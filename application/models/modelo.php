@@ -42,6 +42,23 @@ class Modelo extends CI_Model{
 		
 	}
 
+	function save_teacher($rut,$first_name,$middle_name,$first_surname,$second_surname,$user_name,$password,$type){
+		$insert_teacher = array(
+			'rut' => $rut,
+			'first_name' => $first_name,
+			'middle_name' => $middle_name,
+			'first_surname' => $first_surname,
+			'second_surname' => $second_surname,
+			'name_user' => $user_name,
+			'password' => $password,
+			'type' => $type
+		);
+
+		$this->db->insert('user', $insert_teacher);
+
+		return true;
+	}
+
 
 
 

@@ -1,40 +1,12 @@
 $(document).ready(function () {
 	//se inicia con la carga del sistema
 	charger();
-	//se esconde los mensajes
-	$("#message-success").html("").hide();
-	$("#message-info").html("").hide();
-	$("#message-warning").html("").hide();
-	$("#message-error").html("").hide();
 });
-
-//como la utilizamos demasiadas veces, creamos una función para 
-//evitar repetición de código
-function showMessageSuccess(message) {
-    $("#message-success").html("").show();
-    $("#message-success").html(message).fadeOut(3000);
-}
-//mensaje informativo
-function showMessageInfo(message) {
-    $("#message-info").html("").show();
-    $("#message-info").html(message).fadeOut(3000);
-}
-//mensaje de alerta
-function showMessageWarning(message) {
-    $("#message-warning").html("").show();
-    $("#message-warning").html(message).fadeOut(3000);
-}
-//mensaje de error
-function showMessageError(message) {
-    $("#message-error").html("").show();
-    $("#message-error").html(message).fadeOut(3000);
-}
 
 //carga el arranque para iniciar sesion
 function charger(){
 	$.post(base_url + 'controller/charger', {}, function(page, data){
 		$("#page-body").html(page, data);
-		load_menu();
 	});}
 //envia los datos del formulario al controlador
 //para validar al usuario
@@ -44,11 +16,41 @@ function load_user(){
 		pass: $("#password").val()
 	}, function(datos){
 		if (datos.message_s != "") {
-			showMessageSuccess(datos.message_s);
+			//si no esta vacio lanza mensaje de confirmacion
+			$.bootstrapGrowl(datos.message_s, {
+				ele: 'body',
+				type: 'success',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
 		}else if (datos.message_e != "") {
-			showMessageError(datos.message_e);
+			//si no esta vacio lanza mensaje de error
+			$.bootstrapGrowl(datos.message_e, {
+				ele: 'body',
+				type: 'danger',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
 		}else{
-			showMessageWarning(datos.message_w);
+			//po ultimo si los campos estan vacios lanza mensaje de alerta
+			$.bootstrapGrowl(datos.message_w, {
+				ele: 'body',
+				type: 'warning',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
 		}
 		charger();
 	},'json');}
@@ -57,10 +59,30 @@ function close_session(){
 	$.post(base_url + 'controller/close_session', {}, 
 		function(datos){
 		if (datos.messageclose != '') {
-			showMessageError(datos.messageclose);
+			//si se completa con exito lanza mensaje de confirmacion
+			$.bootstrapGrowl(datos.messageclose, {
+				ele: 'body',
+				type: 'danger',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
 		}else {
+			//de los contrario lanza mensaje de error
 			$message_error = 'Not posible close session';
-			showMessageError($message_error);
+			$.bootstrapGrowl($message_error, {
+				ele: 'body',
+				type: 'danger',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
 		}
 		charger();
 	},'json');
@@ -77,10 +99,10 @@ function new_teacher(){
 	});
 }
 
-//se solicita insercion de profesor
+// //se solicita insercion de profesor
 function save_teacher(){
 	$.post(base_url + 'controller/save_teacher',{
-		rut : $('#rut-teacher').val(),
+		rut : $('#rut_teacher').val(),
 		first_name : $('#first_name_teacher').val(),
 		middle_name: $('#middle_name_teacher').val(),
 		first_surname: $('#first_surname_teacher').val(),
@@ -88,7 +110,43 @@ function save_teacher(){
 		user_name: $('#user_name_teacher').val(),
 		password: $('#password_teacher').val(),
 		password_confirm: $('#password_teacher_confirm').val()
-	},function(page, date){
-
-	}, 'json');
+	},function(datos){
+		if (datos.message_s != "") {
+			//si no esta vacio lanza mensaje de confirmacion
+			$.bootstrapGrowl(datos.message_s, {
+				ele: 'body',
+				type: 'success',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
+		}else if (datos.message_e != "") {
+			//si no esta vacio lanza mensaje de error
+			$.bootstrapGrowl(datos.message_e, {
+				ele: 'body',
+				type: 'danger',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
+		}else{
+			//po ultimo si los campos estan vacios lanza mensaje de alerta
+			$.bootstrapGrowl(datos.message_f, {
+				ele: 'body',
+				type: 'warning',
+				width: 'auto',
+				delay: 2000,
+				offset: {from: 'bottom', amount: 200},
+				align: 'center',
+				allow_dismiss: false,
+				stackup_spacing: 10
+			});
+		}
+	});
 }

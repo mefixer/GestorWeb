@@ -21,20 +21,28 @@ class Controller extends CI_Controller {
 		//primero consulta si existe un usuario logeado
 		if ($this->session->userdata('logged')) {
 			//si lo esta consulta por el tipo
-			if ($this->session->userdata('type') == 1) {
+			switch($this->session->userdata('type')){
+				case '1':
 				$data['name'] = $this->session->userdata('name');
 				$data['surname'] = $this->session->userdata('surname');
+				//si es coordinador pasa se carga su vista y nombre de usuario
 				$this->load->view('coordinator/home-coordinator', $data);
-			} elseif ($this->session->userdata('type') == 2) {
+				break;
+				case '2':
 				$data['name'] = $this->session->userdata('name');
 				$data['surname'] = $this->session->userdata('surname');
+				//si es profesor pasa se carga su vista y nombre de usuario
 				$this->load->view('teacher/home-teacher', $data);
-			}else{
+				break;
+				case '3':
 				$data['name'] = $this->session->userdata('name');
 				$data['surname'] = $this->session->userdata('surname');
+				//si es alumno pasa se carga su vista y nombre de usuario
 				$this->load->view('student/home-student', $data);
+				break;
 			}
 		} else {
+			//de no existir un usuario loggeado se envia al login
 			$this->load->view('login');
 		}
 	}
@@ -90,46 +98,72 @@ class Controller extends CI_Controller {
 		));}
 
 	//cierra la session
-	function close_session(){
-		$this->session->sess_destroy();
-		$msjclose= 'Close session';
-		echo json_encode(array('messageclose' => $msjclose));}
+		function close_session(){
+			$this->session->sess_destroy();
+			$msjclose= 'Close session';
+			echo json_encode(array('messageclose' => $msjclose));}
 
 		//carga los menus de los usuarios en la vista general
-	function teacher_menu(){
-		$this->load->view('coordinator/menu-teacher');
-	}
-	function new_teacher(){
-		$this->load->view('coordinator/new-teacher');
-	}
-
-
-	function save_teacher(){
-
-		$rut = $this->input->post('rut');
-		$first_name = $this->input->post('first_name');
-		$middle_name = $this->input->post('middle_name');
-		$first_surname = $this->input->post('first_surname');
-		$second_name = $this->input->post('second_name');
-		$user_name = $this->input->post('user_name');
-		$password = $this->input->post('password');
-		$password_confirm = $this->input->post('password_confirm');
-
-		$msj_save_teacher = '';
-
-		if ($rut != '' && $first_name != '' && $middle_name != '' && $first_surname != '' &&  $second_name  != '' && $user_name != '' && $password != '' && $password_confirm != '') {
-				$confirm_user = $this->modelo->confirm_user($user_name);
-			if($password == $password_confirm && $confirm_user == false){
-				$this->modelo->save_teacher($rut,$first_name,$middle_name,$first_surname,$second_name,$user_name,$password);
+			function teacher_menu(){
+				$this->load->view('coordinator/menu-teacher');
 			}
-		} else {
-			$msj_save_teacher = 'some fileds is empty, complete de fileds and save again';
+			function new_teacher(){
+				$this->load->view('coordinator/new-teacher');
+			}
+
+
+			function save_teacher(){
+		//se extrae los datos de la vista
+				$rut = $this->input->post('rut');
+				$first_name = $this->input->post('first_name');
+				$middle_name = $this->input->post('middle_name');
+				$first_surname = $this->input->post('first_surname');
+				$second_surname = $this->input->post('second_surname');
+				$user_name = $this->input->post('user_name');
+				$password = $this->input->post('password');
+				$password_confirm = $this->input->post('password_confirm');
+				$type = 2;
+		//se declaran los mensajes
+				$msjs = '';
+				$msje = '';
+				$msjf = '';
+
+				if(	$rut != '' && 
+					$first_name != '' && 
+					$middle_name != '' && 
+					$first_surname != '' && 
+					$second_surname != '' &&
+					$user_name != '' &&
+					$password != '' &&
+					$password_confirm != ''
+				){
+			//se consulta por el nombre de usuario para que no se repita
+					if($this->modelo->confirm_user($user_name) == false){
+				//si logra pasar se genera la consulta
+						if($this->modelo->save_teacher($rut,$first_name,$middle_name,$first_surname,$second_surname,$user_name,$password,$type) == true){
+					//si se completa correctamente se indica con un mensaje
+							$msjs = "the teacher has been created";
+						}else{
+					//si no se indica el error
+							$msje = "a error has ocurred, pleace try agaen";
+						}
+					}
+				}else{
+					$msjf = 'the fields are empty';
+				}
+				
+				echo json_encode(array(
+					'message_s' => $msjs,
+					'message_e' => $msje,
+					'message_f' => $msjf
+				));
+
+			}
+
+
+
+
+
+
+
 		}
-		
-
-
-	}
-
-
-
-	}
