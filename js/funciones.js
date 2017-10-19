@@ -1,5 +1,6 @@
 $(document).ready(function () {
 	//se inicia con la carga del sistema
+	$('.collapsible').collapsible();
 	charger();
 });
 
@@ -17,40 +18,13 @@ function load_user(){
 	}, function(datos){
 		if (datos.message_s != "") {
 			//si no esta vacio lanza mensaje de confirmacion
-			$.bootstrapGrowl(datos.message_s, {
-				ele: 'body',
-				type: 'success',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.message_s, 4000, 'green');
 		}else if (datos.message_e != "") {
 			//si no esta vacio lanza mensaje de error
-			$.bootstrapGrowl(datos.message_e, {
-				ele: 'body',
-				type: 'danger',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.message_e, 4000, 'red');
 		}else{
 			//po ultimo si los campos estan vacios lanza mensaje de alerta
-			$.bootstrapGrowl(datos.message_w, {
-				ele: 'body',
-				type: 'warning',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.message_w, 4000, 'amber darken-1');
 		}
 		charger();
 	},'json');}
@@ -60,29 +34,11 @@ function close_session(){
 		function(datos){
 		if (datos.messageclose != '') {
 			//si se completa con exito lanza mensaje de confirmacion
-			$.bootstrapGrowl(datos.messageclose, {
-				ele: 'body',
-				type: 'danger',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.messageclose, 4000, 'red');
 		}else {
 			//de los contrario lanza mensaje de error
 			$message_error = 'Not posible close session';
-			$.bootstrapGrowl($message_error, {
-				ele: 'body',
-				type: 'danger',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast($message_error, 4000, 'red');
 		}
 		charger();
 	},'json');
@@ -113,40 +69,13 @@ function save_teacher(){
 	},function(datos){
 		if (datos.message_s != "") {
 			//si no esta vacio lanza mensaje de confirmacion
-			$.bootstrapGrowl(datos.message_s, {
-				ele: 'body',
-				type: 'success',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.message_s, 4000, 'green',);
 		}else if (datos.message_e != "") {
 			//si no esta vacio lanza mensaje de error
-			$.bootstrapGrowl(datos.message_e, {
-				ele: 'body',
-				type: 'danger',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.message_e, 4000, 'red');
 		}else{
 			//po ultimo si los campos estan vacios lanza mensaje de alerta
-			$.bootstrapGrowl(datos.message_f, {
-				ele: 'body',
-				type: 'warning',
-				width: 'auto',
-				delay: 2000,
-				offset: {from: 'bottom', amount: 200},
-				align: 'center',
-				allow_dismiss: false,
-				stackup_spacing: 10
-			});
+			Materialize.toast(datos.message_w, 4000, 'info');
 		}
 	});
 }

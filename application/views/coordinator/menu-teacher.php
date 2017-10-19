@@ -1,29 +1,15 @@
   <div class="row">
-    <div class="col-md-3">
+    <div class="col s4">
       <div id="menu-active-coodinator">
-
-        <div class="panel-group" id="accordion" role="tablist" >
-
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="headingTwo">
-              <h4 class="panel-title">
-                <button class="list-group-item btn-block btn-outline-light" style="color:#000" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                 <span class="glyphicon glyphicon-list"></span> Teacher Menu
-                </button>
-              </h4>
-            </div>
-            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-              <div class="panel-body">
-                <button class="btn btn-block btn-danger" onclick="new_teacher()"><span class="glyphicon glyphicon-plus"></span> New teacher</button>
-                <button class="btn btn-block btn-danger" onclick="teacher_list()"><span class="glyphicon glyphicon-list"></span> Teacher List</button>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        <ul class="collection with-header">
+        <li class="collection-header"><strong>Teacher Menu</strong></li>
+        <li class="collection-item"><button class="waves-effect waves-light btn red darken-2" onclick="new_teacher()"><i class="material-icons left">plus_one</i>New teacher</button></li>
+        <li class="collection-item"><button class="waves-effect waves-light btn red darken-2" onclick="teacher_list()"><i class="material-icons left">list</i>Teacher List</button></li>
+      </ul>
       </div>
     </div>
-    <div class="col-md-9">
+    <div class="col s2"></div>
+    <div class="col s6">
       <div class="">
         <div id="info-activity-coordinator">
 
@@ -31,3 +17,9 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+                

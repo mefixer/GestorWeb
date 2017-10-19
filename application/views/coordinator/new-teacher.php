@@ -6,7 +6,7 @@
 
 	<div class="panel panel-body">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col s6">
 				<div class="well well-sm">
 				<div class="input-group">
 					<span class="input-group-addon"><strong>Rut</strong></span>
@@ -26,7 +26,7 @@
 				</div>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col s6">
 				<div class="well well-sm">
 				<div class="input-group">
 					<span class="input-group-addon"><strong>Second Surname</strong></span>

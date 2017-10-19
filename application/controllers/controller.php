@@ -123,20 +123,6 @@ class Controller extends CI_Controller {
 				$password = $this->input->post('password');
 				$password_confirm = $this->input->post('password_confirm');
 				$type = 2;
-		//se declaran los mensajes
-				$msjs = '';
-				$msje = '';
-				$msjf = '';
-
-				if(	$rut != '' && 
-					$first_name != '' && 
-					$middle_name != '' && 
-					$first_surname != '' && 
-					$second_surname != '' &&
-					$user_name != '' &&
-					$password != '' &&
-					$password_confirm != ''
-				){
 			//se consulta por el nombre de usuario para que no se repita
 					if($this->modelo->confirm_user($user_name) == false){
 				//si logra pasar se genera la consulta
@@ -148,15 +134,6 @@ class Controller extends CI_Controller {
 							$msje = "a error has ocurred, pleace try agaen";
 						}
 					}
-				}else{
-					$msjf = 'the fields are empty';
-				}
-				
-				echo json_encode(array(
-					'message_s' => $msjs,
-					'message_e' => $msje,
-					'message_f' => $msjf
-				));
 
 			}
 
