@@ -1,13 +1,10 @@
-<nav>
-    <div class="nav-wrapper grey darken-4">
-      <ul class="left hide-on-med-and-down">
-        <a href="<?php echo base_url()?>" class="brand-logo"><img width="64em" height="64em" src="img/Inacap.png"></a>
-      </ul>
-      <ul class="right hide-on-med-and-down">
-        <li>
-          <a class="btn" onclick="teacher_menu()">Teachers</a>
-          <a class="btn" onclick="student_menu()">Students</a>
-        </li>
+  <nav class="nav-extended red darken-4">
+    <div class="nav-wrapper">
+      <a href="<?php echo base_url()?>">
+        <img class="responsive-img" width="130em"  src="img/inacap.png">
+      </a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li>
           <a><i class="material-icons">account_circle</i></a>
         </li>
@@ -15,14 +12,18 @@
           <a><?php echo $name?> <?php echo $surname?></a>
         </li>
         <li>
-          <a onclick="close_session()" class="waves-effect waves-light btn red darken-1"><i class="material-icons right">lock</i> Log Out</a>
-         </li>
+          <a onclick="close_session()" class="waves-effect waves-light btn grey darken-4"><i class="material-icons right">exit_to_app</i> Log Out</a>
+        </li>
+      </ul>
+    </div>
+    <div class="nav-content">
+      <ul class="tabs tabs-transparent">
+        <li class="tab"><a  onclick="teacher_menu()">Teacher's</a></li>
+        <li class="tab"><a  onclick="student_menu()" href="#">Students</a></li>
       </ul>
     </div>
   </nav>
-
-<br>
-<div class="container" id="body-coordinator">
-
-</div>
+  <br>
+  <div id="body-coordinator">
+  </div>
 

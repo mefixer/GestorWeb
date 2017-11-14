@@ -1,74 +1,48 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand">
-        <img alt="English for IT" width="20em" height="20em" src="img/Inacap.png">
-      </a>
-    </div><!-- /.navbar-header-->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
+  <nav class="nav-extended red darken-4">
+    <div class="nav-wrapper">
+      <a href="<?php echo base_url()?>">
+          <img class="responsive-img" width="90em"  src="img/inacap.png">
+          </a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li>
-          <a href="<?php echo base_url()?>"><span class="glyphicon glyphicon-home"></span></a>
+        <a class="btn grey lighten-4 black-text" onclick="student_load()">Students</a>
+          <a class="btn grey lighten-4 black-text" onclick="materials_load()" href="#">Materials</a>
+          <a class="btn grey lighten-4 black-text" onclick="dictionary_load()" href="#">Dictionary</a>
         </li>
-     <li class="nav-item">
-        <a class="nav-link" href="#"> Learning</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"> Activity</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"> Teacher</a>
-      </li>
+          <li>
+          <a><i class="material-icons">account_circle</i></a>
+        </li>
+        <li>
+          <a><?php echo $name?> <?php echo $surname?></a>
+        </li>
+        <li>
+          <a onclick="close_session()" class="waves-effect waves-light btn grey darken-4"><i class="material-icons right">exit_to_app</i> Log Out</a>
+         </li>
       </ul>
-    <form class="navbar-form navbar-right" role="search">
-      <div class="form-group">
-        <span class="form-control"><span class="oi oi-person"></span> <span><?php echo $name?> <?php echo $surname?></span></span>
-      </div>
-      <button onclick="close_session()" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-log-out"></span> Log Out</button>
-    </form>
-    </div><!-- /.navbar-collapse -->
-
-  </div><!-- /.container-fluid -->
-</nav>
+    </div>
+    <div class="nav-content">
+      <ul class="tabs tabs-transparent">
+        <li class="tab"><a href="#test1">Test 1</a></li>
+        <li class="tab"><a class="active" href="#test2">Test 2</a></li>
+        <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
+        <li class="tab"><a href="#test4">Test 4</a></li>
+      </ul>
+    </div>
+  </nav>
 <br>
 <div class="container" id="progress-bar">
-  <h4>My Progress</h4>
   <div class="progress">
     <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><strong>25%</strong></div>
   </div>
-</div>
+</div><br>
+<div class="row">
+  <div class="col s3" id="menu-active-student">
 
-
-<br>
-
-
-<div class="container">
-  <div class="row">
-    <div class="col-3" id="menu-active-student">
-
-    </div>
-      <div class="col-9">
-        <h5>Activity</h5>
-        <div class="jumbotron">
-          <div id="info-activity-student">
-            
-          </div>
-      </div>
-    </div>
   </div>
-</div>
-<br>
-<div class="container" id="contenedor-footer">
-  <div class="jumbotron">
-    <div id="info-back-activity-student">
-      
+  <div class="col s9">
+    <div id="info-activity-student">
+
     </div>
   </div>
 </div>
