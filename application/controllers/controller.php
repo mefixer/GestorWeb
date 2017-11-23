@@ -49,7 +49,7 @@ class Controller extends CI_Controller {
 //carga la session
 //Carga Sesión de Usuario
 
-	//se extrae los valores de los campos de login
+//se extrae los valores de los campos de login
 	function load_user(){
 		$user = $this->input->post('user');
 		$pass = md5($this->input->post('pass'));
@@ -59,12 +59,8 @@ class Controller extends CI_Controller {
 		$msjw = '';
 	//se declara las variables
 		$cookies = '';
-		$datos['rut'] = ''; 
-		$datos['type'] = '';
-		$datos['first_name'] = '';
-		$datos['first_surname'] = '';
     //se validan los campos para que no sean vacios
-		if ($user != '' && $pass != '') {
+		if ($this->c_valide_field($user) || $this->c_valide_field($pass)) {
 		//se consulta al modelo por usuario y su pass
 			$datos = $this->modelo->login($user, $pass);
 		//la respuesta se almacena en un arreglo
@@ -98,11 +94,10 @@ class Controller extends CI_Controller {
 			"message_load_user_e" => $msje,
 			"message_load_user_w" => $msjw
 		));}
-
-		//Cierra Sesión
+	//Cierra Sesión
 		function close_session(){
 			$this->session->sess_destroy();
-			$msjclose= "<strong class='white-text'>Log Out!</strong>";
+			$msjclose= "<strong class='black-text'>Log Out!</strong>";
 			echo json_encode(array('message_close' => $msjclose));}
 //carga los menus de los usuarios en la vista general
 	function teacher_menu(){$this->load->view('coordinator/menu-teacher');}
@@ -110,7 +105,7 @@ class Controller extends CI_Controller {
 	function student_menu(){$this->load->view('teacher/menu-student');}
 	function new_student(){$this->load->view('teacher/new-student');}
 //Guardar Profesor --vista Coordinador
-	function save_teacher(){
+function save_teacher(){
 		//se extrae los datos de la vista 
 				$rut = $this->input->post('rut');
 				$first_name = $this->input->post('first_name');
@@ -136,57 +131,48 @@ class Controller extends CI_Controller {
 		//declarando
 			$msj_load_teacher = array();
 			$m = array();
-			$conte = 0;
 			$si = 0;
 			$no = 0;	
 		//si campos son Vacios	
-				if ($validate['password'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Password are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['password'])) {
 					$si += 1;}else{$no += 1;}
-
-				if ($validate['password_confirm'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Password Confirm are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['password_confirm'])) {
 					$si += 1;}else{$no += 1;}
-				if($validate['rut'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Rut are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['rut'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['first_name'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field First Name are empty</strong>");
-					array_push($msj_load_teacher, $m); 
+				if (!$this->valida_rut($validate['rut'])) {
+						$m = array('msje' => "<strong class='black-text'>The field rut Incorrect!</strong>");
+						array_push($msj_load_teacher, $m);
+					}else{$si += 1;}
+				if ($this->c_valide_field($validate['first_name'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['middle_name'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Middle Name are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['middle_name'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['first_surname'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field First Surname are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['first_surname'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['second_surname'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Second Surname are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['second_surname'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['name_user'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Name User are empty</strong>");
-					array_push($msj_load_teacher, $m);
+				if ($this->c_valide_field($validate['name_user'])) {
 					$si += 1;}else{$no += 1;}
 				if($validate['password'] != $validate['password_confirm']){
-					$m = array('msjw' => "<strong class='black-text'>The Password Not Coincide</strong>");
-					array_push($msj_load_teacher, $m);
-					$si += 1;}
-
-					$conte = $si-$no;
+					$m = array('msje' => "<strong class='black-text'>The pass does not match</strong>");
+					array_push($msj_load_teacher, $m);}else{$si += 1;}
  		//valida coexion
-			if ($conte == -8) {
+			if ($si === 10) {
 				$pass = md5($password);
 				if ($this->modelo->save_teacher($rut,$first_name,$middle_name,$first_surname,$second_surname,$name_user,$pass,$type)) {
 					$m = array('msjs' => "<strong class='black-text'>Save Teacher!!</strong>");
 					array_push($msj_load_teacher, $m);
 				}else{
 					$m = array('msje' => "<strong class='black-text'>Error!, Teacher don't save!!</strong>");
+					array_push($msj_load_teacher, $m);
+				}
+			}else{
+				if ($no >= 2) {
+					$m = array('msjw' => "<strong class='black-text'>Some fields are empty or the fields have less than 3 characters!</strong>");
+					array_push($msj_load_teacher, $m);
+				}else{
+					$m = array('msjw' => "<strong class='black-text'>one field are empty or the field have less than 3 characters!</strong>");
 					array_push($msj_load_teacher, $m);
 				}
 			}
@@ -217,61 +203,54 @@ function save_student(){
 		//declarando
 			$msj_load_student = array();
 			$m = array();
-			$conte = 0;
 			$si = 0;
 			$no = 0;	
 		//si campos son Vacios	
-				if ($validate['password'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Password are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['password'])) {
 					$si += 1;}else{$no += 1;}
-
-				if ($validate['password_confirm'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Password Confirm are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['password_confirm'])) {
 					$si += 1;}else{$no += 1;}
-				if($validate['rut'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Rut are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['rut'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['first_name'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field First Name are empty</strong>");
-					array_push($msj_load_student, $m); 
+				if (!$this->valida_rut($validate['rut'])) {
+						$m = array('msje' => "<strong class='black-text'>The field rut Incorrect!</strong>");
+						array_push($msj_load_student, $m);
+					}else{$si += 1;}
+				if ($this->c_valide_field($validate['first_name'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['middle_name'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Middle Name are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['middle_name'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['first_surname'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field First Surname are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['first_surname'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['second_surname'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Second Surname are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['second_surname'])) {
 					$si += 1;}else{$no += 1;}
-				if ($validate['name_user'] == "") {
-					$m = array('msjw' => "<strong class='black-text'>The field Name User are empty</strong>");
-					array_push($msj_load_student, $m);
+				if ($this->c_valide_field($validate['name_user'])) {
 					$si += 1;}else{$no += 1;}
 				if($validate['password'] != $validate['password_confirm']){
-					$m = array('msjw' => "<strong class='black-text'>The Password Not Coincide</strong>");
-					array_push($msj_load_teacher, $m);
-					$si += 1;}
-
-					$conte = $si-$no;
+					$m = array('msje' => "<strong class='black-text'>The pass does not match</strong>");
+					array_push($msj_load_student, $m);}else{$si += 1;}
  		//valida coexion
-			if ($conte == -8) {
+			if ($si === 10) {
 				$pass = md5($password);
-				if ($this->modelo->save_student($rut,$first_name,$middle_name,$first_surname,$second_surname,$name_user,$pass,$type)) {
+				if ($this->modelo->save_teacher($rut,$first_name,$middle_name,$first_surname,$second_surname,$name_user,$pass,$type)) {
 					$m = array('msjs' => "<strong class='black-text'>Save Teacher!!</strong>");
 					array_push($msj_load_student, $m);
 				}else{
 					$m = array('msje' => "<strong class='black-text'>Error!, Teacher don't save!!</strong>");
 					array_push($msj_load_student, $m);
 				}
+			}else{
+				if ($no >= 2) {
+					$m = array('msjw' => "<strong class='black-text'>Some fields are empty or the fields have less than 3 characters!</strong>");
+					array_push($msj_load_student, $m);
+				}else{
+					$m = array('msjw' => "<strong class='black-text'>one field are empty or the field have less than 3 characters!</strong>");
+					array_push($msj_load_student, $m);
+				}
 			}
 			echo json_encode($msj_load_student);}
+
+			
 		//oders
 		//Lista de Profesores Vista Coordinador
 
@@ -283,13 +262,70 @@ function edit_user(){
 			$this->db->edit_user($rut);}
 
 //---------Listas---------
-	function teacher_list(){$this->load->view('coordinator/list-teacher');}
-	function student_list(){$this->load->view('teacher/list-student');}
+	function teacher_list(){
+		$list['datos'] = $this->modelo->user_list_teacher()->result();
+		$this->load->view('coordinator/list-teacher', $list);}
+	function student_list(){
+		$list['datos'] = $this->modelo->user_list_student()->result();
+		$this->load->view('teacher/list-student',$list);}
 //---------Cargas---------
 	function load_teacher(){$list = $this->modelo->user_list_teacher();	echo json_encode($list);}
 	function load_student(){$list = $this->modelo->user_list_student();	echo json_encode($list);}
 	function student_load_menu(){$this->load->view('teacher/menu-students');}
 	function learning_load(){$this->load->view('teacher/menu-learning');}
+
+
+
+//-------------------------validaciones-----------------------------
+
+		//valida que los camposs no esten vacios y que no sean menores de 3 caracteres
+		function c_valide_field($field){ 
+		   //compruebo que el tamaño del string sea válido. 
+		   if (strlen($field)<3 || strlen($field)>30){  
+		      return false; 
+		   } 
+		   //compruebo que los caracteres sean los permitidos 
+		   $permitidos = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"; 
+		   for ($i=0; $i<strlen($field); $i++){ 
+		      if (strpos($permitidos, substr($field,$i,1))===false){ 
+		         return false; 
+		      } 
+		   } 
+		   return true; 
+		}
+
+		/**
+		 * Comprueba si el rut ingresado es valido
+		 * @param string $rut RUT
+		 * @return boolean
+		 */
+
+		public function valida_rut($rut)
+		{
+		    if (!preg_match("/^[0-9.]+[-]?+[0-9kK]{1}/", $rut)) {
+		        return false;
+		    }
+		    $rut = preg_replace('/[\.\-]/i', '', $rut);
+		    $dv = substr($rut, -1);
+		    $numero = substr($rut, 0, strlen($rut) - 1);
+		    $i = 2;
+		    $suma = 0;
+		    foreach (array_reverse(str_split($numero)) as $v) {
+		        if ($i == 8)
+		            $i = 2;
+		        $suma += $v * $i;
+		        ++$i;
+		    }
+		    $dvr = 11 - ($suma % 11);
+		    if ($dvr == 11)
+		        $dvr = 0;
+		    if ($dvr == 10)
+		        $dvr = 'K';
+		    if ($dvr == strtoupper($dv))
+		        return true;
+		    else
+		        return false;
+		}
 
 }
 

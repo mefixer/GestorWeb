@@ -1,6 +1,6 @@
 <div class="row ">
-    <div class="col s3">
-      <div id="menu-active-coodinator">
+    <div class="col s12 m4 l3">
+      <div id="col s4">
 
         <ul id="collapsible" class="collapsible popout" data-collapsible="expandable">
           <li>

@@ -77,45 +77,45 @@ class Modelo extends CI_Model{
 	//Lista de profesores
 		$this->db->select("*");
 		$this->db->where('type','Teacher');
-		$response = $this->db->get('user');
+		return $this->db->get('user');
 		//se almacena la respuesta 
-		$data_response = array();
-		foreach ($response->result() as $fila) {
-			$fil= array(
-				'rut' => $fila->rut,
-				'first_name' => $fila->first_name,
-				'middle_name' => $fila->middle_name,
-				'first_surname' => $fila->first_surname,
-				'second_surname' => $fila->second_surname,
-				'name_user' => $fila->name_user,
-				'type' => $fila->type
-			);
-			array_push($data_response, $fil);
-		}
-		//devuelve el arreglo
-		return $data_response;
+		// $data_response = array();
+		// foreach ($response->result() as $fila) {
+		// 	$fil= array(
+		// 		'rut' => $fila->rut,
+		// 		'first_name' => $fila->first_name,
+		// 		'middle_name' => $fila->middle_name,
+		// 		'first_surname' => $fila->first_surname,
+		// 		'second_surname' => $fila->second_surname,
+		// 		'name_user' => $fila->name_user,
+		// 		'type' => $fila->type
+		// 	);
+		// 	array_push($data_response, $fil);
+		// }
+		// //devuelve el arreglo
+		// return $response;
 	}
 	function user_list_student(){
 	//Lista de profesores
 		$this->db->select("*");
 		$this->db->where('type','Student');
-		$response = $this->db->get('user');
+		return $this->db->get('user');
 		//se almacena la respuesta 
-		$data_response = array();
-		foreach ($response->result() as $fila) {
-			$fil= array(
-				'rut' => $fila->rut,
-				'first_name' => $fila->first_name,
-				'middle_name' => $fila->middle_name,
-				'first_surname' => $fila->first_surname,
-				'second_surname' => $fila->second_surname,
-				'name_user' => $fila->name_user,
-				'type' => $fila->type
-			);
-			array_push($data_response, $fil);
-		}
+		// $data_response = array();
+		// foreach ($response->result() as $fila) {
+		// 	$fil= array(
+		// 		'rut' => $fila->rut,
+		// 		'first_name' => $fila->first_name,
+		// 		'middle_name' => $fila->middle_name,
+		// 		'first_surname' => $fila->first_surname,
+		// 		'second_surname' => $fila->second_surname,
+		// 		'name_user' => $fila->name_user,
+		// 		'type' => $fila->type
+		// 	);
+		// 	array_push($data_response, $fil);
+		//}
 		//devuelve el arreglo
-		return $data_response;
+		// return $data_response;
 	}
 	//*faltan datos para el update
 	function edit_user($rut){
