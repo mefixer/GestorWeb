@@ -5,28 +5,18 @@
           </a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li>
-        <a class="btn grey lighten-4 black-text" onclick="student_load()">Students</a>
-          <a class="btn grey lighten-4 black-text" onclick="materials_load()" href="#">Materials</a>
-          <a class="btn grey lighten-4 black-text" onclick="dictionary_load()" href="#">Dictionary</a>
-        </li>
-          <li>
-          <a><i class="material-icons">account_circle</i></a>
-        </li>
-        <li>
-          <a><?php echo $name?> <?php echo $surname?></a>
-        </li>
-        <li>
-          <a onclick="close_session()" class="waves-effect waves-light btn grey darken-4"><i class="material-icons right">exit_to_app</i> Log Out</a>
-         </li>
+          <li><a><strong>TEACHER</strong> :</a></li>
+          <li><div class="chip"><img  alt="Contact Person" src="img/student<?php echo $gender_name?>.png"> <?php echo $name?> <?php echo $lastname?></div></li>
+          <li></li>
+          <li><a class="btn waves-effect waves-light black" onclick="close_session()"><i class="material-icons right white-text">exit_to_app</i> Log Out</a></li>
       </ul>
     </div>
     <div class="nav-content">
       <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#test1">Test 1</a></li>
-        <li class="tab"><a class="active" href="#test2">Test 2</a></li>
-        <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
-        <li class="tab"><a href="#test4">Test 4</a></li>
+        <li class="tab"><a class="">UNITY</a></li>
+        <li class="tab"><a class="" href="#test2">ACTIVITIES</a></li>
+        <li class="tab disabled"><a href="#test3">PROGRESS</a></li>
+        <li class="tab disabled"><a href="#test4">TEST</a></li>
       </ul>
     </div>
   </nav>
