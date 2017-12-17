@@ -45,7 +45,7 @@
 
             </div>
             <div class="col s12 m7 12 white">
-                <div class="" id="bodyclass">
+                <div class="" id="bodyusermanagement">
 
                 </div>
             </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <!--End Class Content-->
+    <!--End student Content-->
         <div id="studentprogress" class="col s12 lime accent-2">
         <div class="row">
             <div class="col s12 m3 12">

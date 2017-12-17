@@ -119,14 +119,68 @@ function saveunity() {
         });
     }, 'json');
 }
-function saveActivity() {
-    $.post(base_url + 'controller/saveActivity', {
-        activityname: $("#unityname").val(),
-        descriptionleft: $("#descriptionunityleft").val(),
-        descriptionright: $("#descriptionunityright").val()
+function saveactivity() {
+    var idunity = document.getElementById("selectunityactivity");
+    var unity_idunity = idunity.options[idunity.selectedIndex].value;
+    var idmaterial = document.getElementById("selectmaterialactivity");
+    var material_idmaterial = idmaterial.options[idmaterial.selectedIndex].value;
+    $.post(base_url + 'controller/saveactivity', {
+        activityname: $("#activityname").val(),
+        descriptionleft: $("#descriptionleftactivity").val(),
+        descriptionright: $("#descriptionrightactivity").val(),
+        unity_idunity: unity_idunity,
+        material_idmaterial: material_idmaterial
     }, function (datos) {
-        var msjavtivity = datos;
-        $.each(msjavtivity, function (i, o) {
+        var msjactivity = datos;
+        $.each(msjactivity, function (i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+    }, 'json');
+}
+function savequestion(){
+    var idactivity = document.getElementById("selectquestionactivity");
+    var activity_idactivity = idactivity.options[idactivity.selectedIndex].value;
+    $.post(base_url + 'controller/savequestion', {
+        questionname: $("#questionname").val(),
+        description: $("#questiondescription").val(),
+        activity_idactivity: activity_idactivity
+    }, function (datos) {
+        var msjquestion = datos;
+        $.each(msjquestion, function (i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+        questionlist();
+    }, 'json');
+}
+function saveanswere(){
+    var idquestion = document.getElementById("selectquestionanswere");
+    var question_idquestion = idquestion.options[idquestion.selectedIndex].value;
+    var idvalue = document.getElementById("selectvalueanswere");
+    var value_idvalue = idvalue.options[idvalue.selectedIndex].value;
+    $.post(base_url + 'controller/saveanswere', {
+        answerename: $("#answerename").val(),
+        description: $("#answeredescription").val(),
+        value_idvalue: value_idvalue,
+        question_idquestion:question_idquestion
+    }, function (datos) {
+        var msjanswere = datos;
+        $.each(msjanswere, function (i, o) {
             if (o.msjw !== "") {
                 Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
             }
@@ -149,6 +203,27 @@ function saveyoutubelink() {
 
     });
 }
+function saveword(){
+    $.post(base_url + 'controller/saveword',{
+        wordname: $("#wordname").val(),
+        description: $("#descriptionword").val(),
+        aditionaldescription: $("#aditionaldescriptionword").val()
+    },function(datos){
+        var msjword = datos;
+        $.each(msjword, function (i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+        glosarylist();
+    },'json');
+}
 function updateclass(id) {
     $.post(base_url + 'controller/updateclass', {
         idclassedit: $('#idclassedit' + id).val(),
@@ -170,7 +245,7 @@ function updateclass(id) {
             }
         });
         charger();
-    });
+    },'json');
 }
 function updatestudent(id) {
     var idgenders = document.getElementById("selectgenderStudentedit" + id);
@@ -200,8 +275,8 @@ function updatestudent(id) {
 }
 //listas
 function teacherlist() {
-    $.post(base_url + 'controller/teacher_list', {}, function (page, datos) {
-        $("#info-activity-coordinator").html(page, datos);
+    $.post(base_url + 'controller/teacherlist', {}, function (page, datos) {
+        $("#bodyusermanagement").html(page, datos);
     }), 'json';
 }
 function studentlist() {
@@ -224,6 +299,11 @@ function activitylist() {
         $("#bodyactivity").html(page, datos);
     });
 }
+function questionlist(){
+    $.post(base_url + 'controller/questionlist', {}, function (page, datos) {
+        $("#bodyactivity").html(page, datos);
+    });
+}
 function materiallist() {
     $.post(base_url + 'controller/materiallist', {}, function (page, datos) {
         $("#bodymaterial").html(page, datos);
@@ -240,17 +320,27 @@ function progresslist(){
     });
 }
 //editar y eliminar
-function edit_teacher(rut) {
-    $("#modal_list").modal('open');
-    $.post(base_url + 'controller/edit_teacher', {}, function (data) {
-        var teacher = data;
-    });
+function deleteteacher(id){
+	$.post(base_url + 'controller/deleteteacher',{
+		idteacher: $("#idteacher"+id).val(),
+		idteacher: $("#idteacher"+id).val(),
+		password: $("#teacherpassworddelete"+id).val()
+	},function(datos){
+		var msjdeleteteacher = datos;
+        $.each(msjdeleteteacher, function (i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+	},'json');
 }
-function delete_teacher(fil, rut) {
-    $post(base_url + 'controller/delete_teacher', {}, function (data) {
-        var teacher = data;
-    });
-}
+
 /*Valida Campos*/
 function checkRut(rut) {
     // Despejar Puntos

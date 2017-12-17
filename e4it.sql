@@ -3,20 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
-<<<<<<< HEAD
--- Tiempo de generación: 17-12-2017 a las 05:55:55
-=======
--- Tiempo de generación: 01-12-2017 a las 06:16:22
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
+-- Tiempo de generación: 18-12-2017 a las 00:25:07
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-<<<<<<< HEAD
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-=======
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
 SET time_zone = "+00:00";
 
 
@@ -28,189 +19,85 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `e4it`
 --
-<<<<<<< HEAD
 CREATE DATABASE IF NOT EXISTS `e4it` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `e4it`;
-=======
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `activity`
 --
-<<<<<<< HEAD
--- Creación: 14-12-2017 a las 02:53:42
---
 
 DROP TABLE IF EXISTS `activity`;
-CREATE TABLE IF NOT EXISTS `activity` (
-  `idactivity` int(11) NOT NULL AUTO_INCREMENT,
-=======
-
 CREATE TABLE `activity` (
   `idactivity` int(11) NOT NULL,
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
   `activityname` varchar(45) NOT NULL,
   `descriptionleft` varchar(45) DEFAULT NULL,
   `descriptionright` varchar(45) DEFAULT NULL,
   `unity_idunity` int(11) NOT NULL,
   `unity_class_idclass` int(11) NOT NULL,
-<<<<<<< HEAD
   `unity_class_teacher_idteacher` int(11) NOT NULL,
   `material_idmaterial` int(11) NOT NULL,
-  `material_materialtype_idmaterialtype` int(11) NOT NULL,
-  PRIMARY KEY (`idactivity`,`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`,`material_idmaterial`,`material_materialtype_idmaterialtype`),
-  UNIQUE KEY `activityname_UNIQUE` (`activityname`),
-  KEY `fk_activity_unity1_idx` (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`),
-  KEY `fk_activity_material1_idx` (`material_idmaterial`,`material_materialtype_idmaterialtype`)
+  `material_materialtype_idmaterialtype` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `activity`:
---   `material_idmaterial`
---       `material` -> `idmaterial`
---   `material_materialtype_idmaterialtype`
---       `material` -> `materialtype_idmaterialtype`
---   `unity_idunity`
---       `unity` -> `idunity`
---   `unity_class_idclass`
---       `unity` -> `class_idclass`
---   `unity_class_teacher_idteacher`
---       `unity` -> `class_teacher_idteacher`
---
 
 --
 -- Truncar tablas antes de insertar `activity`
 --
 
 TRUNCATE TABLE `activity`;
-=======
-  `unity_class_teacher_idteacher` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Volcado de datos para la tabla `activity`
+--
 
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
+INSERT INTO `activity` (`idactivity`, `activityname`, `descriptionleft`, `descriptionright`, `unity_idunity`, `unity_class_idclass`, `unity_class_teacher_idteacher`, `material_idmaterial`, `material_materialtype_idmaterialtype`) VALUES
+(1, 'asafa', 'sfasfa', 'sfaffd', 0, 1, 1, 1, 4);
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `answer`
 --
-<<<<<<< HEAD
--- Creación: 12-12-2017 a las 17:59:16
---
 
 DROP TABLE IF EXISTS `answer`;
-CREATE TABLE IF NOT EXISTS `answer` (
-  `idanswer` int(11) NOT NULL AUTO_INCREMENT,
-  `answarename` varchar(45) NOT NULL,
-  `decription` varchar(45) NOT NULL,
+CREATE TABLE `answer` (
+  `idanswer` int(11) NOT NULL,
+  `answername` varchar(45) NOT NULL,
+  `description` varchar(45) DEFAULT NULL,
   `value_idvalue` int(11) NOT NULL,
-  PRIMARY KEY (`idanswer`,`value_idvalue`),
-  KEY `fk_answer_value1_idx` (`value_idvalue`)
+  `question_idquestion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `answer`:
---   `value_idvalue`
---       `value` -> `idvalue`
---
 
 --
 -- Truncar tablas antes de insertar `answer`
 --
 
 TRUNCATE TABLE `answer`;
-=======
-
-CREATE TABLE `answer` (
-  `idanswer` int(11) NOT NULL,
-  `answarename` varchar(45) NOT NULL,
-  `decription` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `answer_has_question`
---
-<<<<<<< HEAD
--- Creación: 30-11-2017 a las 03:20:25
+-- Volcado de datos para la tabla `answer`
 --
 
-DROP TABLE IF EXISTS `answer_has_question`;
-CREATE TABLE IF NOT EXISTS `answer_has_question` (
-  `answer_idanswer` int(11) NOT NULL,
-  `question_idquestion` int(11) NOT NULL,
-  PRIMARY KEY (`answer_idanswer`,`question_idquestion`),
-  KEY `fk_answer_has_question_question1_idx` (`question_idquestion`),
-  KEY `fk_answer_has_question_answer1_idx` (`answer_idanswer`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `answer` (`idanswer`, `answername`, `description`, `value_idvalue`, `question_idquestion`) VALUES
+(1, 'No Empty', '', 1, 1),
+(2, 'Yes', '', 1, 2),
+(3, 'Yes, is Empty', '', 3, 1),
+(4, 'No, i\'m Not Shure', '', 3, 2);
 
---
--- RELACIONES PARA LA TABLA `answer_has_question`:
---   `answer_idanswer`
---       `answer` -> `idanswer`
---   `question_idquestion`
---       `question` -> `idquestion`
---
-
---
--- Truncar tablas antes de insertar `answer_has_question`
---
-
-TRUNCATE TABLE `answer_has_question`;
-=======
-
-CREATE TABLE `answer_has_question` (
-  `answer_idanswer` int(11) NOT NULL,
-  `question_idquestion` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `answer_has_value`
---
-
-CREATE TABLE `answer_has_value` (
-  `answer_idanswer` int(11) NOT NULL,
-  `value_idvalue` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `class`
 --
-<<<<<<< HEAD
--- Creación: 30-11-2017 a las 03:20:21
---
 
 DROP TABLE IF EXISTS `class`;
-CREATE TABLE IF NOT EXISTS `class` (
-  `idclass` int(11) NOT NULL AUTO_INCREMENT,
-=======
-
 CREATE TABLE `class` (
   `idclass` int(11) NOT NULL,
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
   `classname` varchar(45) NOT NULL,
   `descriptioncenter` varchar(200) NOT NULL,
   `descriptionleft` varchar(200) DEFAULT NULL,
   `descriptionright` varchar(200) DEFAULT NULL,
-<<<<<<< HEAD
-  `teacher_idteacher` int(11) NOT NULL,
-  PRIMARY KEY (`idclass`,`teacher_idteacher`),
-  KEY `fk_class_teacher1_idx` (`teacher_idteacher`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `class`:
---   `teacher_idteacher`
---       `teacher` -> `idteacher`
---
+  `teacher_idteacher` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `class`
@@ -227,47 +114,16 @@ INSERT INTO `class` (`idclass`, `classname`, `descriptioncenter`, `descriptionle
 (3, 'EL EXTRA', 'EL FUA', 'VOY Y SACO', 'AL UNIVERSO', 1),
 (5, 'SNAP DRAGON PTE', 'VEST DIVICE', 'TESLA MOTOR', 'BIOTECNOLOGY', 1),
 (6, 'ADASD', 'ADASDASD', 'dasdasdasdasd', 'asdasdas', 1);
-=======
-  `teacher_idteacher` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `exam`
---
-
-CREATE TABLE `exam` (
-  `idexam` int(11) NOT NULL,
-  `examname` varchar(45) NOT NULL,
-  `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `material`
---
-
-CREATE TABLE `material` (
-  `idmaterial` int(11) NOT NULL,
-  `materialname` varchar(45) NOT NULL,
-  `materialtype_idmaterialtype` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
-
--- --------------------------------------------------------
-
---
-<<<<<<< HEAD
 -- Estructura de tabla para la tabla `coordinator`
---
--- Creación: 17-12-2017 a las 02:59:12
 --
 
 DROP TABLE IF EXISTS `coordinator`;
-CREATE TABLE IF NOT EXISTS `coordinator` (
-  `idcoordinator` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `coordinator` (
+  `idcoordinator` int(11) NOT NULL,
   `idnumber` varchar(10) NOT NULL,
   `name` varchar(45) NOT NULL,
   `lastname` varchar(45) NOT NULL,
@@ -275,21 +131,8 @@ CREATE TABLE IF NOT EXISTS `coordinator` (
   `password` varchar(45) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `role_idrole` int(11) NOT NULL,
-  `gender_idgender` int(11) NOT NULL,
-  PRIMARY KEY (`idcoordinator`,`role_idrole`,`gender_idgender`),
-  UNIQUE KEY `username_UNIQUE` (`username`),
-  UNIQUE KEY `rut_UNIQUE` (`idnumber`),
-  KEY `fk_teacher_role1_idx` (`role_idrole`),
-  KEY `fk_teacher_gender1_idx` (`gender_idgender`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `coordinator`:
---   `gender_idgender`
---       `gender` -> `idgender`
---   `role_idrole`
---       `role` -> `idrole`
---
+  `gender_idgender` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `coordinator`
@@ -302,61 +145,20 @@ TRUNCATE TABLE `coordinator`;
 
 INSERT INTO `coordinator` (`idcoordinator`, `idnumber`, `name`, `lastname`, `username`, `password`, `email`, `role_idrole`, `gender_idgender`) VALUES
 (1, '66666666-6', 'David', 'Maldonado Briones', 'dama', '202cb962ac59075b964b07152d234b70', 'david@gmail.com', 3, 1);
-=======
--- Estructura de tabla para la tabla `materialtype`
---
-
-CREATE TABLE `materialtype` (
-  `idmaterialtype` int(11) NOT NULL,
-  `materialtypename` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `material_has_class`
---
-
-CREATE TABLE `material_has_class` (
-  `material_idmaterial` int(11) NOT NULL,
-  `class_idclass` int(11) NOT NULL,
-  `class_teacher_idteacher` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `question`
---
-
-CREATE TABLE `question` (
-  `idquestion` int(11) NOT NULL,
-  `questionname` varchar(45) NOT NULL,
-  `description` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
-
--- --------------------------------------------------------
-
---
-<<<<<<< HEAD
 -- Estructura de tabla para la tabla `exam`
---
--- Creación: 30-11-2017 a las 03:20:22
 --
 
 DROP TABLE IF EXISTS `exam`;
-CREATE TABLE IF NOT EXISTS `exam` (
-  `idexam` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `exam` (
+  `idexam` int(11) NOT NULL,
   `examname` varchar(45) NOT NULL,
   `date` date NOT NULL,
-  PRIMARY KEY (`idexam`),
-  UNIQUE KEY `examname_UNIQUE` (`examname`)
+  `state` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `exam`:
---
 
 --
 -- Truncar tablas antes de insertar `exam`
@@ -368,25 +170,12 @@ TRUNCATE TABLE `exam`;
 --
 -- Estructura de tabla para la tabla `exam_has_record`
 --
--- Creación: 08-12-2017 a las 21:15:55
---
 
 DROP TABLE IF EXISTS `exam_has_record`;
-CREATE TABLE IF NOT EXISTS `exam_has_record` (
+CREATE TABLE `exam_has_record` (
   `exam_idexam` int(11) NOT NULL,
-  `record_idrecord` int(11) NOT NULL,
-  PRIMARY KEY (`exam_idexam`,`record_idrecord`),
-  KEY `fk_exam_has_record_record1_idx` (`record_idrecord`),
-  KEY `fk_exam_has_record_exam1_idx` (`exam_idexam`)
+  `record_idrecord` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `exam_has_record`:
---   `exam_idexam`
---       `exam` -> `idexam`
---   `record_idrecord`
---       `record` -> `idrecord`
---
 
 --
 -- Truncar tablas antes de insertar `exam_has_record`
@@ -398,19 +187,12 @@ TRUNCATE TABLE `exam_has_record`;
 --
 -- Estructura de tabla para la tabla `gender`
 --
--- Creación: 02-12-2017 a las 20:07:11
---
 
 DROP TABLE IF EXISTS `gender`;
-CREATE TABLE IF NOT EXISTS `gender` (
-  `idgender` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`idgender`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `gender`:
---
+CREATE TABLE `gender` (
+  `idgender` int(11) NOT NULL,
+  `name` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `gender`
@@ -424,127 +206,45 @@ TRUNCATE TABLE `gender`;
 INSERT INTO `gender` (`idgender`, `name`) VALUES
 (1, 'male'),
 (2, 'female');
-=======
--- Estructura de tabla para la tabla `question_has_activity`
---
-
-CREATE TABLE `question_has_activity` (
-  `question_idquestion` int(11) NOT NULL,
-  `activity_idactivity` int(11) NOT NULL,
-  `activity_unity_idunity` int(11) NOT NULL,
-  `activity_unity_class_idclass` int(11) NOT NULL,
-  `activity_unity_class_teacher_idteacher` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `record`
---
-
-CREATE TABLE `record` (
-  `idrecord` int(11) NOT NULL,
-  `recordname` varchar(45) NOT NULL,
-  `date` date NOT NULL,
-  `value` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `role`
---
-
-CREATE TABLE `role` (
-  `idrole` int(11) NOT NULL,
-  `rolename` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `role`
---
-
-INSERT INTO `role` (`idrole`, `rolename`) VALUES
-(1, 'student'),
-(2, 'teacher');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `student`
---
-
-CREATE TABLE `student` (
-  `idstudent` int(11) NOT NULL,
-  `idnumber` varchar(10) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `lastname` varchar(45) NOT NULL,
-  `username` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `class_idclass` int(11) NOT NULL,
-  `role_idrole` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `student_has_record`
---
-
-CREATE TABLE `student_has_record` (
-  `student_idstudent` int(11) NOT NULL,
-  `student_class_idclass` int(11) NOT NULL,
-  `record_idrecord` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
-
--- --------------------------------------------------------
-
---
-<<<<<<< HEAD
 -- Estructura de tabla para la tabla `glosary`
---
--- Creación: 12-12-2017 a las 17:59:17
 --
 
 DROP TABLE IF EXISTS `glosary`;
-CREATE TABLE IF NOT EXISTS `glosary` (
-  `idglosary` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `glosary` (
+  `idglosary` int(11) NOT NULL,
   `wordname` varchar(45) NOT NULL,
-  `decription` varchar(200) NOT NULL,
-  `aditionaldescription` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`idglosary`)
+  `description` varchar(200) NOT NULL,
+  `aditionaldescription` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `glosary`:
---
 
 --
 -- Truncar tablas antes de insertar `glosary`
 --
 
 TRUNCATE TABLE `glosary`;
+--
+-- Volcado de datos para la tabla `glosary`
+--
+
+INSERT INTO `glosary` (`idglosary`, `wordname`, `description`, `aditionaldescription`) VALUES
+(6, 'Potato', 'Patata', 'En Chile, Papa.');
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `log`
 --
--- Creación: 17-12-2017 a las 02:59:11
---
 
 DROP TABLE IF EXISTS `log`;
-CREATE TABLE IF NOT EXISTS `log` (
-  `idlog` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `log` (
+  `idlog` int(11) NOT NULL,
   `start` date DEFAULT NULL,
-  `end` date DEFAULT NULL,
-  PRIMARY KEY (`idlog`)
+  `end` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `log`:
---
 
 --
 -- Truncar tablas antes de insertar `log`
@@ -556,31 +256,14 @@ TRUNCATE TABLE `log`;
 --
 -- Estructura de tabla para la tabla `log_has_student`
 --
--- Creación: 17-12-2017 a las 02:59:12
---
 
 DROP TABLE IF EXISTS `log_has_student`;
-CREATE TABLE IF NOT EXISTS `log_has_student` (
+CREATE TABLE `log_has_student` (
   `log_idlog` int(11) NOT NULL,
   `student_idstudent` int(11) NOT NULL,
   `student_role_idrole` int(11) NOT NULL,
-  `student_gender_idgender` int(11) NOT NULL,
-  PRIMARY KEY (`log_idlog`,`student_idstudent`,`student_role_idrole`,`student_gender_idgender`),
-  KEY `fk_log_has_student_student1_idx` (`student_idstudent`,`student_role_idrole`,`student_gender_idgender`),
-  KEY `fk_log_has_student_log1_idx` (`log_idlog`)
+  `student_gender_idgender` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `log_has_student`:
---   `log_idlog`
---       `log` -> `idlog`
---   `student_idstudent`
---       `student` -> `idstudent`
---   `student_role_idrole`
---       `student` -> `role_idrole`
---   `student_gender_idgender`
---       `student` -> `gender_idgender`
---
 
 --
 -- Truncar tablas antes de insertar `log_has_student`
@@ -592,28 +275,18 @@ TRUNCATE TABLE `log_has_student`;
 --
 -- Estructura de tabla para la tabla `material`
 --
--- Creación: 06-12-2017 a las 03:43:54
---
 
 DROP TABLE IF EXISTS `material`;
-CREATE TABLE IF NOT EXISTS `material` (
-  `idmaterial` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `material` (
+  `idmaterial` int(11) NOT NULL,
   `materialname` varchar(45) NOT NULL,
   `descriptionleft` varchar(200) NOT NULL,
   `descriptionright` varchar(200) DEFAULT NULL,
   `link` varchar(200) DEFAULT NULL,
   `route` varchar(200) DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
-  `materialtype_idmaterialtype` int(11) NOT NULL,
-  PRIMARY KEY (`idmaterial`,`materialtype_idmaterialtype`),
-  KEY `fk_material_materialtype1_idx` (`materialtype_idmaterialtype`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `material`:
---   `materialtype_idmaterialtype`
---       `materialtype` -> `idmaterialtype`
---
+  `materialtype_idmaterialtype` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `material`
@@ -633,19 +306,12 @@ INSERT INTO `material` (`idmaterial`, `materialname`, `descriptionleft`, `descri
 --
 -- Estructura de tabla para la tabla `materialtype`
 --
--- Creación: 30-11-2017 a las 03:20:24
---
 
 DROP TABLE IF EXISTS `materialtype`;
-CREATE TABLE IF NOT EXISTS `materialtype` (
-  `idmaterialtype` int(11) NOT NULL AUTO_INCREMENT,
-  `materialtypename` varchar(45) NOT NULL,
-  PRIMARY KEY (`idmaterialtype`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `materialtype`:
---
+CREATE TABLE `materialtype` (
+  `idmaterialtype` int(11) NOT NULL,
+  `materialtypename` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `materialtype`
@@ -667,95 +333,44 @@ INSERT INTO `materialtype` (`idmaterialtype`, `materialtypename`) VALUES
 --
 -- Estructura de tabla para la tabla `question`
 --
--- Creación: 30-11-2017 a las 03:20:23
---
 
 DROP TABLE IF EXISTS `question`;
-CREATE TABLE IF NOT EXISTS `question` (
-  `idquestion` int(11) NOT NULL AUTO_INCREMENT,
-  `questionname` varchar(45) NOT NULL,
-  `description` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idquestion`)
+CREATE TABLE `question` (
+  `idquestion` int(11) NOT NULL,
+  `questionname` varchar(200) NOT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `activity_idactivity` int(11) NOT NULL,
+  `activity_unity_idunity` int(11) NOT NULL,
+  `activity_unity_class_idclass` int(11) NOT NULL,
+  `activity_unity_class_teacher_idteacher` int(11) NOT NULL,
+  `activity_material_idmaterial` int(11) NOT NULL,
+  `activity_material_materialtype_idmaterialtype` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `question`:
---
 
 --
 -- Truncar tablas antes de insertar `question`
 --
 
 TRUNCATE TABLE `question`;
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `question_has_activity`
---
--- Creación: 16-12-2017 a las 04:35:26
+-- Volcado de datos para la tabla `question`
 --
 
-DROP TABLE IF EXISTS `question_has_activity`;
-CREATE TABLE IF NOT EXISTS `question_has_activity` (
-  `question_idquestion` int(11) NOT NULL,
-  `activity_idactivity` int(11) NOT NULL,
-  `activity_unity_idunity` int(11) NOT NULL,
-  `activity_unity_class_idclass` int(11) NOT NULL,
-  `activity_unity_class_teacher_idteacher` int(11) NOT NULL,
-  `activity_material_idmaterial` int(11) NOT NULL,
-  `activity_material_materialtype_idmaterialtype` int(11) NOT NULL,
-  PRIMARY KEY (`question_idquestion`,`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`,`activity_material_idmaterial`,`activity_material_materialtype_idmaterialtype`),
-  KEY `fk_question_has_activity_activity1_idx` (`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`,`activity_material_idmaterial`,`activity_material_materialtype_idmaterialtype`),
-  KEY `fk_question_has_activity_question1_idx` (`question_idquestion`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `question` (`idquestion`, `questionname`, `description`, `activity_idactivity`, `activity_unity_idunity`, `activity_unity_class_idclass`, `activity_unity_class_teacher_idteacher`, `activity_material_idmaterial`, `activity_material_materialtype_idmaterialtype`) VALUES
+(1, 'Is Empty?', 'Answer the question.', 1, 0, 1, 1, 1, 4),
+(2, 'Are you shure?', 'Aswere the question now!', 1, 0, 1, 1, 1, 4);
 
---
--- RELACIONES PARA LA TABLA `question_has_activity`:
---   `activity_idactivity`
---       `activity` -> `idactivity`
---   `activity_unity_idunity`
---       `activity` -> `unity_idunity`
---   `activity_unity_class_idclass`
---       `activity` -> `unity_class_idclass`
---   `activity_unity_class_teacher_idteacher`
---       `activity` -> `unity_class_teacher_idteacher`
---   `activity_material_idmaterial`
---       `activity` -> `material_idmaterial`
---   `activity_material_materialtype_idmaterialtype`
---       `activity` -> `material_materialtype_idmaterialtype`
---   `question_idquestion`
---       `question` -> `idquestion`
---
-
---
--- Truncar tablas antes de insertar `question_has_activity`
---
-
-TRUNCATE TABLE `question_has_activity`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `question_has_record`
 --
--- Creación: 08-12-2017 a las 21:15:55
---
 
 DROP TABLE IF EXISTS `question_has_record`;
-CREATE TABLE IF NOT EXISTS `question_has_record` (
+CREATE TABLE `question_has_record` (
   `question_idquestion` int(11) NOT NULL,
-  `record_idrecord` int(11) NOT NULL,
-  PRIMARY KEY (`question_idquestion`,`record_idrecord`),
-  KEY `fk_question_has_record_record1_idx` (`record_idrecord`),
-  KEY `fk_question_has_record_question1_idx` (`question_idquestion`)
+  `record_idrecord` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `question_has_record`:
---   `question_idquestion`
---       `question` -> `idquestion`
---   `record_idrecord`
---       `record` -> `idrecord`
---
 
 --
 -- Truncar tablas antes de insertar `question_has_record`
@@ -767,21 +382,14 @@ TRUNCATE TABLE `question_has_record`;
 --
 -- Estructura de tabla para la tabla `record`
 --
--- Creación: 30-11-2017 a las 03:20:23
---
 
 DROP TABLE IF EXISTS `record`;
-CREATE TABLE IF NOT EXISTS `record` (
-  `idrecord` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `record` (
+  `idrecord` int(11) NOT NULL,
   `recordname` varchar(45) NOT NULL,
   `date` date NOT NULL,
-  `value` int(11) NOT NULL,
-  PRIMARY KEY (`idrecord`)
+  `value` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `record`:
---
 
 --
 -- Truncar tablas antes de insertar `record`
@@ -793,28 +401,13 @@ TRUNCATE TABLE `record`;
 --
 -- Estructura de tabla para la tabla `record_has_class`
 --
--- Creación: 08-12-2017 a las 21:15:54
---
 
 DROP TABLE IF EXISTS `record_has_class`;
-CREATE TABLE IF NOT EXISTS `record_has_class` (
+CREATE TABLE `record_has_class` (
   `record_idrecord` int(11) NOT NULL,
   `class_idclass` int(11) NOT NULL,
-  `class_teacher_idteacher` int(11) NOT NULL,
-  PRIMARY KEY (`record_idrecord`,`class_idclass`,`class_teacher_idteacher`),
-  KEY `fk_record_has_class_class1_idx` (`class_idclass`,`class_teacher_idteacher`),
-  KEY `fk_record_has_class_record1_idx` (`record_idrecord`)
+  `class_teacher_idteacher` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `record_has_class`:
---   `class_idclass`
---       `class` -> `idclass`
---   `class_teacher_idteacher`
---       `class` -> `teacher_idteacher`
---   `record_idrecord`
---       `record` -> `idrecord`
---
 
 --
 -- Truncar tablas antes de insertar `record_has_class`
@@ -826,19 +419,12 @@ TRUNCATE TABLE `record_has_class`;
 --
 -- Estructura de tabla para la tabla `role`
 --
--- Creación: 01-12-2017 a las 02:06:27
---
 
 DROP TABLE IF EXISTS `role`;
-CREATE TABLE IF NOT EXISTS `role` (
-  `idrole` int(11) NOT NULL AUTO_INCREMENT,
-  `rolename` varchar(45) NOT NULL,
-  PRIMARY KEY (`idrole`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `role`:
---
+CREATE TABLE `role` (
+  `idrole` int(11) NOT NULL,
+  `rolename` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `role`
@@ -859,12 +445,10 @@ INSERT INTO `role` (`idrole`, `rolename`) VALUES
 --
 -- Estructura de tabla para la tabla `student`
 --
--- Creación: 03-12-2017 a las 04:06:36
---
 
 DROP TABLE IF EXISTS `student`;
-CREATE TABLE IF NOT EXISTS `student` (
-  `idstudent` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `student` (
+  `idstudent` int(11) NOT NULL,
   `idnumber` varchar(10) NOT NULL,
   `name` varchar(45) NOT NULL,
   `lastname` varchar(45) NOT NULL,
@@ -872,21 +456,8 @@ CREATE TABLE IF NOT EXISTS `student` (
   `password` varchar(45) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `role_idrole` int(11) NOT NULL,
-  `gender_idgender` int(11) NOT NULL,
-  PRIMARY KEY (`idstudent`,`role_idrole`,`gender_idgender`),
-  UNIQUE KEY `idnumber_UNIQUE` (`idnumber`),
-  UNIQUE KEY `username_UNIQUE` (`username`),
-  KEY `fk_student_role1_idx` (`role_idrole`),
-  KEY `fk_student_gender1_idx` (`gender_idgender`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `student`:
---   `gender_idgender`
---       `gender` -> `idgender`
---   `role_idrole`
---       `role` -> `idrole`
---
+  `gender_idgender` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `student`
@@ -908,34 +479,15 @@ INSERT INTO `student` (`idstudent`, `idnumber`, `name`, `lastname`, `username`, 
 --
 -- Estructura de tabla para la tabla `student_has_class`
 --
--- Creación: 03-12-2017 a las 04:06:37
---
 
 DROP TABLE IF EXISTS `student_has_class`;
-CREATE TABLE IF NOT EXISTS `student_has_class` (
+CREATE TABLE `student_has_class` (
   `student_idstudent` int(11) NOT NULL,
   `student_role_idrole` int(11) NOT NULL,
   `student_gender_idgender` int(11) NOT NULL,
   `class_idclass` int(11) NOT NULL,
-  `class_teacher_idteacher` int(11) NOT NULL,
-  PRIMARY KEY (`student_idstudent`,`student_role_idrole`,`student_gender_idgender`,`class_idclass`,`class_teacher_idteacher`),
-  KEY `fk_student_has_class_class1_idx` (`class_idclass`,`class_teacher_idteacher`),
-  KEY `fk_student_has_class_student1_idx` (`student_idstudent`,`student_role_idrole`,`student_gender_idgender`)
+  `class_teacher_idteacher` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `student_has_class`:
---   `class_idclass`
---       `class` -> `idclass`
---   `class_teacher_idteacher`
---       `class` -> `teacher_idteacher`
---   `student_idstudent`
---       `student` -> `idstudent`
---   `student_role_idrole`
---       `student` -> `role_idrole`
---   `student_gender_idgender`
---       `student` -> `gender_idgender`
---
 
 --
 -- Truncar tablas antes de insertar `student_has_class`
@@ -947,26 +499,13 @@ TRUNCATE TABLE `student_has_class`;
 --
 -- Estructura de tabla para la tabla `student_has_record`
 --
--- Creación: 02-12-2017 a las 22:27:57
---
 
 DROP TABLE IF EXISTS `student_has_record`;
-CREATE TABLE IF NOT EXISTS `student_has_record` (
+CREATE TABLE `student_has_record` (
   `student_idstudent` int(11) NOT NULL,
   `student_class_idclass` int(11) NOT NULL,
-  `record_idrecord` int(11) NOT NULL,
-  PRIMARY KEY (`student_idstudent`,`student_class_idclass`,`record_idrecord`),
-  KEY `fk_student_has_record_record1_idx` (`record_idrecord`),
-  KEY `fk_student_has_record_student1_idx` (`student_idstudent`,`student_class_idclass`)
+  `record_idrecord` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `student_has_record`:
---   `record_idrecord`
---       `record` -> `idrecord`
---   `student_idstudent`
---       `student` -> `idstudent`
---
 
 --
 -- Truncar tablas antes de insertar `student_has_record`
@@ -978,12 +517,10 @@ TRUNCATE TABLE `student_has_record`;
 --
 -- Estructura de tabla para la tabla `teacher`
 --
--- Creación: 02-12-2017 a las 20:10:38
---
 
 DROP TABLE IF EXISTS `teacher`;
-CREATE TABLE IF NOT EXISTS `teacher` (
-  `idteacher` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `teacher` (
+  `idteacher` int(11) NOT NULL,
   `idnumber` varchar(10) NOT NULL,
   `name` varchar(45) NOT NULL,
   `lastname` varchar(45) NOT NULL,
@@ -991,21 +528,8 @@ CREATE TABLE IF NOT EXISTS `teacher` (
   `password` varchar(45) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `role_idrole` int(11) NOT NULL,
-  `gender_idgender` int(11) NOT NULL,
-  PRIMARY KEY (`idteacher`,`role_idrole`,`gender_idgender`),
-  UNIQUE KEY `username_UNIQUE` (`username`),
-  UNIQUE KEY `rut_UNIQUE` (`idnumber`),
-  KEY `fk_teacher_role1_idx` (`role_idrole`),
-  KEY `fk_teacher_gender1_idx` (`gender_idgender`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `teacher`:
---   `gender_idgender`
---       `gender` -> `idgender`
---   `role_idrole`
---       `role` -> `idrole`
---
+  `gender_idgender` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Truncar tablas antes de insertar `teacher`
@@ -1017,39 +541,21 @@ TRUNCATE TABLE `teacher`;
 --
 
 INSERT INTO `teacher` (`idteacher`, `idnumber`, `name`, `lastname`, `username`, `password`, `email`, `role_idrole`, `gender_idgender`) VALUES
-(1, '11111111-1', 'Belén Elizabeth', 'Pérez Durán', 'beped', '202cb962ac59075b964b07152d234b70', 'belen.perez04@inacapmail.cl', 2, 2),
-(2, '33333333-3', 'Alfred', 'Storm Linear', 'att', '202cb962ac59075b964b07152d234b70', 'alstorm@gmail.com', 2, 1);
+(1, '11111111-1', 'Belén Elizabeth', 'Pérez Durán', 'beped', '202cb962ac59075b964b07152d234b70', 'belen.perez04@inacapmail.cl', 2, 2);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `teacher_has_log`
 --
--- Creación: 17-12-2017 a las 02:59:11
---
 
 DROP TABLE IF EXISTS `teacher_has_log`;
-CREATE TABLE IF NOT EXISTS `teacher_has_log` (
+CREATE TABLE `teacher_has_log` (
   `teacher_idteacher` int(11) NOT NULL,
   `teacher_role_idrole` int(11) NOT NULL,
   `teacher_gender_idgender` int(11) NOT NULL,
-  `log_idlog` int(11) NOT NULL,
-  PRIMARY KEY (`teacher_idteacher`,`teacher_role_idrole`,`teacher_gender_idgender`,`log_idlog`),
-  KEY `fk_teacher_has_log_log1_idx` (`log_idlog`),
-  KEY `fk_teacher_has_log_teacher1_idx` (`teacher_idteacher`,`teacher_role_idrole`,`teacher_gender_idgender`)
+  `log_idlog` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `teacher_has_log`:
---   `log_idlog`
---       `log` -> `idlog`
---   `teacher_idteacher`
---       `teacher` -> `idteacher`
---   `teacher_role_idrole`
---       `teacher` -> `role_idrole`
---   `teacher_gender_idgender`
---       `teacher` -> `gender_idgender`
---
 
 --
 -- Truncar tablas antes de insertar `teacher_has_log`
@@ -1061,30 +567,17 @@ TRUNCATE TABLE `teacher_has_log`;
 --
 -- Estructura de tabla para la tabla `unity`
 --
--- Creación: 09-12-2017 a las 15:20:29
---
 
 DROP TABLE IF EXISTS `unity`;
-CREATE TABLE IF NOT EXISTS `unity` (
+CREATE TABLE `unity` (
   `idunity` int(11) NOT NULL,
   `unityname` varchar(45) NOT NULL,
   `descriptioncenter` varchar(200) DEFAULT NULL,
   `descriptionleft` varchar(200) DEFAULT NULL,
   `descriptionright` varchar(200) DEFAULT NULL,
   `class_idclass` int(11) NOT NULL,
-  `class_teacher_idteacher` int(11) NOT NULL,
-  PRIMARY KEY (`idunity`,`class_idclass`,`class_teacher_idteacher`),
-  UNIQUE KEY `descriptioncenter_UNIQUE` (`descriptioncenter`),
-  KEY `fk_unity_class1_idx` (`class_idclass`,`class_teacher_idteacher`)
+  `class_teacher_idteacher` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `unity`:
---   `class_idclass`
---       `class` -> `idclass`
---   `class_teacher_idteacher`
---       `class` -> `teacher_idteacher`
---
 
 --
 -- Truncar tablas antes de insertar `unity`
@@ -1103,31 +596,14 @@ INSERT INTO `unity` (`idunity`, `unityname`, `descriptioncenter`, `descriptionle
 --
 -- Estructura de tabla para la tabla `unity_has_exam`
 --
--- Creación: 09-12-2017 a las 15:20:30
---
 
 DROP TABLE IF EXISTS `unity_has_exam`;
-CREATE TABLE IF NOT EXISTS `unity_has_exam` (
+CREATE TABLE `unity_has_exam` (
   `unity_idunity` int(11) NOT NULL,
   `unity_class_idclass` int(11) NOT NULL,
   `unity_class_teacher_idteacher` int(11) NOT NULL,
-  `exam_idexam` int(11) NOT NULL,
-  PRIMARY KEY (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`,`exam_idexam`),
-  KEY `fk_unity_has_exam_exam1_idx` (`exam_idexam`),
-  KEY `fk_unity_has_exam_unity1_idx` (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`)
+  `exam_idexam` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `unity_has_exam`:
---   `exam_idexam`
---       `exam` -> `idexam`
---   `unity_idunity`
---       `unity` -> `idunity`
---   `unity_class_idclass`
---       `unity` -> `class_idclass`
---   `unity_class_teacher_idteacher`
---       `unity` -> `class_teacher_idteacher`
---
 
 --
 -- Truncar tablas antes de insertar `unity_has_exam`
@@ -1139,26 +615,306 @@ TRUNCATE TABLE `unity_has_exam`;
 --
 -- Estructura de tabla para la tabla `value`
 --
--- Creación: 30-11-2017 a las 03:20:25
---
 
 DROP TABLE IF EXISTS `value`;
-CREATE TABLE IF NOT EXISTS `value` (
-  `idvalue` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `value` (
+  `idvalue` int(11) NOT NULL,
   `valuename` varchar(45) NOT NULL,
-  `val` int(11) NOT NULL,
-  PRIMARY KEY (`idvalue`)
+  `val` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- RELACIONES PARA LA TABLA `value`:
---
 
 --
 -- Truncar tablas antes de insertar `value`
 --
 
 TRUNCATE TABLE `value`;
+--
+-- Volcado de datos para la tabla `value`
+--
+
+INSERT INTO `value` (`idvalue`, `valuename`, `val`) VALUES
+(1, 'Good', 100),
+(2, 'Regular', 50),
+(3, 'Bad', 0);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `activity`
+--
+ALTER TABLE `activity`
+  ADD PRIMARY KEY (`idactivity`,`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`,`material_idmaterial`,`material_materialtype_idmaterialtype`),
+  ADD UNIQUE KEY `activityname_UNIQUE` (`activityname`),
+  ADD KEY `fk_activity_unity1_idx` (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`),
+  ADD KEY `fk_activity_material1_idx` (`material_idmaterial`,`material_materialtype_idmaterialtype`);
+
+--
+-- Indices de la tabla `answer`
+--
+ALTER TABLE `answer`
+  ADD PRIMARY KEY (`idanswer`,`value_idvalue`,`question_idquestion`),
+  ADD KEY `fk_answer_value1_idx` (`value_idvalue`),
+  ADD KEY `fk_answer_question1_idx` (`question_idquestion`);
+
+--
+-- Indices de la tabla `class`
+--
+ALTER TABLE `class`
+  ADD PRIMARY KEY (`idclass`,`teacher_idteacher`),
+  ADD KEY `fk_class_teacher1_idx` (`teacher_idteacher`);
+
+--
+-- Indices de la tabla `coordinator`
+--
+ALTER TABLE `coordinator`
+  ADD PRIMARY KEY (`idcoordinator`,`role_idrole`,`gender_idgender`),
+  ADD UNIQUE KEY `username_UNIQUE` (`username`),
+  ADD UNIQUE KEY `rut_UNIQUE` (`idnumber`),
+  ADD KEY `fk_teacher_role1_idx` (`role_idrole`),
+  ADD KEY `fk_teacher_gender1_idx` (`gender_idgender`);
+
+--
+-- Indices de la tabla `exam`
+--
+ALTER TABLE `exam`
+  ADD PRIMARY KEY (`idexam`,`state`),
+  ADD UNIQUE KEY `examname_UNIQUE` (`examname`);
+
+--
+-- Indices de la tabla `exam_has_record`
+--
+ALTER TABLE `exam_has_record`
+  ADD PRIMARY KEY (`exam_idexam`,`record_idrecord`),
+  ADD KEY `fk_exam_has_record_record1_idx` (`record_idrecord`),
+  ADD KEY `fk_exam_has_record_exam1_idx` (`exam_idexam`);
+
+--
+-- Indices de la tabla `gender`
+--
+ALTER TABLE `gender`
+  ADD PRIMARY KEY (`idgender`);
+
+--
+-- Indices de la tabla `glosary`
+--
+ALTER TABLE `glosary`
+  ADD PRIMARY KEY (`idglosary`),
+  ADD UNIQUE KEY `wordname_UNIQUE` (`wordname`);
+
+--
+-- Indices de la tabla `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`idlog`);
+
+--
+-- Indices de la tabla `log_has_student`
+--
+ALTER TABLE `log_has_student`
+  ADD PRIMARY KEY (`log_idlog`,`student_idstudent`,`student_role_idrole`,`student_gender_idgender`),
+  ADD KEY `fk_log_has_student_student1_idx` (`student_idstudent`,`student_role_idrole`,`student_gender_idgender`),
+  ADD KEY `fk_log_has_student_log1_idx` (`log_idlog`);
+
+--
+-- Indices de la tabla `material`
+--
+ALTER TABLE `material`
+  ADD PRIMARY KEY (`idmaterial`,`materialtype_idmaterialtype`),
+  ADD KEY `fk_material_materialtype1_idx` (`materialtype_idmaterialtype`);
+
+--
+-- Indices de la tabla `materialtype`
+--
+ALTER TABLE `materialtype`
+  ADD PRIMARY KEY (`idmaterialtype`);
+
+--
+-- Indices de la tabla `question`
+--
+ALTER TABLE `question`
+  ADD PRIMARY KEY (`idquestion`,`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`,`activity_material_idmaterial`,`activity_material_materialtype_idmaterialtype`),
+  ADD KEY `fk_question_activity1_idx` (`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`,`activity_material_idmaterial`,`activity_material_materialtype_idmaterialtype`);
+
+--
+-- Indices de la tabla `question_has_record`
+--
+ALTER TABLE `question_has_record`
+  ADD PRIMARY KEY (`question_idquestion`,`record_idrecord`),
+  ADD KEY `fk_question_has_record_record1_idx` (`record_idrecord`),
+  ADD KEY `fk_question_has_record_question1_idx` (`question_idquestion`);
+
+--
+-- Indices de la tabla `record`
+--
+ALTER TABLE `record`
+  ADD PRIMARY KEY (`idrecord`);
+
+--
+-- Indices de la tabla `record_has_class`
+--
+ALTER TABLE `record_has_class`
+  ADD PRIMARY KEY (`record_idrecord`,`class_idclass`,`class_teacher_idteacher`),
+  ADD KEY `fk_record_has_class_class1_idx` (`class_idclass`,`class_teacher_idteacher`),
+  ADD KEY `fk_record_has_class_record1_idx` (`record_idrecord`);
+
+--
+-- Indices de la tabla `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`idrole`);
+
+--
+-- Indices de la tabla `student`
+--
+ALTER TABLE `student`
+  ADD PRIMARY KEY (`idstudent`,`role_idrole`,`gender_idgender`),
+  ADD UNIQUE KEY `idnumber_UNIQUE` (`idnumber`),
+  ADD UNIQUE KEY `username_UNIQUE` (`username`),
+  ADD KEY `fk_student_role1_idx` (`role_idrole`),
+  ADD KEY `fk_student_gender1_idx` (`gender_idgender`);
+
+--
+-- Indices de la tabla `student_has_class`
+--
+ALTER TABLE `student_has_class`
+  ADD PRIMARY KEY (`student_idstudent`,`student_role_idrole`,`student_gender_idgender`,`class_idclass`,`class_teacher_idteacher`),
+  ADD KEY `fk_student_has_class_class1_idx` (`class_idclass`,`class_teacher_idteacher`),
+  ADD KEY `fk_student_has_class_student1_idx` (`student_idstudent`,`student_role_idrole`,`student_gender_idgender`);
+
+--
+-- Indices de la tabla `student_has_record`
+--
+ALTER TABLE `student_has_record`
+  ADD PRIMARY KEY (`student_idstudent`,`student_class_idclass`,`record_idrecord`),
+  ADD KEY `fk_student_has_record_record1_idx` (`record_idrecord`),
+  ADD KEY `fk_student_has_record_student1_idx` (`student_idstudent`,`student_class_idclass`);
+
+--
+-- Indices de la tabla `teacher`
+--
+ALTER TABLE `teacher`
+  ADD PRIMARY KEY (`idteacher`,`role_idrole`,`gender_idgender`),
+  ADD UNIQUE KEY `username_UNIQUE` (`username`),
+  ADD UNIQUE KEY `rut_UNIQUE` (`idnumber`),
+  ADD KEY `fk_teacher_role1_idx` (`role_idrole`),
+  ADD KEY `fk_teacher_gender1_idx` (`gender_idgender`);
+
+--
+-- Indices de la tabla `teacher_has_log`
+--
+ALTER TABLE `teacher_has_log`
+  ADD PRIMARY KEY (`teacher_idteacher`,`teacher_role_idrole`,`teacher_gender_idgender`,`log_idlog`),
+  ADD KEY `fk_teacher_has_log_log1_idx` (`log_idlog`),
+  ADD KEY `fk_teacher_has_log_teacher1_idx` (`teacher_idteacher`,`teacher_role_idrole`,`teacher_gender_idgender`);
+
+--
+-- Indices de la tabla `unity`
+--
+ALTER TABLE `unity`
+  ADD PRIMARY KEY (`idunity`,`class_idclass`,`class_teacher_idteacher`),
+  ADD UNIQUE KEY `descriptioncenter_UNIQUE` (`descriptioncenter`),
+  ADD KEY `fk_unity_class1_idx` (`class_idclass`,`class_teacher_idteacher`);
+
+--
+-- Indices de la tabla `unity_has_exam`
+--
+ALTER TABLE `unity_has_exam`
+  ADD PRIMARY KEY (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`,`exam_idexam`),
+  ADD KEY `fk_unity_has_exam_exam1_idx` (`exam_idexam`),
+  ADD KEY `fk_unity_has_exam_unity1_idx` (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`);
+
+--
+-- Indices de la tabla `value`
+--
+ALTER TABLE `value`
+  ADD PRIMARY KEY (`idvalue`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `activity`
+--
+ALTER TABLE `activity`
+  MODIFY `idactivity` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `answer`
+--
+ALTER TABLE `answer`
+  MODIFY `idanswer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `class`
+--
+ALTER TABLE `class`
+  MODIFY `idclass` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `coordinator`
+--
+ALTER TABLE `coordinator`
+  MODIFY `idcoordinator` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `exam`
+--
+ALTER TABLE `exam`
+  MODIFY `idexam` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `gender`
+--
+ALTER TABLE `gender`
+  MODIFY `idgender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `glosary`
+--
+ALTER TABLE `glosary`
+  MODIFY `idglosary` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `log`
+--
+ALTER TABLE `log`
+  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `material`
+--
+ALTER TABLE `material`
+  MODIFY `idmaterial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `materialtype`
+--
+ALTER TABLE `materialtype`
+  MODIFY `idmaterialtype` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `question`
+--
+ALTER TABLE `question`
+  MODIFY `idquestion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `record`
+--
+ALTER TABLE `record`
+  MODIFY `idrecord` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `role`
+--
+ALTER TABLE `role`
+  MODIFY `idrole` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `student`
+--
+ALTER TABLE `student`
+  MODIFY `idstudent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `teacher`
+--
+ALTER TABLE `teacher`
+  MODIFY `idteacher` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `value`
+--
+ALTER TABLE `value`
+  MODIFY `idvalue` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Restricciones para tablas volcadas
 --
@@ -1174,14 +930,8 @@ ALTER TABLE `activity`
 -- Filtros para la tabla `answer`
 --
 ALTER TABLE `answer`
+  ADD CONSTRAINT `fk_answer_question1` FOREIGN KEY (`question_idquestion`) REFERENCES `question` (`idquestion`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_answer_value1` FOREIGN KEY (`value_idvalue`) REFERENCES `value` (`idvalue`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `answer_has_question`
---
-ALTER TABLE `answer_has_question`
-  ADD CONSTRAINT `fk_answer_has_question_answer1` FOREIGN KEY (`answer_idanswer`) REFERENCES `answer` (`idanswer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_answer_has_question_question1` FOREIGN KEY (`question_idquestion`) REFERENCES `question` (`idquestion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `class`
@@ -1217,11 +967,10 @@ ALTER TABLE `material`
   ADD CONSTRAINT `fk_material_materialtype1` FOREIGN KEY (`materialtype_idmaterialtype`) REFERENCES `materialtype` (`idmaterialtype`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `question_has_activity`
+-- Filtros para la tabla `question`
 --
-ALTER TABLE `question_has_activity`
-  ADD CONSTRAINT `fk_question_has_activity_activity1` FOREIGN KEY (`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`,`activity_material_idmaterial`,`activity_material_materialtype_idmaterialtype`) REFERENCES `activity` (`idactivity`, `unity_idunity`, `unity_class_idclass`, `unity_class_teacher_idteacher`, `material_idmaterial`, `material_materialtype_idmaterialtype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_question_has_activity_question1` FOREIGN KEY (`question_idquestion`) REFERENCES `question` (`idquestion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `question`
+  ADD CONSTRAINT `fk_question_activity1` FOREIGN KEY (`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`,`activity_material_idmaterial`,`activity_material_materialtype_idmaterialtype`) REFERENCES `activity` (`idactivity`, `unity_idunity`, `unity_class_idclass`, `unity_class_teacher_idteacher`, `material_idmaterial`, `material_materialtype_idmaterialtype`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `question_has_record`
@@ -1284,870 +1033,6 @@ ALTER TABLE `unity`
 ALTER TABLE `unity_has_exam`
   ADD CONSTRAINT `fk_unity_has_exam_exam1` FOREIGN KEY (`exam_idexam`) REFERENCES `exam` (`idexam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_unity_has_exam_unity1` FOREIGN KEY (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`) REFERENCES `unity` (`idunity`, `class_idclass`, `class_teacher_idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-
---
--- Metadatos
---
-USE `phpmyadmin`;
-
---
--- Metadatos para la tabla activity
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla answer
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla answer_has_question
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla class
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla coordinator
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla exam
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla exam_has_record
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla gender
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla glosary
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla log
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla log_has_student
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla material
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla materialtype
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla question
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla question_has_activity
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla question_has_record
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla record
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla record_has_class
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla role
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla student
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla student_has_class
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla student_has_record
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla teacher
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla teacher_has_log
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla unity
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla unity_has_exam
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la tabla value
---
-
---
--- Truncar tablas antes de insertar `pma__column_info`
---
-
-TRUNCATE TABLE `pma__column_info`;
---
--- Truncar tablas antes de insertar `pma__table_uiprefs`
---
-
-TRUNCATE TABLE `pma__table_uiprefs`;
---
--- Truncar tablas antes de insertar `pma__tracking`
---
-
-TRUNCATE TABLE `pma__tracking`;
---
--- Metadatos para la base de datos e4it
---
-
---
--- Truncar tablas antes de insertar `pma__bookmark`
---
-
-TRUNCATE TABLE `pma__bookmark`;
---
--- Truncar tablas antes de insertar `pma__relation`
---
-
-TRUNCATE TABLE `pma__relation`;
---
--- Truncar tablas antes de insertar `pma__savedsearches`
---
-
-TRUNCATE TABLE `pma__savedsearches`;
---
--- Truncar tablas antes de insertar `pma__central_columns`
---
-
-TRUNCATE TABLE `pma__central_columns`;COMMIT;
-=======
--- Estructura de tabla para la tabla `teacher`
---
-
-CREATE TABLE `teacher` (
-  `idteacher` int(11) NOT NULL,
-  `idnumber` varchar(10) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `lastname` varchar(45) NOT NULL,
-  `username` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `role_idrole` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `teacher`
---
-
-INSERT INTO `teacher` (`idteacher`, `idnumber`, `name`, `lastname`, `username`, `password`, `email`, `role_idrole`) VALUES
-(1, '11111111-1', 'Belén Elizabeth', 'Pérez Durán', 'beped', '202cb962ac59075b964b07152d234b70', 'belen.perez04@inacapmail.cl', 2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `unity`
---
-
-CREATE TABLE `unity` (
-  `idunity` int(11) NOT NULL,
-  `unityname` varchar(45) NOT NULL,
-  `class_idclass` int(11) NOT NULL,
-  `class_teacher_idteacher` int(11) NOT NULL,
-  `exam_idexam` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `value`
---
-
-CREATE TABLE `value` (
-  `idvalue` int(11) NOT NULL,
-  `valuename` varchar(45) NOT NULL,
-  `val` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `activity`
---
-ALTER TABLE `activity`
-  ADD PRIMARY KEY (`idactivity`,`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`),
-  ADD UNIQUE KEY `activityname_UNIQUE` (`activityname`),
-  ADD KEY `fk_activity_unity1_idx` (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`);
-
---
--- Indices de la tabla `answer`
---
-ALTER TABLE `answer`
-  ADD PRIMARY KEY (`idanswer`);
-
---
--- Indices de la tabla `answer_has_question`
---
-ALTER TABLE `answer_has_question`
-  ADD PRIMARY KEY (`answer_idanswer`,`question_idquestion`),
-  ADD KEY `fk_answer_has_question_question1_idx` (`question_idquestion`),
-  ADD KEY `fk_answer_has_question_answer1_idx` (`answer_idanswer`);
-
---
--- Indices de la tabla `answer_has_value`
---
-ALTER TABLE `answer_has_value`
-  ADD PRIMARY KEY (`answer_idanswer`,`value_idvalue`),
-  ADD KEY `fk_answer_has_value_value1_idx` (`value_idvalue`),
-  ADD KEY `fk_answer_has_value_answer1_idx` (`answer_idanswer`);
-
---
--- Indices de la tabla `class`
---
-ALTER TABLE `class`
-  ADD PRIMARY KEY (`idclass`,`teacher_idteacher`),
-  ADD KEY `fk_class_teacher1_idx` (`teacher_idteacher`);
-
---
--- Indices de la tabla `exam`
---
-ALTER TABLE `exam`
-  ADD PRIMARY KEY (`idexam`),
-  ADD UNIQUE KEY `examname_UNIQUE` (`examname`);
-
---
--- Indices de la tabla `material`
---
-ALTER TABLE `material`
-  ADD PRIMARY KEY (`idmaterial`,`materialtype_idmaterialtype`),
-  ADD KEY `fk_material_materialtype1_idx` (`materialtype_idmaterialtype`);
-
---
--- Indices de la tabla `materialtype`
---
-ALTER TABLE `materialtype`
-  ADD PRIMARY KEY (`idmaterialtype`);
-
---
--- Indices de la tabla `material_has_class`
---
-ALTER TABLE `material_has_class`
-  ADD PRIMARY KEY (`material_idmaterial`,`class_idclass`,`class_teacher_idteacher`),
-  ADD KEY `fk_material_has_class_class1_idx` (`class_idclass`,`class_teacher_idteacher`),
-  ADD KEY `fk_material_has_class_material1_idx` (`material_idmaterial`);
-
---
--- Indices de la tabla `question`
---
-ALTER TABLE `question`
-  ADD PRIMARY KEY (`idquestion`);
-
---
--- Indices de la tabla `question_has_activity`
---
-ALTER TABLE `question_has_activity`
-  ADD PRIMARY KEY (`question_idquestion`,`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`),
-  ADD KEY `fk_question_has_activity_activity1_idx` (`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`),
-  ADD KEY `fk_question_has_activity_question1_idx` (`question_idquestion`);
-
---
--- Indices de la tabla `record`
---
-ALTER TABLE `record`
-  ADD PRIMARY KEY (`idrecord`);
-
---
--- Indices de la tabla `role`
---
-ALTER TABLE `role`
-  ADD PRIMARY KEY (`idrole`);
-
---
--- Indices de la tabla `student`
---
-ALTER TABLE `student`
-  ADD PRIMARY KEY (`idstudent`,`class_idclass`,`role_idrole`),
-  ADD UNIQUE KEY `idnumber_UNIQUE` (`idnumber`),
-  ADD UNIQUE KEY `username_UNIQUE` (`username`),
-  ADD KEY `fk_student_class_idx` (`class_idclass`),
-  ADD KEY `fk_student_role1_idx` (`role_idrole`);
-
---
--- Indices de la tabla `student_has_record`
---
-ALTER TABLE `student_has_record`
-  ADD PRIMARY KEY (`student_idstudent`,`student_class_idclass`,`record_idrecord`),
-  ADD KEY `fk_student_has_record_record1_idx` (`record_idrecord`),
-  ADD KEY `fk_student_has_record_student1_idx` (`student_idstudent`,`student_class_idclass`);
-
---
--- Indices de la tabla `teacher`
---
-ALTER TABLE `teacher`
-  ADD PRIMARY KEY (`idteacher`,`role_idrole`),
-  ADD UNIQUE KEY `username_UNIQUE` (`username`),
-  ADD UNIQUE KEY `rut_UNIQUE` (`idnumber`),
-  ADD KEY `fk_teacher_role1_idx` (`role_idrole`);
-
---
--- Indices de la tabla `unity`
---
-ALTER TABLE `unity`
-  ADD PRIMARY KEY (`idunity`,`class_idclass`,`class_teacher_idteacher`,`exam_idexam`),
-  ADD KEY `fk_unity_class1_idx` (`class_idclass`,`class_teacher_idteacher`),
-  ADD KEY `fk_unity_exam1_idx` (`exam_idexam`);
-
---
--- Indices de la tabla `value`
---
-ALTER TABLE `value`
-  ADD PRIMARY KEY (`idvalue`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `activity`
---
-ALTER TABLE `activity`
-  MODIFY `idactivity` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `answer`
---
-ALTER TABLE `answer`
-  MODIFY `idanswer` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `class`
---
-ALTER TABLE `class`
-  MODIFY `idclass` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `exam`
---
-ALTER TABLE `exam`
-  MODIFY `idexam` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `material`
---
-ALTER TABLE `material`
-  MODIFY `idmaterial` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `question`
---
-ALTER TABLE `question`
-  MODIFY `idquestion` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `record`
---
-ALTER TABLE `record`
-  MODIFY `idrecord` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `role`
---
-ALTER TABLE `role`
-  MODIFY `idrole` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `student`
---
-ALTER TABLE `student`
-  MODIFY `idstudent` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `teacher`
---
-ALTER TABLE `teacher`
-  MODIFY `idteacher` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `value`
---
-ALTER TABLE `value`
-  MODIFY `idvalue` int(11) NOT NULL AUTO_INCREMENT;
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `activity`
---
-ALTER TABLE `activity`
-  ADD CONSTRAINT `fk_activity_unity1` FOREIGN KEY (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`) REFERENCES `unity` (`idunity`, `class_idclass`, `class_teacher_idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `answer_has_question`
---
-ALTER TABLE `answer_has_question`
-  ADD CONSTRAINT `fk_answer_has_question_answer1` FOREIGN KEY (`answer_idanswer`) REFERENCES `answer` (`idanswer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_answer_has_question_question1` FOREIGN KEY (`question_idquestion`) REFERENCES `question` (`idquestion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `answer_has_value`
---
-ALTER TABLE `answer_has_value`
-  ADD CONSTRAINT `fk_answer_has_value_answer1` FOREIGN KEY (`answer_idanswer`) REFERENCES `answer` (`idanswer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_answer_has_value_value1` FOREIGN KEY (`value_idvalue`) REFERENCES `value` (`idvalue`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `class`
---
-ALTER TABLE `class`
-  ADD CONSTRAINT `fk_class_teacher1` FOREIGN KEY (`teacher_idteacher`) REFERENCES `teacher` (`idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `material`
---
-ALTER TABLE `material`
-  ADD CONSTRAINT `fk_material_materialtype1` FOREIGN KEY (`materialtype_idmaterialtype`) REFERENCES `materialtype` (`idmaterialtype`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `material_has_class`
---
-ALTER TABLE `material_has_class`
-  ADD CONSTRAINT `fk_material_has_class_class1` FOREIGN KEY (`class_idclass`,`class_teacher_idteacher`) REFERENCES `class` (`idclass`, `teacher_idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_material_has_class_material1` FOREIGN KEY (`material_idmaterial`) REFERENCES `material` (`idmaterial`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `question_has_activity`
---
-ALTER TABLE `question_has_activity`
-  ADD CONSTRAINT `fk_question_has_activity_activity1` FOREIGN KEY (`activity_idactivity`,`activity_unity_idunity`,`activity_unity_class_idclass`,`activity_unity_class_teacher_idteacher`) REFERENCES `activity` (`idactivity`, `unity_idunity`, `unity_class_idclass`, `unity_class_teacher_idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_question_has_activity_question1` FOREIGN KEY (`question_idquestion`) REFERENCES `question` (`idquestion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `student`
---
-ALTER TABLE `student`
-  ADD CONSTRAINT `fk_student_class` FOREIGN KEY (`class_idclass`) REFERENCES `class` (`idclass`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_student_role1` FOREIGN KEY (`role_idrole`) REFERENCES `role` (`idrole`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `student_has_record`
---
-ALTER TABLE `student_has_record`
-  ADD CONSTRAINT `fk_student_has_record_record1` FOREIGN KEY (`record_idrecord`) REFERENCES `record` (`idrecord`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_student_has_record_student1` FOREIGN KEY (`student_idstudent`,`student_class_idclass`) REFERENCES `student` (`idstudent`, `class_idclass`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `teacher`
---
-ALTER TABLE `teacher`
-  ADD CONSTRAINT `fk_teacher_role1` FOREIGN KEY (`role_idrole`) REFERENCES `role` (`idrole`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `unity`
---
-ALTER TABLE `unity`
-  ADD CONSTRAINT `fk_unity_class1` FOREIGN KEY (`class_idclass`,`class_teacher_idteacher`) REFERENCES `class` (`idclass`, `teacher_idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_unity_exam1` FOREIGN KEY (`exam_idexam`) REFERENCES `exam` (`idexam`) ON DELETE NO ACTION ON UPDATE NO ACTION;
->>>>>>> 7d10ce5bcf88873176d7a354ea922e8ae8b0383e
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -87,7 +87,7 @@
     <!--End Unity Content-->
 
     <!-- Activity Content-->
-    <div id="activity" class="card yellow">
+    <div id="activity" class="card blue-grey lighten-1">
         <div class="row">
             <div class="col s12">
                 <ul class="collection z-depth-4">
@@ -95,6 +95,16 @@
                         <i class="material-icons circle yellow black-text">list</i>
                         <span class="title"><strong>activity List</strong></span>
                         <button class="secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Activity List!" onclick="activitylist()"><i class="material-icons">list</i></button>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col s12">
+                <ul class="collection z-depth-4">
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle yellow black-text">list</i>
+                        <span class="title"><strong>Question and Answere List</strong></span>
+                        <button class="secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Question and Answere List!" onclick="questionlist()"><i class="material-icons">list</i></button>
                     </li>
                 </ul>
 

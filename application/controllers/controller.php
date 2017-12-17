@@ -93,56 +93,57 @@ class Controller extends CI_Controller {
 		//de no existir un usuario loggeado se envia al login
 			$this->load->view('login');
 		}}
-	function load_user(){
-	$username = $this->input->post('username');
-	$password = md5($this->input->post('password'));
-    //se declaran los mensajes
-		$msjs = '';
-		$msje = '';
-		$msjw = '';
-	//se declara las variables
-		$cookies = '';
-    //se validan los campos para que no sean vacios
-		if ($this->c_valide_field($username) & $this->c_valide_field($password)) {
-		//se consulta al modelo por usuario y su pass
-			$datos = $this->modelo->login($username, $password);
-		//la respuesta se almacena en un arreglo
-			$cookies = array(
-                                "idcoordinator" => $datos['idcoordinator'],
-                                "idteacher" => $datos['idteacher'],
-				"idstudent" => $datos['idstudent'],
-                                "idnumber" => $datos['idnumber'], 
-				"name" => $datos['name'],
-				"lastname" => $datos['lastname'],
-                                "usertname" => $datos['username'],
-				"email" => $datos['email'],
-                                "role_idrole" => $datos['role_idrole'],
-                                "gender_idgender" => $datos['gender_idgender']
-                                );
-			//se consulta si la respuesta es vacia para continuar
-			if($datos['role_idrole'] != '') {
-				$cookies['logged'] = true;
-				//se caga la session
-				$this->session->set_userdata($cookies);
-				//se almacena un mensaje 
-				$msjs = "<strong class='black-text'>Welcome!</strong>";
+		function load_user(){
+			$username = $this->input->post('username');
+			$password = md5($this->input->post('password'));
+	    //se declaran los mensajes
+			$msjs = '';
+			$msje = '';
+			$msjw = '';
+		//se declara las variables
+			$cookies = '';
+	    //se validan los campos para que no sean vacios
+			if ($this->c_valide_field($username) & $this->c_valide_field($password)) {
+			//se consulta al modelo por usuario y su pass
+				$datos = $this->modelo->login($username, $password);
+			//la respuesta se almacena en un arreglo
+				$cookies = array(
+					"idcoordinator" => $datos['idcoordinator'],
+					"idteacher" => $datos['idteacher'],
+					"idstudent" => $datos['idstudent'],
+					"idnumber" => $datos['idnumber'], 
+					"name" => $datos['name'],
+					"lastname" => $datos['lastname'],
+					"usertname" => $datos['username'],
+					"email" => $datos['email'],
+					"role_idrole" => $datos['role_idrole'],
+					"gender_idgender" => $datos['gender_idgender'],
+					"password" => $password
+				);
+				//se consulta si la respuesta es vacia para continuar
+				if($datos['role_idrole'] != '') {
+					$cookies['logged'] = true;
+					//se caga la session
+					$this->session->set_userdata($cookies);
+					//se almacena un mensaje 
+					$msjs = "<strong class='black-text'>Welcome!</strong>";
+				} else {
+					$cookies['logged'] = false;
+					//se carga la sesion vacia
+					$this->session->set_userdata($cookies);
+					//se indica el mensaje
+					$msje = "<strong class='black-text'>User don't exist!</strong>";
+				}
 			} else {
-				$cookies['logged'] = false;
-				//se carga la sesion vacia
-				$this->session->set_userdata($cookies);
-				//se indica el mensaje
-				$msje = "<strong class='black-text'>User don't exist!</strong>";
+				//se carga el mensaje de que los campos son vacios
+				$msjw = "<strong class='black-text'>The fields are empty!</strong>";
 			}
-		} else {
-			//se carga el mensaje de que los campos son vacios
-			$msjw = "<strong class='black-text'>The fields are empty!</strong>";
-		}
-		//se envia mediante json los mensajes de respuesta
-		echo json_encode(array(
-			"message_load_user_s" => $msjs, 
-			"message_load_user_e" => $msje,
-			"message_load_user_w" => $msjw
-		));}
+			//se envia mediante json los mensajes de respuesta
+			echo json_encode(array(
+				"message_load_user_s" => $msjs, 
+				"message_load_user_e" => $msje,
+				"message_load_user_w" => $msjw
+			));}
 	//Cierra Sesión
 	function close_session(){
 			$this->session->sess_destroy();
@@ -313,6 +314,120 @@ function saveunity() {
 		}
         echo json_encode($unitymsj);
     }
+    function saveactivity(){
+    	$activityname = $this->input->post('activityname');
+    	$descriptionleft = $this->input->post('descriptionleft');
+    	$descriptionright = $this->input->post('descriptionright');
+    	$unity_idunity = $this->input->post('unity_idunity');
+    	$class_idclass = $this->modelo->unityclass($unity_idunity);
+        $unity_class_idclass = $class_idclass['class_idclass'];
+    	$unity_class_teacher_idteacher = $this->session->userdata('idteacher');
+    	$material_idmaterial = $this->input->post('material_idmaterial');
+    	$materialtype_idmaterialtype = $this->modelo->unitymaretialtype($material_idmaterial);
+        $material_materialtype_idmaterialtype = $materialtype_idmaterialtype['materialtype_idmaterialtype'];
+
+    	$msjactivity = array();
+    	$m = array();
+    	$si = 0;
+    	$no = 0;
+
+    	if ($this->c_valide_field($activityname) == true) {$si += 1;}else{$no += 1;}
+    	if ($si === 1) {
+    		if ($this->modelo->saveactivity($activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$unity_class_teacher_idteacher,$material_idmaterial,$material_materialtype_idmaterialtype) === true) {
+    			$m = array('msjs' => "<strong class='black-text'>Save activity!</strong>");
+    			array_push($msjactivity, $m);
+    		}else{
+    			$m = array('msje' => "<strong class='black-text'>Don't save activity!</strong>");
+    			array_push($msjactivity, $m);
+    		}
+    	}else{
+    		$m = array('msjw' => "<strong class='black-text'>Field name are empty!</strong>");
+    			array_push($msjactivity, $m);
+    	}
+    	echo json_encode($msjactivity);
+    }
+    function savequestion(){
+        $questionname = $this->input->post('questionname');
+        $description = $this->input->post('description');
+        $activity_idactivity = $this->input->post('activity_idactivity');
+        $datos = $this->modelo->questionactivity($activity_idactivity);
+        $activity_unity_idunity = $datos['unity_idunity'];
+        $activity_unity_class_idclass = $datos['unity_class_idclass'];
+        $activity_unity_class_teacher_idteacher = $this->session->userdata('idteacher');
+        $activity_material_idmaterial = $datos['material_idmaterial'];
+        $activity_material_materialtype_idmaterialtype = $datos['material_materialtype_idmaterialtype'];
+        
+        $msjquestion = array();
+    	$m = array();
+    	$si = 0;
+    	$no = 0;
+        
+        if($this->c_valide_field($questionname) == true) {$si += 1;}else{$no += 1;}
+        if($si === 1){
+            if($this->modelo->savequestion($questionname,$description,$activity_idactivity,$activity_unity_idunity,$activity_unity_class_idclass,$activity_unity_class_teacher_idteacher,$activity_material_idmaterial,$activity_material_materialtype_idmaterialtype)){
+                $m = array('msjs' => "<strong class='black-text'>Save question!</strong>");
+    		array_push($msjquestion, $m);
+            }else{
+                $m = array('msje' => "<strong class='black-text'>Don't save question! Error Database!</strong>");
+    		array_push($msjquestion, $m);
+            }
+        }else{
+            $m = array('msjw' => "<strong class='black-text'>Question are empty!</strong>");
+    		array_push($msjquestion, $m);
+        }
+        echo json_encode($msjquestion);
+    }
+    function saveanswere(){
+        $answerename = $this->input->post('answerename');
+        $description = $this->input->post('description');
+        $value_idvalue = $this->input->post('value_idvalue');
+        $question_idquestion = $this->input->post('question_idquestion');
+        $msjanswere = array();
+    	$m = array();
+    	$si = 0;
+    	$no = 0;
+        if($this->c_valide_field($answerename) == true){$si += 1;}else{$no += 1;}
+        if($si === 1){
+            if($this->modelo->saveanswere($answerename,$description,$value_idvalue,$question_idquestion) == true){
+                $m = array('msjs' => "<strong class='black-text'>Answere Save!</strong>");
+            array_push($msjanswere, $m);
+            }else{
+                $m = array('msje' => "<strong class='black-text'>Answere Don't Save!</strong>");
+            array_push($msjanswere, $m);
+            }
+        }else{
+            $m = array('msjw' => "<strong class='black-text'>Answere are empty!</strong>");
+            array_push($msjanswere, $m);
+        }
+        echo json_encode($msjanswere);
+    }
+    function saveword(){
+        $wordname = $this->input->post('wordname');
+        $description = $this->input->post('description');
+        $aditionaldescription = $this->input->post('aditionaldescription');
+        
+        $msjword = array();
+        $m = array();
+        $si = 0;
+        $no = 0;
+        
+        if ($this->c_valide_field($wordname) == true){$si += 1;}else{$no += 1;}
+        if ($this->c_valide_field($description) == true){$si += 1;}else{$no += 1;}
+        
+        if($si == 2){
+            if($this->modelo->saveword($wordname,$description,$aditionaldescription) == true){
+                $m = array('msjs' => "<strong class='black-text'>Save word!</strong>");
+                array_push($msjword, $m);
+            }else{
+                $m = array('msjw' => "<strong class='black-text'>Dont save word!</strong>");
+                array_push($msjword, $m);
+            }
+        }else{
+            $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
+            array_push($msjword, $m);
+        }
+        echo json_encode($msjword);
+    }
 
     function updateclass(){
 	//se extrae los datos de la vista
@@ -390,7 +505,36 @@ function saveyoutubelink(){
 	$this->modelo->saveyoutubelink($materialname, $descriptionleft,$descriptionright,$link,$idmaterialtype);
 
 }
+
+function deleteteacher(){
+	$idteacher = $this->input->post('idteacher');
+	$role_idrole = 2;
+	$gender_idgender = $this->input->post('gender_idgender');
+	$password = md5($this->input->post('password'));
+
+	$msjdelete = array();
+	$m = array();
+
+	if ($password == $this->session->userdata('password')) {
+		if ($this->modelo->deleteteacher($idteacher, $role_idrole, $gender_idgender)) {
+			$m = array('msjs' => "<strong class='black-text'>Delete teacher</strong>");
+			array_push($msjdelete, $m);
+		}else{
+			$m = array('msje' => "<strong class='black-text'>Don't delete teacher, Error Database!</strong>");
+			array_push($msjdelete, $m);
+		}
+	}else{
+		$m = array('msje' => "<strong class='black-text'>Password incorrect! don't delete teacher</strong>");
+		array_push($msjdelete, $m);
+	}
+	echo json_encode($msjdelete);
+}
 //---------Listas---------
+	function teacherlist(){
+		$list['teacher'] = $this->modelo->teacherlist()->result();
+		$list['gender'] = $this->modelo->genderlist()->result();
+	    $this->load->view('coordinator/teacherlist',$list);
+	}
 	function studentlist(){
 		$list['student'] = $this->modelo->studentlist()->result();
 		$list['role'] = $this->modelo->rolelist()->result();
@@ -417,9 +561,17 @@ function saveyoutubelink(){
 	function activitylist(){
 		$list['activity'] = $this->modelo->activitylist($this->session->userdata('idteacher'))->result();
 		$list['unity'] = $this->modelo->unitylist($this->session->userdata('idteacher'))->result();
+                $list['material'] = $this->modelo->materiallist()->result();
 		$this->load->view('teacher/activity/activitylist',$list);}
+        function questionlist(){
+            $list['value'] = $this->modelo->valuelist()->result();
+            $list['answer'] = $this->modelo->answerlist()->result();
+            $list['question'] = $this->modelo->questionlist($this->session->userdata('idteacher'))->result();
+            $list['activity'] = $this->modelo->activitylist($this->session->userdata('idteacher'))->result();
+            $this->load->view('teacher/activity/questionlist',$list);
+        }
         function glosarylist(){
-            $list['glosary'] = $this->modelo->glosarylist();
+            $list['glosary'] = $this->modelo->glosarylist()->result();
             $this->load->view('teacher/glosary/glosarylist',$list);
         }
         function progresslist(){
@@ -440,7 +592,7 @@ function saveyoutubelink(){
 		      return false; 
 		   } 
 		   //compruebo que los caracteres sean los permitidos 
-		   $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_.,:;'?"; 
+		   $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ .,:;'?"; 
 		   for ($i=0; $i<strlen($field); $i++){ 
 		      if (strpos($permitidos, substr($field,$i,1))===false){ 
 		         return false; 

@@ -107,6 +107,53 @@ class Modelo extends CI_Model{
             return $data_response;
         }
 
+        function unityclass($unity_idunity){
+        	$this->db->select('*');
+        	$this->db->where('idunity', $unity_idunity);
+                $this->db->limit(1);
+        	$res = $this->db->get('unity');
+                
+                $idclass['unity_class_idclass'] = "";
+                
+                foreach ($res->result() as $fila){
+                    $idclass['class_idclass'] = $fila->class_idclass;
+                }
+                return $idclass;
+        }
+
+        function unitymaretialtype($material_idmaterial){
+        	$this->db->select('*');
+        	$this->db->where('idmaterial', $material_idmaterial);
+                $this->db->limit(1);
+        	$query = $this->db->get('material');
+                
+                $idmaterial['materialtype_idmaterialtype']= "";
+                
+                foreach ($query->result() as $fila){
+                    $idmaterial['materialtype_idmaterialtype']= $fila->materialtype_idmaterialtype;
+                }
+            return $idmaterial;
+        }
+        function questionactivity($activity_idactivity){
+            $this->db->select('*');
+            $this->db->where('idactivity',$activity_idactivity);
+            $this->db->limit(1);
+            $query = $this->db->get('activity');
+            
+            $datos['unity_idunity']="";
+            $datos['unity_class_idclass']="";
+            $datos['material_idmaterial']="";
+            $datos['material_materialtype_idmaterialtype']="";
+            
+            foreach ($query->result() as $fila){
+                $datos['unity_idunity']= $fila->unity_idunity;
+                $datos['unity_class_idclass']= $fila->unity_class_idclass;
+                $datos['material_idmaterial']= $fila->material_idmaterial;
+                $datos['material_materialtype_idmaterialtype']= $fila->material_materialtype_idmaterialtype;
+            }
+            return $datos;
+        }
+
 	function studentexist($idnumber){
 	//valida si existe el rut que se intenta ingresar
 		$this->db->select('*');
@@ -199,6 +246,58 @@ class Modelo extends CI_Model{
 		$this->db->insert('unity', $insertunity);
 		return true;
 	}
+        
+        function saveactivity($activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$unity_class_teacher_idteacher,$material_idmaterial,$material_materialtype_idmaterialtype){
+            $insertactivity = array(
+                'activityname' => $activityname,
+                'descriptionleft' => $descriptionleft,
+                'descriptionright' => $descriptionright,
+                'unity_idunity' => $unity_idunity,
+                'unity_class_idclass' => $unity_class_idclass,
+                'unity_class_teacher_idteacher' => $unity_class_teacher_idteacher,
+                'material_idmaterial' => $material_idmaterial,
+                'material_materialtype_idmaterialtype' => $material_materialtype_idmaterialtype
+            );
+            
+            $this->db->insert('activity', $insertactivity);
+            return true;
+        }
+        
+        function savequestion($questionname,$description,$activity_idactivity,$activity_unity_idunity,$activity_unity_class_idclass,$activity_unity_class_teacher_idteacher,$activity_material_idmaterial,$activity_material_materialtype_idmaterialtype){
+            $insertquestion = array(
+                'questionname' => $questionname,
+                'description' => $description,
+                'activity_idactivity' => $activity_idactivity,
+                'activity_unity_idunity' => $activity_unity_idunity,
+                'activity_unity_class_idclass' => $activity_unity_class_idclass,
+                'activity_unity_class_teacher_idteacher' => $activity_unity_class_teacher_idteacher,
+                'activity_material_idmaterial' => $activity_material_idmaterial,
+                'activity_material_materialtype_idmaterialtype' => $activity_material_materialtype_idmaterialtype
+            );
+            $this->db->insert('question', $insertquestion);
+            return true;
+        }
+        function saveanswere($answerename,$description,$value_idvalue,$question_idquestion){
+            $insertanswere = array(
+                'answername' => $answerename,
+                'description' => $description,
+                'value_idvalue' => $value_idvalue,
+                'question_idquestion' => $question_idquestion
+            );
+            $this->db->insert('answer', $insertanswere);
+            return true;
+        }
+        
+        function saveword($wordname,$description,$aditionaldescription){
+            $insertword = array(
+                'wordname' => $wordname,
+                'description' => $description,
+                'aditionaldescription' => $aditionaldescription
+            );
+            
+            $this->db->insert('glosary', $insertword);
+            return true;
+        }
 
 	function teacherlist(){
 		//Lista de profesores
@@ -236,6 +335,19 @@ class Modelo extends CI_Model{
 		$this->db->where('unity_class_teacher_idteacher', $idteacher);
 		return $this->db->get('activity');
 	}
+        function questionlist($idteacher){
+            $this->db->select("*");
+            $this->db->where('activity_unity_class_teacher_idteacher', $idteacher);
+            return $this->db->get('question');
+        }
+        function answerlist(){
+            $this->db->select("*");
+            return $this->db->get('answer');
+        }
+        function valuelist(){
+            $this->db->select("*");
+            return $this->db->get('value');
+        }
 	function materiallist(){
 		$this->db->select('*');
 		return $this->db->get('material');
@@ -281,6 +393,11 @@ class Modelo extends CI_Model{
 
 		return true;
 
+	}
+
+	function deleteteacher($idteacher, $role_idrole, $gender_idgender){
+		$this->db->query("DELETE FROM `teacher` WHERE `teacher`.`idteacher` = $idteacher AND `teacher`.`role_idrole` = $role_idrole AND `teacher`.`gender_idgender` = $gender_idgender");
+		return true;
 	}
 
 
