@@ -244,20 +244,20 @@ function updateclass(id) {
                 Materialize.toast(o.msje, 4000, 'red lighten-3');
             }
         });
-        charger();
+        classlist();
     },'json');
 }
 function updatestudent(id) {
-    var idgenders = document.getElementById("selectgenderStudentedit" + id);
-    var idgender = idgenders.options[idgenders.selectedIndex].value;
+//    var idgenders = document.getElementById("selectgenderStudentedit" + id);
+//    var idgender = idgenders.options[idgenders.selectedIndex].value;
     $.post(base_url + 'controller/updatestudent', {
         idstudent: $('#idstudentstudent' + id).val(),
         idnumber: $('#idnumberstudent' + id).val(),
         name: $('#namestudent' + id).val(),
         lastname: $('#lastnamestudent' + id).val(),
         username: $('#usernamestudent' + id).val(),
-        email: $('#emailstudent' + id).val(),
-        gender_idgender: idgender
+        email: $('#emailstudent' + id).val()
+//        gender_idgender: idgender
     }, function (msjdate) {
         var msjstudentedit = msjdate;
         $.each(msjstudentedit, function (i, o) {
@@ -286,7 +286,7 @@ function studentlist() {
 }
 function classlist() {
     $.post(base_url + 'controller/classlist', {}, function (page, datos) {
-        $('#bodyclass').html(page, datos);
+        $("#contentClass").html(page, datos);
     });
 }
 function unitylist() {
@@ -339,6 +339,26 @@ function deleteteacher(id){
             }
         });
 	},'json');
+}
+function deleteclass(id){
+    $.post(base_url  + 'controller/deleteclass',{
+        idclass :  document.getElementById("idclassedit" + id),
+        password: document.getElementById("validatepassteacherdeleteclass" + id)
+    },function(datos){
+        var msjdeleteclass = datos;
+        $.each(msjdeleteclass, function (i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+        classlist();
+    },'json');
 }
 
 /*Valida Campos*/

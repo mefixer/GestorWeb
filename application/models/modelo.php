@@ -399,7 +399,12 @@ class Modelo extends CI_Model{
 		$this->db->query("DELETE FROM `teacher` WHERE `teacher`.`idteacher` = $idteacher AND `teacher`.`role_idrole` = $role_idrole AND `teacher`.`gender_idgender` = $gender_idgender");
 		return true;
 	}
-
+        
+    function deleteclass($idclass){
+    	$this->db->where('idclass', $idclass);
+        $query = $this->db->delete('class');
+        return true;
+    }
 
 
 

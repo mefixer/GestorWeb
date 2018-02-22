@@ -10,200 +10,63 @@
         </ul>
         <ul class="side-nav" id="mobile-demo">
             <li><a><strong>TEACHER</strong> :</a></li>
-            <li><div class="chip"><img  alt="Contact Person" src="img/teacher.png"> <?php echo $name ?> <?php echo $lastname ?></div></li>
+            <li><div class="chip"><img  alt="Contact Person" src="img/teacher<?php echo $gender_name ?>.png" > <?php echo $name ?> <?php echo $lastname ?></div></li>
             <li></li>
             <li><a class="btn waves-effect waves-light black" onclick="close_session()"><i class="material-icons right white-text">exit_to_app</i> Log Out</a></li>
         </ul>
     </div>
-    <div class="nav-content">
-        <ul class="tabs tabs-transparent">
-            <li class="tab"><a href="#class">CLASS</a></li>
-            <li class="tab"><a href="#unity">UNITY</a></li>
-            <li class="tab"><a href="#activity">ACTIVITY</a></li>
-            <li class="tab"><a href="#test">TEST</a></li>
-            <li class="tab"><a href="#materials">MATERIALS</a></li>
-            <li class="tab"><a href="#studentprogress">STUDENT PROGRESS</a></li>
-            <li class="tab"><a href="#glosary">GLOSARY</a></li>
-        </ul>
-    </div>
 </nav>
-
-<!--Container-->
-<!--  <div class="container">-->
-
-<!--Card Content-->
-<div class="card-content">
-
-    <!-- Class Content-->
-    <div id="class" class="card yellow">
-
-        <div class="row">
-            <div class="col s12 m4 12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle yellow">list</i>
-                        <span class="title"><strong>Class List</strong></span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Class List!" onclick="classlist()"><i class="material-icons">list</i></button>
-                    </li>
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle green">list</i>
-                        <span class="title"><strong>Student List</strong></span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Student List" onclick="studentlist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-
-            </div>
-            <div class="col s12 m7 12 white">
-                <div class="" id="bodyclass">
-
-                </div>
-            </div>
-            <div class="col s12 m1 12 white">
-            </div>
+<div id="NewClass" class="modal">
+    <div class="modal-content">
+      <div class="card-panel"><!-- panel -->
+         <h4 align="center"><strong>NEW CLASS</strong></h4>
+        <div class="input-field">
+          <input type="text" class="validate" maxlength="45" data-length="45" required id="classname">
+          <label for="classname">CLASS NAME</label>
         </div>
-    </div>
-    <!--End Class Content-->
-
-    <!-- Unity Content-->
-    <div id="unity" class="card red">
-        <div class="row">
-            <div class="col s12 m3 12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle red">list</i>
-                        <span class="title">Unity List</span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Unity List!" onclick="unitylist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-
-            </div>
-            <div class="col s12 m9 19 white">
-                <div class="" id="bodyunity">
-
-                </div>
-            </div>
+        <div class="input-field">
+          <textarea id="descriptionclasscenter" class="materialize-textarea validate" required maxlength="200" data-length="200" ></textarea>
+          <label for="name">DESCRIPTION CLASS CENTER</label>
         </div>
-    </div>
-    <!--End Unity Content-->
-
-    <!-- Activity Content-->
-    <div id="activity" class="card blue-grey lighten-1">
-        <div class="row">
-            <div class="col s12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle yellow black-text">list</i>
-                        <span class="title"><strong>activity List</strong></span>
-                        <button class="secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Activity List!" onclick="activitylist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-
-            </div>
-            <div class="col s12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle yellow black-text">list</i>
-                        <span class="title"><strong>Question and Answere List</strong></span>
-                        <button class="secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Question and Answere List!" onclick="questionlist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-
-            </div>
-            <div class="col s12">
-                <div class="" id="bodyactivity">
-
-                </div>
-            </div>
+        <div class="input-field">
+          <textarea id="descriptionclassleft"  class="materialize-textarea" required maxlength="200" data-length="200"></textarea>
+          <label for="lastname">DESCRIPTION CLASS LEFT</label>
         </div>
-    </div>
-    <!--End Activity Content-->
-
-    <!-- Test Content-->
-    <div id="test" class="col s12 blue">
-        <div class="row">
-            <div class="col s12 m3 12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle blue">list</i>
-                        <span class="title">Test List</span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Test List!" onclick="testlist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-
-            </div>
-            <div class="col s12 m9 19">
-                <div class="" id="bodytest">
-
-                </div>
-            </div>
+        <div class="input-field">
+          <textarea id="descriptionclassright" class="materialize-textarea" required maxlength="200" data-length="200"></textarea>
+          <label for="username">DESCRIPTION CLASS RIGHT</label>
         </div>
-    </div>
-    <!--End Test Content-->
-
-    <!-- Materials Content-->
-    <div id="materials" class="col s12 black">
-        <div class="row">
-            <div class="col s12 m3 12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar"><i class="material-icons circle black">list</i>
-                        <span class="title">Material List</span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Material List!" onclick="materiallist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col s12 m9 19 white">
-                <div class="" id="bodymaterial">
-
-                </div>
-            </div>
+        <div class="input-field">
+          <select disabled id="idselectgender"> 
+            <option value="<?php echo $idteacher?>"><?php echo $name?> <?php echo $lastname?></option>
+          </select>
+          <label>Role</label>
         </div>
+      </div><!-- End panel -->
     </div>
-    <!--End Materials Content-->
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat red">CANCEL</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="saveclass()">SAVE</a>
+    </div>
+  </div>
 
-    <!-- Student progress Content-->
-    <div id="studentprogress" class="col s12 lime accent-2">
-        <div class="row">
-            <div class="col s12 m3 12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar"><i class="material-icons circle black">list</i>
-                        <span class="title">Progress List</span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Prgress List!" onclick="progresslist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-            </div>
 
-            <div class="col s12 m9 19 white">
-                <div class="" id="bodyprogress">
 
-                </div>
-            </div>
+<br>
+      <div class="row">
+          <div class="col s12 m4 l2">
+              <button class="btn waves-effect waves-light" type="submit" name="action" onclick="classlist()">CLASS
+                <i class="material-icons">class</i>
+              </button>
+          </div>
+        <div class="col s12 m4 l9">
+            <div id="contentClass">
+                
         </div>
-    </div>
-    <!--End Student Content-->
-
-    <!-- Student Content-->
-    <div id="glosary" class="col s12 blue">
-        <div class="row">
-            <div class="col s12 m3 12">
-                <ul class="collection z-depth-4">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle blue">list</i>
-                        <span class="title">Glosary List</span>
-                        <button class=" secondary-content waves-effect btn-large white black-text waves-yellow tooltipped" data-position="right" data-delay="50" data-tooltip="Glosary List!" onclick="glosarylist()"><i class="material-icons">list</i></button>
-                    </li>
-                </ul>
-            </div>
-            <div class="col s12 m9 19">
-                <div class="white" id="bodyglosary">
-
-                </div>
-            </div>
         </div>
-    </div>
-    <!--End Student Content-->
-</div>
-<!--End Card Content-->
+      </div>
+
+
 
 <!--Floatting Tooltipped-->
 <div class="fixed-action-btn horizontal  click-to-toggle">
@@ -292,8 +155,12 @@
 </div>
 <!--End Modal Upload Youtube Link Structure -->
 
-<!--  </div>-->
-<!--End Container-->    
+
+
+
+
+
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('.modal').modal();

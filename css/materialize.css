@@ -4,6 +4,9 @@
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
 
+
+
+
 .materialize-red {
   background-color: #e51c23 !important;
 }
@@ -5021,7 +5024,7 @@ small {
 }
 
 .tabs.tabs-transparent .indicator {
-  background-color: #fff;
+  background-color: #212121;
 }
 
 .tabs.tabs-fixed-width {
@@ -5075,8 +5078,8 @@ small {
 .tabs .indicator {
   position: absolute;
   bottom: 0;
-  height: 2px;
-  background-color: #f6b2b5;
+  height: 12px;
+  background-color: #212121;
   will-change: left, right;
 }
 
@@ -8116,7 +8119,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .slider .slides {
-  background-color: #9e9e9e;
+  background-color: #212121;
   margin: 0;
   height: 400px;
 }
@@ -8172,14 +8175,14 @@ input[type=range]:focus::-ms-fill-upper {
   height: 16px;
   width: 16px;
   margin: 0 12px;
-  background-color: #e0e0e0;
+  background-color: #212121;
   -webkit-transition: background-color .3s;
   transition: background-color .3s;
   border-radius: 50%;
 }
 
 .slider .indicators .indicator-item.active {
-  background-color: #4CAF50;
+  background-color: #212121;
 }
 
 .carousel {
@@ -8267,7 +8270,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .carousel .indicators .indicator-item.active {
-  background-color: #fff;
+  background-color: #212121;
 }
 
 .carousel.scrolling .carousel-item .materialboxed,
