@@ -281,42 +281,42 @@ function teacherlist() {
 }
 function studentlist() {
     $.post(base_url + 'controller/studentlist', {}, function (page, datos) {
-        $("#bodyclass").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function classlist() {
     $.post(base_url + 'controller/classlist', {}, function (page, datos) {
-        $("#contentClass").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function unitylist() {
     $.post(base_url + 'controller/unitylist', {}, function (page, datos) {
-        $("#bodyunity").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function activitylist() {
     $.post(base_url + 'controller/activitylist', {}, function (page, datos) {
-        $("#bodyactivity").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function questionlist(){
     $.post(base_url + 'controller/questionlist', {}, function (page, datos) {
-        $("#bodyactivity").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function materiallist() {
     $.post(base_url + 'controller/materiallist', {}, function (page, datos) {
-        $("#bodymaterial").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function glosarylist(){
     $.post(base_url + 'controller/glosarylist', {}, function (page, datos) {
-        $("#bodyglosary").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 function progresslist(){
     $.post(base_url + 'controller/progresslist', {}, function (page, datos) {
-        $("#bodyprogress").html(page, datos);
+        $("#contentteacher").html(page, datos);
     });
 }
 //editar y eliminar

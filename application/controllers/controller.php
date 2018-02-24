@@ -644,22 +644,24 @@ function deleteclass(){
     function activitylist(){
         $list['activity'] = $this->modelo->activitylist($this->session->userdata('idteacher'))->result();
         $list['unity'] = $this->modelo->unitylist($this->session->userdata('idteacher'))->result();
-                $list['material'] = $this->modelo->materiallist()->result();
+        $list['material'] = $this->modelo->materiallist()->result();
+        $list['name'] = $this->session->userdata('name');
+        $list['lastname'] = $this->session->userdata('lastname');
         $this->load->view('teacher/activity/activitylist',$list);}
-        function questionlist(){
-            $list['value'] = $this->modelo->valuelist()->result();
-            $list['answer'] = $this->modelo->answerlist()->result();
-            $list['question'] = $this->modelo->questionlist($this->session->userdata('idteacher'))->result();
-            $list['activity'] = $this->modelo->activitylist($this->session->userdata('idteacher'))->result();
-            $this->load->view('teacher/activity/questionlist',$list);
-        }
-        function glosarylist(){
-            $list['glosary'] = $this->modelo->glosarylist()->result();
-            $this->load->view('teacher/glosary/glosarylist',$list);
-        }
-        function progresslist(){
-            $this->load->view('teacher/progress/progresslist');
-        }
+    function questionlist(){
+        $list['value'] = $this->modelo->valuelist()->result();
+        $list['answer'] = $this->modelo->answerlist()->result();
+        $list['question'] = $this->modelo->questionlist($this->session->userdata('idteacher'))->result();
+        $list['activity'] = $this->modelo->activitylist($this->session->userdata('idteacher'))->result();
+        $this->load->view('teacher/activity/questionlist',$list);
+    }
+    function glosarylist(){
+        $list['glosary'] = $this->modelo->glosarylist()->result();
+        $this->load->view('teacher/glosary/glosarylist',$list);
+    }
+    function progresslist(){
+        $this->load->view('teacher/progress/progresslist');
+    }
 //---------Cargas---------
     function load_teacher(){$list = $this->modelo->user_list_teacher(); echo json_encode($list);}
     function load_student(){$list = $this->modelo->user_list_student(); echo json_encode($list);}

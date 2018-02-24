@@ -1,13 +1,11 @@
 <br>
 <div class="card-panel">
     
-
 <a class="btn modal-trigger black" href="#NewClass">New Class</a>
 
 <table class="responsive-table">
         <thead>
           <tr>
-              <th>ID_CLASS</th>
               <th>CLASS NAME</th>
               <th>DESCRIPTION CENTER</th>
               <th>DESCRIPTION LEFT</th>
@@ -15,49 +13,34 @@
               <th>TEACHER</th>
           </tr>
         </thead>
-<?php if ($class == 0): ?><p>Don't Class!</p><?php else: ?>
+              <tbody>
+          <?php if ($class == 0): ?><p>Don't Class!</p><?php else: ?>
 
       <?php $i = 0; foreach ($class as $fila):?>
-        <tbody>
-            <tr>
+            <tr class="tablesorter-ignoreRow">
                 <td>
-                    <input type="text" disabled class="validate active" id="idclassedit<?php echo $i ?>" value="<?php echo $fila->idclass ?>">
+                  <p><?php echo $fila->classname ?></p>
+                </td>
+                <td>
+                  <p><?php echo $fila->descriptioncenter ?></p>
+                </td>
+                <td>
+                  <p><?php echo $fila->descriptionleft ?></p>
+                </td>
+                <td>
+                  <p><?php echo $fila->descriptionright ?></p>
+                </td>
+                <td>
+                  <p><?php echo $name ?> <?php echo $lastname ?></p>
                 </td>
                 <td>
                 
-                    <input type="text" class="active validate" data-length="45" maxlength="45" id="classnameedit<?php echo $i ?>" value="<?php echo $fila->classname ?>">
-                
-                </td>
-                <td>
-                
-                    <input type="text" class="validate active" data-length="45" maxlength="45" id="classdescriptioncenteredit<?php echo $i ?>" value="<?php echo $fila->descriptioncenter ?>">
-                
-                </td>
-                <td>
-                
-                    <input type="text" class="validate active" data-length="45" maxlength="45" id="classdescriptionleftedit<?php echo $i ?>" value="<?php echo $fila->descriptionleft ?>">
-                
-                </td>
-                <td>
-                
-                    <input type="text" class="validate active" data-length="45" maxlength="45" id="classdescriptionrightedit<?php echo $i ?>" value="<?php echo $fila->descriptionright ?>">
+                    <a class="btn-floating white black-text" onclick="updateclass(<?php echo $i ?>)" data-tooltip="Edit Class" id="btneditclass<?php echo $i ?>"><i class="material-icons right">edit</i></a>
                 
                 </td>
                 <td>
                 
-                    <select disabled="true" id="idselecteacher">
-                        <option value="<?php echo $idteacher ?>" disabled selected><?php echo $name ?> <?php echo $lastname ?></option>
-                    </select>
-                
-                </td>
-                <td>
-                
-                    <button class="btn white black-text" onclick="updateclass(<?php echo $i ?>)" id="btneditclass<?php echo $i ?>"><i class="material-icons right">edit</i> Edit</button>
-                
-                </td>
-                <td>
-                
-                    <button id="btnclassdeletemodal<?php echo $i ?>" href="#Modal_delete_class<?php echo $i ?>"  class="btn red darken-4 modal-trigger"><i class="material-icons right">delete</i> Delete</button>
+                    <a id="btnclassdeletemodal<?php echo $i ?>" href="#Modal_delete_class<?php echo $i ?>" data-tooltip="Delete Class" class="btn-floating red darken-4 modal-trigger"><i class="material-icons right">delete</i></a>
                 
                 </td>
 
@@ -77,18 +60,13 @@
                             </div>
                 </div>
             </tr>
+            <?php $i++; endforeach; ?>
+      <?php endif; ?> 
         </tbody>
-      <?php $i++; endforeach; ?>
-
-<?php endif; ?> 
+      
 </table>
 
 </div>
-
-
-
-
-
 <!-- Llamados a Js Visuales -->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -98,10 +76,6 @@
     $(".button-collapse").sideNav();
     $('input#classname, textarea#descriptionclasscenter, textarea#descriptionclassleft,textarea#descriptionclassright').characterCounter();
     $('.modal').modal();
-
-
-
-
     $("#studentcheckedall").change(function () {
             if ($(this).is(':checked')) {
                     //$("input[type=checkbox]").prop('checked', true); //todos los check
@@ -111,11 +85,6 @@
                     $('#check input[type = checkbox]').prop('checked', false);//solo los del objeto #diasHabilitados
                 }
             });
-
-
-
-
-
   });
 </script>
 

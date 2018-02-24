@@ -16,6 +16,7 @@
         </ul>
     </div>
 </nav>
+<!-- MODALs News-->
 <div id="NewClass" class="modal">
     <div class="modal-content">
       <div class="card-panel"><!-- panel -->
@@ -49,21 +50,44 @@
       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="saveclass()">SAVE</a>
     </div>
   </div>
-
-
+ 
 
 <br>
+<!-- BODY PAGE AND BUTTON LIST-->
       <div class="row">
-          <div class="col s12 m4 l2">
-              <button class="btn waves-effect waves-light" type="submit" name="action" onclick="classlist()">CLASS
-                <i class="material-icons">class</i>
-              </button>
+          <div class="col s12 m3">
+            <ul class="collapsible popout" data-collapsible="accordion">
+                <li>
+                  <div class="collapsible-header" onclick="classlist()"><i class="material-icons">class</i>COURSES</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="studentlist()"><i class="material-icons">face</i>STUDENTS</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="unitylist()"><i class="material-icons">view_module</i>UNITYS</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="activitylist()"><i class="material-icons">extension</i>ACTIVITIES</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="questionlist()"><i class="material-icons">question_answer</i>QUESTIONS AND ANSWERS</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="materiallist()"><i class="material-icons">work</i>MATERIALS</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="glosarylist()"><i class="material-icons">g_translate</i>GLOSSARY</div>
+                </li>
+                <li>
+                  <div class="collapsible-header" onclick="progresslist()"><i class="material-icons">trending_up</i>PROGRESS</div>
+                </li>
+              </ul>
           </div>
-        <div class="col s12 m4 l9">
-            <div id="contentClass">
-                
-        </div>
-        </div>
+            <div class="col s12 m9 19">
+                <div id="contentteacher">
+                    
+                </div>
+            </div>
       </div>
 
 
@@ -164,11 +188,14 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('.modal').modal();
-        $('#collapsible').collapsible();
+        $('#collapsible').collapsible('active');
         $('ul.tabs').tabs();
         $('select').material_select();
         $(".button-collapse").sideNav();
         //Materialize effects
         $('.tooltipped').tooltip({delay: 50});
     });
+     $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
 </script>
