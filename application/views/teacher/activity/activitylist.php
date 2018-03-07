@@ -1,5 +1,5 @@
 <div class="card-panel">
-    <a class="btn modal-trigger black" href="#NewActivity">New Activity</a>
+    <a class="btn modal-trigger grey darken-1" href="#NewActivity"><i class="material-icons right">add_box</i><strong> New Activity</strong></a>
 
     <div id="NewActivity" class="modal">
           <div class="modal-content">
@@ -104,6 +104,12 @@
                                         endforeach;
                                         ?>
                                     </select>
+                                </td>
+                                <td>
+                                    <span class="card-title activator grey-text" style="cursor: pointer;" onclick="updateclass(<?php echo $i ?>)" data-tooltip="Edit Class" id="btneditclass<?php echo $i ?>"><i class="material-icons right">edit</i></span>
+                                </td>
+                                <td>
+                                    <span id="btnclassdeletemodal<?php echo $i ?>" style="cursor: pointer;" href="#Modal_delete_class<?php echo $i ?>" data-tooltip="Delete Class" class="card-title activator red-text modal-trigger"><i class="material-icons right">delete</i></span>
                                 </td>
                             </tr>
                             <?php $i++; endforeach; ?>

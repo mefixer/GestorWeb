@@ -80,6 +80,19 @@ class Modelo extends CI_Model{
                 
 		//devuelve el arreglo
 		return $data_response;}
+                
+	function confirm_delete($user_name, $password){
+		$this->db->select('name');
+		$this->db->where('username', $user_name);
+		$this->db->where('password', $password);
+		$res = $this->db->get('teacher');
+
+		if ($res->num_rows() != 0) {
+			return true;
+			}else{
+				return false;
+		}
+	}
 
 	function confirm_user($user_name){
 	//Consulta nombre de usuario devuelve un booleano
@@ -92,7 +105,7 @@ class Modelo extends CI_Model{
 		} else {
 			return false;
 		}}
-        function gendername($idgender){
+    function gendername($idgender){
             $this->db->select('*');
             $this->db->where('idgender', $idgender);
             $this->db->limit(1);
@@ -400,10 +413,25 @@ class Modelo extends CI_Model{
 		return true;
 	}
         
-    function deleteclass($idclass){
-    	$this->db->where('idclass', $idclass);
-        $query = $this->db->delete('class');
-        return true;
+    function deleteclass($idclass,$idteacher){
+
+    	// consultar si existe una actividad
+    	$this->db->select('*');
+    	$this->db->where('class_idclass', $idclass);
+    	$res = $this->db->get('unity');
+
+    	if ($res->num_rows() == 0 ) {
+    		$this->db->query("DELETE FROM `class` WHERE `idclass` = '$idclass' and `teacher_idteacher` = '$idteacher' ");
+    		return true;
+    	}else{
+    		return false;
+    	}
+
+         
+
+
+
+
     }
 
 

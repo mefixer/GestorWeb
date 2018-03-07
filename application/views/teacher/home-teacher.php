@@ -16,40 +16,7 @@
         </ul>
     </div>
 </nav>
-<!-- MODALs News-->
-<div id="NewClass" class="modal">
-    <div class="modal-content">
-      <div class="card-panel"><!-- panel -->
-         <h4 align="center"><strong>NEW CLASS</strong></h4>
-        <div class="input-field">
-          <input type="text" class="validate" maxlength="45" data-length="45" required id="classname">
-          <label for="classname">CLASS NAME</label>
-        </div>
-        <div class="input-field">
-          <textarea id="descriptionclasscenter" class="materialize-textarea validate" required maxlength="200" data-length="200" ></textarea>
-          <label for="name">DESCRIPTION CLASS CENTER</label>
-        </div>
-        <div class="input-field">
-          <textarea id="descriptionclassleft"  class="materialize-textarea" required maxlength="200" data-length="200"></textarea>
-          <label for="lastname">DESCRIPTION CLASS LEFT</label>
-        </div>
-        <div class="input-field">
-          <textarea id="descriptionclassright" class="materialize-textarea" required maxlength="200" data-length="200"></textarea>
-          <label for="username">DESCRIPTION CLASS RIGHT</label>
-        </div>
-        <div class="input-field">
-          <select disabled id="idselectgender"> 
-            <option value="<?php echo $idteacher?>"><?php echo $name?> <?php echo $lastname?></option>
-          </select>
-          <label>Role</label>
-        </div>
-      </div><!-- End panel -->
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat red">CANCEL</a>
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="saveclass()">SAVE</a>
-    </div>
-  </div>
+
  
 
 <br>

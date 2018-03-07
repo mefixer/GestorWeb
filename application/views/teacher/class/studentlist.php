@@ -1,7 +1,7 @@
+<br>
 <div class="card-panel">
-
-
-<a class="btn modal-trigger black" href="#NewStudent">New Student</a>
+  
+<a class="btn modal-trigger grey darken-1" href="#NewStudent"><i class="material-icons right">add_box</i><strong> New Student</strong></a>
 
 <div id="NewStudent" class="modal">
       <div class="modal-content">
@@ -87,9 +87,8 @@
           <tr>
               <th>Id Number</th>
               <th>Name</th>
-              <th>Lastname</th>
+              <th>Last Name</th>
               <th>User Name</th>
-              <th>TEACHER</th>
           </tr>
         </thead>
               <tbody>
@@ -110,10 +109,10 @@
                           </td>
                           
                           <td>
-                            <button class="btn white black-text" onclick="updatestudent(<?php echo $i?>)" id="editstudent<?php echo $i?>"><i class="material-icons right">edit</i> Edit</button>
+                            <span class="card-title grey-text" style="cursor: pointer;" onclick="updatestudent(<?php echo $i?>)" id="editstudent<?php echo $i?>"><i class="material-icons right">edit</i></span>
                           </td>
                           <td>
-                            <button id="delete<?php echo $i ?>" href="#Modal_delete_teacher"  class="btn red darken-4 modal-trigger"><i class="material-icons right">delete</i> Delete</button>
+                            <span id="delete<?php echo $i ?>" style="cursor: pointer;" href="#Modal_delete_teacher"  class="card-title red-text"><i class="material-icons right">delete</i></span>
                           </td>
                                             <div class="modal" tabindex="-1" role="dialog" id="Modal_delete_teacher">
                                               <div class="modal-dialog" role="document">

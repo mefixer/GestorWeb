@@ -1,5 +1,5 @@
 <div class="card-panel">
-        <a class="btn modal-trigger black" href="#NewUnity">New Unity</a>
+        <a class="btn modal-trigger grey darken-1" href="#NewUnity"><i class="material-icons right">add_box</i><strong> New Unity</strong></a>
         <div id="NewUnity" class="modal">
               <div class="modal-content">
                     <div class="panel">
@@ -111,10 +111,10 @@
                                             <?php echo $name ?> <?php echo $lastname ?>
                                         </td>
                                         <td>
-                                            <button class="btn-floating grey darken-1" onclick="updateclass()" id="editclass<?php echo $i ?>"><i class="material-icons right">edit</i> Edit</button>
+                                            <span class="card-title grey-text modal-trigger" style="cursor: pointer;" onclick="updateclass()" id="editclass<?php echo $i ?>"><i class="material-icons right">edit</i></span>
                                         </td>
                                         <td>
-                                            <button id="delete<?php echo $i ?>" href="#Modal_delete_teacher"  class="btn-floating red darken-4 modal-trigger"><i class="material-icons right">delete</i>Delete</button>
+                                            <span id="delete<?php echo $i ?>" style="cursor: pointer;" href="#Modal_delete_teacher"  class="card-title red-text modal-trigger"><i class="material-icons right">delete</i></span>
                                         </td>
                                                 <div class="modal" tabindex="-1" role="dialog" id="Modal_delete_teacher">
                                                     <div class="modal-dialog" role="document">
