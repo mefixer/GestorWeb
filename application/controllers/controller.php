@@ -87,7 +87,7 @@ class Controller extends CI_Controller {
                     //se caga la session
                     $this->session->set_userdata($cookies);
                     //se almacena un mensaje 
-                    $msjs = "<strong class='black-text'>Welcome!</strong>";
+                    $msjs = "<strong>Welcome!</strong>";
                 } else {
                     $cookies['logged'] = false;
                     //se carga la sesion vacia
@@ -163,7 +163,7 @@ class Controller extends CI_Controller {
                             // echo $no;
                 if ($si === 7) {
                     $pass = md5($password);
-                    if ($this->modelo->savestudent($idnumber,$name,$lastname,$username,$password,$email,$role_idrole,$gender_idgender)) {
+                    if ($this->modelo->savestudent($idnumber,$name,$lastname,$username,$pass,$email,$role_idrole,$gender_idgender)) {
                         $m = array('msjs' => "<strong class='black-text'>Save Teacher!!</strong>");
                         array_push($msj_load_student, $m);
                     }else{
@@ -486,21 +486,18 @@ class Controller extends CI_Controller {
         $lastname = $this->input->post('lastname');
         $username = $this->input->post('username');
         $email = $this->input->post('email');
-        $gender_idgender = $this->input->post('role_idrole');
+        $gender_idgender = $this->input->post('gender_idgender');
         //declaracion de variables mensajes
-            $msjsupdatestudent = array();
-            $m = array();
-            $si = 0;
-            $no = 0;
+        $msjsupdatestudent = array();
+        $m = array();
+        $si = 0;
+        $no = 0;
 
-        if (!$this->c_valide_field($idnumber)){$si += 1;}else{$no += 1;}
-        if (!$this->c_valide_field($name)){$si += 1;}else{$no += 1;}
-        if (!$this->c_valide_field($lastname)){$si += 1;}else{$no += 1;}
-        if (!$this->c_valide_field($username)){$si += 1;}else{$no += 1;}
-        if (!$this->c_valide_field($email)){$si += 1;}else{$no += 1;}
-
-        echo $si;
-        echo $no;
+        if ($this->c_valide_field($idnumber)){$si += 1;}else{$no += 1;}
+        if ($this->c_valide_field($name)){$si += 1;}else{$no += 1;}
+        if ($this->c_valide_field($lastname)){$si += 1;}else{$no += 1;}
+        if ($this->c_valide_field($username)){$si += 1;}else{$no += 1;}
+        if ($this->c_valide_field($email)){$si += 1;}else{$no += 1;}
 
         if($si === 5){
             if($this->modelo->updatestudent($idstudent,$idnumber,$name,$lastname,$username,$email,$gender_idgender)){
@@ -510,9 +507,11 @@ class Controller extends CI_Controller {
                 $m = array('msje' => "<strong class='black-text'>Error, Don't save the changes!</strong>");
                 array_push($msjsupdatestudent, $m);
             }
-        }else{if($no > 1){
+        }else{
+            if($no > 1){
             $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-            array_push($msjsupdatestudent, $m);}
+            array_push($msjsupdatestudent, $m);
+            }
         }
         echo json_encode($msjsupdatestudent);}      
     function saveyoutubelink(){
@@ -569,6 +568,28 @@ class Controller extends CI_Controller {
                 array_push($msjdeleteclass, $m);
         }
         echo json_encode($msjdeleteclass);
+    }
+    function deleteStudent(){
+        $idstudent = $this->input->post('idstudent');
+        $password = md5($this->input->post('password'));
+        $user = $this->session->userdata('username');
+
+        $msjdeletestudent = array();
+        $m = array();
+        
+        if ($this->modelo->confirm_delete($user,$password)) {
+            if($this->modelo->deleteStudent($idstudent)){
+                $m = array('msjs' => "<strong class='black-text'>Delete Student!</strong>");
+                array_push($msjdeletestudent, $m);
+            }else{
+                $m = array('msje' => "<strong class='black-text'>Don't delete student!</strong>");
+                array_push($msjdeletestudent, $m);
+            }
+        }else{
+            $m = array('msje' => "<strong class='black-text'>Don't delete student, Error! Pass is Incorrect!</strong>");
+                array_push($msjdeletestudent, $m);
+        }
+        echo json_encode($msjdeletestudent);
     }
 //Files Transaction
     public function upload_audio(){
@@ -665,7 +686,7 @@ class Controller extends CI_Controller {
               return false; 
            } 
            //comprueba que los caracteres sean los permitidos 
-           $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ .,:;'?#"; 
+           $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ @.,:;'?#"; 
            for ($i=0; $i<strlen($field); $i++){ 
               if (strpos($permitidos, substr($field,$i,1))===false){ 
                  return false; 

@@ -85,6 +85,7 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
+            studentlist();
         }, 'json');}
     function saveunity() {
         var idclass = document.getElementById("selectclassunity");
@@ -233,16 +234,16 @@
             classlist();
         },'json');}
     function updatestudent(id) {
-        //    var idgenders = document.getElementById("selectgenderStudentedit" + id);
-        //    var idgender = idgenders.options[idgenders.selectedIndex].value;
+        var idgender = document.getElementById("idselectgender"+ id).value;
             $.post(base_url + 'controller/updatestudent', {
-                idstudent: $('#idstudentstudent' + id).val(),
-                idnumber: $('#idnumberstudent' + id).val(),
-                name: $('#namestudent' + id).val(),
-                lastname: $('#lastnamestudent' + id).val(),
-                username: $('#usernamestudent' + id).val(),
-                email: $('#emailstudent' + id).val()
-        //        gender_idgender: idgender
+                idstudent: $('#id_student_edit' + id).val(),
+                idnumber: $('#id_number_edit' + id).val(),
+                name: $('#name_edit' + id).val(),
+                lastname: $('#lastname_edit' + id).val(),
+                username: $('#username_edit' + id).val(),
+                email: $('#email_edit' + id).val(),
+                gender_idgender: idgender
+                //gender_idgender: $('#gender_option_edit' + id).val()
             }, function (msjdate) {
                 var msjstudentedit = msjdate;
                 $.each(msjstudentedit, function (i, o) {
@@ -255,6 +256,7 @@
                     if (o.msje !== "") {
                         Materialize.toast(o.msje, 4000, 'red lighten-3');
                     }
+                    studentlist();
                 });
             }, 'json');}
 //Load View
@@ -333,6 +335,26 @@
                 });
                 classlist();
             },'json');}
+        function deleteStudent(id){
+             $.post(base_url  + 'controller/deleteStudent',{
+                idstudent: $("#id_student_edit"+id).val(),
+                password: $("#deletestudentValidate"+id).val()
+            },function(datos){
+                var msjdeleteclass = datos;
+                $.each(msjdeleteclass, function (i, o) {
+                    if (o.msjw !== "") {
+                        Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                    }
+                    if (o.msjs !== "") {
+                        Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                    }
+                    if (o.msje !== "") {
+                        Materialize.toast(o.msje, 4000, 'red lighten-3');
+                    }
+                });
+                studentlist();
+            },'json');
+        }
 //*Valida Campos*/
         function checkRut(rut) {
             // Despejar Puntos

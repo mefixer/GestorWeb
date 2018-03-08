@@ -90,7 +90,7 @@ class Modelo extends CI_Model{
 		if ($res->num_rows() != 0) {
 			return true;
 			}else{
-				return false;
+			return false;
 		}
 	}
 
@@ -426,13 +426,22 @@ class Modelo extends CI_Model{
     	}else{
     		return false;
     	}
-
-         
-
-
-
-
     }
+    function deleteStudent($idstudent){
+
+    	// consultar si existe una actividad
+    	$this->db->select('*');
+    	$this->db->where('student_idstudent', $idstudent);
+    	$res = $this->db->get('student_has_class');
+
+    	if ($res->num_rows() == 0 ) {
+    		$this->db->query("DELETE FROM `student` WHERE `idstudent` = '$idstudent'");
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+
 
 
 
