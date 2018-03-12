@@ -414,7 +414,34 @@ class Controller extends CI_Controller {
                         array_push($classmsj, $m);}
                     }
             echo json_encode($classmsj);}
-    function updateunity(){
+        function updateunit(){
+              //se extrae los datos de la vista
+            $idunity = $this->input->post('idunity');
+            $unityname = $this->input->post('unityname');
+            $descriptioncenter = $this->input->post('descriptioncenter');
+            $descriptionleft = $this->input->post('descriptionleft');
+            $descriptionright = $this->input->post('descriptionright');
+            $class_idclass = $this->input->post('class_idclass');
+            $class_teacher_idteacher = $this->session->userdata('idteacher');
+            //declaracion de variables mensajes y errores
+            $unitmsj = array();
+            $m = array();
+
+            if ($this->c_valide_field($unityname) === true) {
+                if($this->modelo->updateunit($idunity,$unityname,$descriptioncenter,$descriptionleft,$descriptionright,$class_idclass,$class_teacher_idteacher)){
+                    $m = array('msjs' => "<strong class='black-text'>Save unity!</strong>");
+                    array_push($unitmsj, $m);
+                }else{
+                    $m = array('msje' => "<strong class='black-text'>Error, Don't save the unity!</strong>");
+                    array_push($unitmsj, $m);
+                }
+            }else{if($no > 0){
+                $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
+                array_push($unitmsj, $m);}
+            }
+            echo json_encode($unitmsj);
+        } 
+        function updateunity(){
         //se extrae los datos de la vista
             $idunity = $this->load->post('idunity');
             $unityname = $this->input->post('unityname');
@@ -453,21 +480,14 @@ class Controller extends CI_Controller {
         $descriptionleft = $this->input->post('descriptionleft');
         $descriptionright = $this->input->post('descriptionright');
         $unity_idunity = $this->input->post('unity_idunity');
-        $class_idclass = $this->modelo->unityclass($unity_idunity);
-        $unity_class_idclass = $class_idclass['class_idclass'];
-        $unity_class_teacher_idteacher = $this->session->userdata('idteacher');
+        $unity_class_idclass = $this->input->post('unity_class_idclass');
         $material_idmaterial = $this->input->post('material_idmaterial');
-        $materialtype_idmaterialtype = $this->modelo->unitymaretialtype($material_idmaterial);
-        $material_materialtype_idmaterialtype = $materialtype_idmaterialtype['materialtype_idmaterialtype'];
-
+        $idmaterialtype = $this->input->post('materialmaterial_materialtype_idmaterialtype');
+        $idteacher = $this->session->userdata('idteacher');
         $msjactivityupdate = array();
         $m = array();
-        $si = 0;
-        $no = 0;
-
-        if ($this->c_valide_field($activityname) == true) {$si += 1;}else{$no += 1;}
-        if ($si === 1) {
-            if ($this->modelo->updateactivity($idactivity,$activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$unity_class_teacher_idteacher,$material_idmaterial,$material_materialtype_idmaterialtype) === true) {
+        if ($this->c_valide_field($activityname)){
+            if ($this->modelo->updateactivity($idactivity,$activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$idteacher,$material_idmaterial,$idmaterialtype)) {
                 $m = array('msjs' => "<strong class='black-text'>Save activity!</strong>");
                 array_push($msjactivityupdate, $m);
             }else{
@@ -513,7 +533,24 @@ class Controller extends CI_Controller {
             array_push($msjsupdatestudent, $m);
             }
         }
-        echo json_encode($msjsupdatestudent);}      
+        echo json_encode($msjsupdatestudent);}
+    function studentsaveclass(){
+        $idclass = $this->input->post('idclass');
+        $idstudent = $this->input->post('idstudent');
+        $idgender = $this->input->post('idgender');
+        $idteacher = $this->session->userdata('idteacher');
+        
+        $msjsstudenclass= array();
+        $m = array();
+            if ($this->modelo->studentsaveclass($idclass,$idstudent,$idgender,$idteacher)){
+                $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
+                array_push($msjsstudenclass, $m);
+            }else{
+                $m = array('msje' => "<strong class='black-text'>Error, Don't save the changes!</strong>");
+                array_push($msjsstudenclass, $m);
+            }
+        echo json_encode($msjsstudenclass);
+    }
     function saveyoutubelink(){
         $materialname = $this->input->post('materialname');
         $descriptionleft = $this->input->post('descriptionleft');
@@ -550,7 +587,6 @@ class Controller extends CI_Controller {
         $password = md5($this->input->post('password'));
         $user = $this->session->userdata('username');
         $idteacher = $this->session->userdata('idteacher');
-        $ressultDelete = "";
         
         $msjdeleteclass = array();
         $m = array();
@@ -568,6 +604,28 @@ class Controller extends CI_Controller {
                 array_push($msjdeleteclass, $m);
         }
         echo json_encode($msjdeleteclass);
+    }
+    function deleteunity(){
+        $idunity = $this->input->post('idunity');
+        $password = md5($this->input->post('password'));
+        $user = $this->session->userdata('username');
+        
+        $msjdeleteunity = array();
+        $m = array();
+        
+        if ($this->modelo->confirm_delete($user,$password)) {
+            if($this->modelo->deleteunity($idunity)){
+                $m = array('msjs' => "<strong class='black-text'>Delete unity!</strong>");
+                array_push($msjdeleteunity, $m);
+            }else{
+                $m = array('msje' => "<strong class='black-text'>Don't delete unity, activity depend of this class!</strong>");
+                array_push($msjdeleteunity, $m);
+            }
+        }else{
+            $m = array('msje' => "<strong class='black-text'>Don't delete unity, Error! Pass is Incorrect!</strong>");
+                array_push($msjdeleteunity, $m);
+        }
+        echo json_encode($msjdeleteunity);
     }
     function deleteStudent(){
         $idstudent = $this->input->post('idstudent');
@@ -629,6 +687,7 @@ class Controller extends CI_Controller {
         $this->load->view('coordinator/teacherlist',$list);
     }
     function studentlist(){
+        $list['class'] = $this->modelo->classlist($this->session->userdata('idteacher'))->result();
         $list['student'] = $this->modelo->studentlist()->result();
         $list['role'] = $this->modelo->rolelist()->result();
         $list['gender'] = $this->modelo->genderlist()->result();

@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-12-2017 a las 00:25:07
--- Versión del servidor: 10.1.21-MariaDB
--- Versión de PHP: 5.6.30
+-- Tiempo de generación: 12-03-2018 a las 02:36:32
+-- Versión del servidor: 10.1.30-MariaDB
+-- Versión de PHP: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `e4it`
 --
-CREATE DATABASE IF NOT EXISTS `e4it` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `e4it`;
 
 -- --------------------------------------------------------
 
@@ -28,7 +28,6 @@ USE `e4it`;
 -- Estructura de tabla para la tabla `activity`
 --
 
-DROP TABLE IF EXISTS `activity`;
 CREATE TABLE `activity` (
   `idactivity` int(11) NOT NULL,
   `activityname` varchar(45) NOT NULL,
@@ -42,16 +41,12 @@ CREATE TABLE `activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `activity`
---
-
-TRUNCATE TABLE `activity`;
---
 -- Volcado de datos para la tabla `activity`
 --
 
 INSERT INTO `activity` (`idactivity`, `activityname`, `descriptionleft`, `descriptionright`, `unity_idunity`, `unity_class_idclass`, `unity_class_teacher_idteacher`, `material_idmaterial`, `material_materialtype_idmaterialtype`) VALUES
-(1, 'asafa', 'sfasfa', 'sfaffd', 0, 1, 1, 1, 4);
+(2, 'Whats is a best smartphone?', 'resolve cuestion an anwer', '', 2, 5, 1, 1, 4),
+(3, 'Wach the video and respounse the answers', '', '', 3, 1, 1, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -59,7 +54,6 @@ INSERT INTO `activity` (`idactivity`, `activityname`, `descriptionleft`, `descri
 -- Estructura de tabla para la tabla `answer`
 --
 
-DROP TABLE IF EXISTS `answer`;
 CREATE TABLE `answer` (
   `idanswer` int(11) NOT NULL,
   `answername` varchar(45) NOT NULL,
@@ -68,28 +62,12 @@ CREATE TABLE `answer` (
   `question_idquestion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `answer`
---
-
-TRUNCATE TABLE `answer`;
---
--- Volcado de datos para la tabla `answer`
---
-
-INSERT INTO `answer` (`idanswer`, `answername`, `description`, `value_idvalue`, `question_idquestion`) VALUES
-(1, 'No Empty', '', 1, 1),
-(2, 'Yes', '', 1, 2),
-(3, 'Yes, is Empty', '', 3, 1),
-(4, 'No, i\'m Not Shure', '', 3, 2);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `class`
 --
 
-DROP TABLE IF EXISTS `class`;
 CREATE TABLE `class` (
   `idclass` int(11) NOT NULL,
   `classname` varchar(45) NOT NULL,
@@ -100,20 +78,12 @@ CREATE TABLE `class` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `class`
---
-
-TRUNCATE TABLE `class`;
---
 -- Volcado de datos para la tabla `class`
 --
 
 INSERT INTO `class` (`idclass`, `classname`, `descriptioncenter`, `descriptionleft`, `descriptionright`, `teacher_idteacher`) VALUES
-(1, 'English 4 IT', 'CLASS INFORMATION TECNOLOGIES', '', '', 1),
-(2, 'Funciona Bien', 'HOLA HOLA HOLA', 'EL EXTRA', 'LOREA CHORO NACO', 1),
-(3, 'EL EXTRA', 'EL FUA', 'VOY Y SACO', 'AL UNIVERSO', 1),
-(5, 'SNAP DRAGON PTE', 'VEST DIVICE', 'TESLA MOTOR', 'BIOTECNOLOGY', 1),
-(6, 'ADASD', 'ADASDASD', 'dasdasdasdasd', 'asdasdas', 1);
+(1, 'English 4 IT', 'INFORMATION TECNOLOGIES', '', '', 1),
+(5, 'SNAP DRAGON PTE', 'VEST DIVICE', 'TESLA MOTOR', 'BIOTECNOLOGY', 1);
 
 -- --------------------------------------------------------
 
@@ -121,7 +91,6 @@ INSERT INTO `class` (`idclass`, `classname`, `descriptioncenter`, `descriptionle
 -- Estructura de tabla para la tabla `coordinator`
 --
 
-DROP TABLE IF EXISTS `coordinator`;
 CREATE TABLE `coordinator` (
   `idcoordinator` int(11) NOT NULL,
   `idnumber` varchar(10) NOT NULL,
@@ -135,11 +104,6 @@ CREATE TABLE `coordinator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `coordinator`
---
-
-TRUNCATE TABLE `coordinator`;
---
 -- Volcado de datos para la tabla `coordinator`
 --
 
@@ -152,7 +116,6 @@ INSERT INTO `coordinator` (`idcoordinator`, `idnumber`, `name`, `lastname`, `use
 -- Estructura de tabla para la tabla `exam`
 --
 
-DROP TABLE IF EXISTS `exam`;
 CREATE TABLE `exam` (
   `idexam` int(11) NOT NULL,
   `examname` varchar(45) NOT NULL,
@@ -160,45 +123,28 @@ CREATE TABLE `exam` (
   `state` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `exam`
---
-
-TRUNCATE TABLE `exam`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `exam_has_record`
 --
 
-DROP TABLE IF EXISTS `exam_has_record`;
 CREATE TABLE `exam_has_record` (
   `exam_idexam` int(11) NOT NULL,
   `record_idrecord` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `exam_has_record`
---
-
-TRUNCATE TABLE `exam_has_record`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `gender`
 --
 
-DROP TABLE IF EXISTS `gender`;
 CREATE TABLE `gender` (
   `idgender` int(11) NOT NULL,
   `name` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `gender`
---
-
-TRUNCATE TABLE `gender`;
 --
 -- Volcado de datos para la tabla `gender`
 --
@@ -213,7 +159,6 @@ INSERT INTO `gender` (`idgender`, `name`) VALUES
 -- Estructura de tabla para la tabla `glosary`
 --
 
-DROP TABLE IF EXISTS `glosary`;
 CREATE TABLE `glosary` (
   `idglosary` int(11) NOT NULL,
   `wordname` varchar(45) NOT NULL,
@@ -221,11 +166,6 @@ CREATE TABLE `glosary` (
   `aditionaldescription` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `glosary`
---
-
-TRUNCATE TABLE `glosary`;
 --
 -- Volcado de datos para la tabla `glosary`
 --
@@ -239,25 +179,18 @@ INSERT INTO `glosary` (`idglosary`, `wordname`, `description`, `aditionaldescrip
 -- Estructura de tabla para la tabla `log`
 --
 
-DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `idlog` int(11) NOT NULL,
   `start` date DEFAULT NULL,
   `end` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `log`
---
-
-TRUNCATE TABLE `log`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `log_has_student`
 --
 
-DROP TABLE IF EXISTS `log_has_student`;
 CREATE TABLE `log_has_student` (
   `log_idlog` int(11) NOT NULL,
   `student_idstudent` int(11) NOT NULL,
@@ -265,18 +198,12 @@ CREATE TABLE `log_has_student` (
   `student_gender_idgender` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `log_has_student`
---
-
-TRUNCATE TABLE `log_has_student`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `material`
 --
 
-DROP TABLE IF EXISTS `material`;
 CREATE TABLE `material` (
   `idmaterial` int(11) NOT NULL,
   `materialname` varchar(45) NOT NULL,
@@ -288,11 +215,6 @@ CREATE TABLE `material` (
   `materialtype_idmaterialtype` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `material`
---
-
-TRUNCATE TABLE `material`;
 --
 -- Volcado de datos para la tabla `material`
 --
@@ -307,17 +229,11 @@ INSERT INTO `material` (`idmaterial`, `materialname`, `descriptionleft`, `descri
 -- Estructura de tabla para la tabla `materialtype`
 --
 
-DROP TABLE IF EXISTS `materialtype`;
 CREATE TABLE `materialtype` (
   `idmaterialtype` int(11) NOT NULL,
   `materialtypename` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `materialtype`
---
-
-TRUNCATE TABLE `materialtype`;
 --
 -- Volcado de datos para la tabla `materialtype`
 --
@@ -334,7 +250,6 @@ INSERT INTO `materialtype` (`idmaterialtype`, `materialtypename`) VALUES
 -- Estructura de tabla para la tabla `question`
 --
 
-DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
   `idquestion` int(11) NOT NULL,
   `questionname` varchar(200) NOT NULL,
@@ -347,43 +262,23 @@ CREATE TABLE `question` (
   `activity_material_materialtype_idmaterialtype` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `question`
---
-
-TRUNCATE TABLE `question`;
---
--- Volcado de datos para la tabla `question`
---
-
-INSERT INTO `question` (`idquestion`, `questionname`, `description`, `activity_idactivity`, `activity_unity_idunity`, `activity_unity_class_idclass`, `activity_unity_class_teacher_idteacher`, `activity_material_idmaterial`, `activity_material_materialtype_idmaterialtype`) VALUES
-(1, 'Is Empty?', 'Answer the question.', 1, 0, 1, 1, 1, 4),
-(2, 'Are you shure?', 'Aswere the question now!', 1, 0, 1, 1, 1, 4);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `question_has_record`
 --
 
-DROP TABLE IF EXISTS `question_has_record`;
 CREATE TABLE `question_has_record` (
   `question_idquestion` int(11) NOT NULL,
   `record_idrecord` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `question_has_record`
---
-
-TRUNCATE TABLE `question_has_record`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `record`
 --
 
-DROP TABLE IF EXISTS `record`;
 CREATE TABLE `record` (
   `idrecord` int(11) NOT NULL,
   `recordname` varchar(45) NOT NULL,
@@ -391,46 +286,29 @@ CREATE TABLE `record` (
   `value` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `record`
---
-
-TRUNCATE TABLE `record`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `record_has_class`
 --
 
-DROP TABLE IF EXISTS `record_has_class`;
 CREATE TABLE `record_has_class` (
   `record_idrecord` int(11) NOT NULL,
   `class_idclass` int(11) NOT NULL,
   `class_teacher_idteacher` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `record_has_class`
---
-
-TRUNCATE TABLE `record_has_class`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `role`
 --
 
-DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `idrole` int(11) NOT NULL,
   `rolename` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `role`
---
-
-TRUNCATE TABLE `role`;
 --
 -- Volcado de datos para la tabla `role`
 --
@@ -446,7 +324,6 @@ INSERT INTO `role` (`idrole`, `rolename`) VALUES
 -- Estructura de tabla para la tabla `student`
 --
 
-DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `idstudent` int(11) NOT NULL,
   `idnumber` varchar(10) NOT NULL,
@@ -460,19 +337,13 @@ CREATE TABLE `student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `student`
---
-
-TRUNCATE TABLE `student`;
---
 -- Volcado de datos para la tabla `student`
 --
 
 INSERT INTO `student` (`idstudent`, `idnumber`, `name`, `lastname`, `username`, `password`, `email`, `role_idrole`, `gender_idgender`) VALUES
 (3, '17597491-1', 'Mauricio Eduardo', 'Garcia Mardones', 'magata', '202cb962ac59075b964b07152d234b70', 'mgarciamardones@gmail.com', 1, 1),
 (4, '22222222-2', 'Jose Agustin', 'Parra Cancino', 'paca', '202cb962ac59075b964b07152d234b70', 'jose_parra@gmail.com', 1, 1),
-(5, '33333333-3', 'sdasdasdDSASDA', 'ASDAASDASD', 'ASDAS', '123', 'SDADADAD', 1, 1),
-(6, '44444444-4', 'ASDASD', 'ASDASD', 'ASDASD', '123', 'ASDASD', 1, 1);
+(5, '33333333-3', 'sdasdasdDSASDA', 'ASDAASDASD', 'ASDAS', '123', 'SDADADAD', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -480,7 +351,6 @@ INSERT INTO `student` (`idstudent`, `idnumber`, `name`, `lastname`, `username`, 
 -- Estructura de tabla para la tabla `student_has_class`
 --
 
-DROP TABLE IF EXISTS `student_has_class`;
 CREATE TABLE `student_has_class` (
   `student_idstudent` int(11) NOT NULL,
   `student_role_idrole` int(11) NOT NULL,
@@ -490,35 +360,30 @@ CREATE TABLE `student_has_class` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `student_has_class`
+-- Volcado de datos para la tabla `student_has_class`
 --
 
-TRUNCATE TABLE `student_has_class`;
+INSERT INTO `student_has_class` (`student_idstudent`, `student_role_idrole`, `student_gender_idgender`, `class_idclass`, `class_teacher_idteacher`) VALUES
+(3, 1, 1, 5, 1);
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `student_has_record`
 --
 
-DROP TABLE IF EXISTS `student_has_record`;
 CREATE TABLE `student_has_record` (
   `student_idstudent` int(11) NOT NULL,
   `student_class_idclass` int(11) NOT NULL,
   `record_idrecord` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `student_has_record`
---
-
-TRUNCATE TABLE `student_has_record`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `teacher`
 --
 
-DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher` (
   `idteacher` int(11) NOT NULL,
   `idnumber` varchar(10) NOT NULL,
@@ -532,11 +397,6 @@ CREATE TABLE `teacher` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `teacher`
---
-
-TRUNCATE TABLE `teacher`;
---
 -- Volcado de datos para la tabla `teacher`
 --
 
@@ -549,7 +409,6 @@ INSERT INTO `teacher` (`idteacher`, `idnumber`, `name`, `lastname`, `username`, 
 -- Estructura de tabla para la tabla `teacher_has_log`
 --
 
-DROP TABLE IF EXISTS `teacher_has_log`;
 CREATE TABLE `teacher_has_log` (
   `teacher_idteacher` int(11) NOT NULL,
   `teacher_role_idrole` int(11) NOT NULL,
@@ -557,18 +416,12 @@ CREATE TABLE `teacher_has_log` (
   `log_idlog` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `teacher_has_log`
---
-
-TRUNCATE TABLE `teacher_has_log`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `unity`
 --
 
-DROP TABLE IF EXISTS `unity`;
 CREATE TABLE `unity` (
   `idunity` int(11) NOT NULL,
   `unityname` varchar(45) NOT NULL,
@@ -580,16 +433,12 @@ CREATE TABLE `unity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncar tablas antes de insertar `unity`
---
-
-TRUNCATE TABLE `unity`;
---
 -- Volcado de datos para la tabla `unity`
 --
 
 INSERT INTO `unity` (`idunity`, `unityname`, `descriptioncenter`, `descriptionleft`, `descriptionright`, `class_idclass`, `class_teacher_idteacher`) VALUES
-(0, 'ajdgajsh', 'jhdajshdga', 'kjhadas', '', 1, 1);
+(2, 'SMARTPHONE', 'Mobile Devices', '', '', 5, 1),
+(3, 'Information Tecnology', '', '', '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -597,7 +446,6 @@ INSERT INTO `unity` (`idunity`, `unityname`, `descriptioncenter`, `descriptionle
 -- Estructura de tabla para la tabla `unity_has_exam`
 --
 
-DROP TABLE IF EXISTS `unity_has_exam`;
 CREATE TABLE `unity_has_exam` (
   `unity_idunity` int(11) NOT NULL,
   `unity_class_idclass` int(11) NOT NULL,
@@ -605,29 +453,18 @@ CREATE TABLE `unity_has_exam` (
   `exam_idexam` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `unity_has_exam`
---
-
-TRUNCATE TABLE `unity_has_exam`;
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `value`
 --
 
-DROP TABLE IF EXISTS `value`;
 CREATE TABLE `value` (
   `idvalue` int(11) NOT NULL,
   `valuename` varchar(45) NOT NULL,
   `val` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncar tablas antes de insertar `value`
---
-
-TRUNCATE TABLE `value`;
 --
 -- Volcado de datos para la tabla `value`
 --
@@ -839,82 +676,104 @@ ALTER TABLE `value`
 -- AUTO_INCREMENT de la tabla `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `idactivity` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idactivity` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT de la tabla `answer`
 --
 ALTER TABLE `answer`
   MODIFY `idanswer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT de la tabla `class`
 --
 ALTER TABLE `class`
   MODIFY `idclass` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `coordinator`
 --
 ALTER TABLE `coordinator`
   MODIFY `idcoordinator` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT de la tabla `exam`
 --
 ALTER TABLE `exam`
   MODIFY `idexam` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `gender`
 --
 ALTER TABLE `gender`
   MODIFY `idgender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `glosary`
 --
 ALTER TABLE `glosary`
   MODIFY `idglosary` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `log`
 --
 ALTER TABLE `log`
   MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `material`
 --
 ALTER TABLE `material`
   MODIFY `idmaterial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `materialtype`
 --
 ALTER TABLE `materialtype`
   MODIFY `idmaterialtype` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT de la tabla `question`
 --
 ALTER TABLE `question`
   MODIFY `idquestion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `record`
 --
 ALTER TABLE `record`
   MODIFY `idrecord` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `role`
 --
 ALTER TABLE `role`
   MODIFY `idrole` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT de la tabla `student`
 --
 ALTER TABLE `student`
   MODIFY `idstudent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `teacher`
 --
 ALTER TABLE `teacher`
   MODIFY `idteacher` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `unity`
+--
+ALTER TABLE `unity`
+  MODIFY `idunity` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT de la tabla `value`
 --
 ALTER TABLE `value`
   MODIFY `idvalue` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- Restricciones para tablas volcadas
 --
@@ -1033,6 +892,7 @@ ALTER TABLE `unity`
 ALTER TABLE `unity_has_exam`
   ADD CONSTRAINT `fk_unity_has_exam_exam1` FOREIGN KEY (`exam_idexam`) REFERENCES `exam` (`idexam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_unity_has_exam_unity1` FOREIGN KEY (`unity_idunity`,`unity_class_idclass`,`unity_class_teacher_idteacher`) REFERENCES `unity` (`idunity`, `class_idclass`, `class_teacher_idteacher`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
