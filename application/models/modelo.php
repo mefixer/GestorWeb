@@ -216,6 +216,17 @@ class Modelo extends CI_Model{
 
 		return true;
 	}
+        function studentsaveclass($idclass,$idstudent,$idgender,$idteacher){
+            $insert_sc = array(
+                'student_idstudent' => $idstudent,
+                'student_role_idrole' => 1,
+                'student_gender_idgender' => $idgender,
+                'class_idclass' => $idclass,
+                'class_teacher_idteacher' => $idteacher
+            );
+            $this->db->insert('student_has_class',$insert_sc);
+            return true;
+        }
 	function saveyoutubelink($materialname, $descriptionleft,$descriptionright,$link,$idmaterialtype){
 		//Guarda el link en la base de datos
 		$insert_material = array(
@@ -407,6 +418,44 @@ class Modelo extends CI_Model{
 		return true;
 
 	}
+        
+        function updateunit($idunity,$unityname,$descriptioncenter,$descriptionleft,$descriptionright,$class_idclass,$class_teacher_idteacher){
+            $this->db->where('idunity', $idunity);
+            $query = array(
+                'unityname' => $unityname,
+                'descriptioncenter' => $descriptioncenter,
+                'descriptionleft' => $descriptionleft,
+                'descriptionright' => $descriptionright,
+                'class_idclass' => $class_idclass,
+                'class_teacher_idteacher' => $class_teacher_idteacher
+            );
+            $this->db->update('unity', $query);
+            return true;
+        }
+        function updateactivity($idactivity,
+                $activityname,
+                $descriptionleft,
+                $descriptionright,
+                $unity_idunity,
+                $unity_class_idclass,
+                $idteacher,
+                $material_idmaterial,
+                $idmaterialtype){
+            $this->db->where('idactivity',$idactivity);
+            
+            $query = array(
+                'activityname' => $activityname,
+                'descriptionleft' => $descriptionleft, 
+                'descriptionright' => $descriptionright,
+                'unity_idunity' => $unity_idunity,
+                'unity_class_idclass' => $unity_class_idclass,
+                'unity_class_teacher_idteacher' => $idteacher,
+                'material_idmaterial' => $material_idmaterial,
+                'material_materialtype_idmaterialtype' => $idmaterialtype
+            );
+            $this->db->update('activity', $query);
+            return true;
+        }
 
 	function deleteteacher($idteacher, $role_idrole, $gender_idgender){
 		$this->db->query("DELETE FROM `teacher` WHERE `teacher`.`idteacher` = $idteacher AND `teacher`.`role_idrole` = $role_idrole AND `teacher`.`gender_idgender` = $gender_idgender");
@@ -414,7 +463,6 @@ class Modelo extends CI_Model{
 	}
         
     function deleteclass($idclass,$idteacher){
-
     	// consultar si existe una actividad
     	$this->db->select('*');
     	$this->db->where('class_idclass', $idclass);
@@ -440,6 +488,18 @@ class Modelo extends CI_Model{
     	}else{
     		return false;
     	}
+    }
+    function deleteunity($idunity){
+        $this->db->select('*');
+        $this->db->where('unity_idunity',$idunity);
+        $res = $this->db->get('activity');
+        
+        if($res->num_rows() == 0){
+            $this->db->query("DELETE FROM `unity` WHERE `idunity` = '$idunity'");
+    		return true;
+        }else{
+            return false;
+        }
     }
 
 

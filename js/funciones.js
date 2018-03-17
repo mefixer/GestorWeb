@@ -109,6 +109,7 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
+            unitylist();
         }, 'json');}
     function saveactivity() {
         var idunity = document.getElementById("selectunityactivity");
@@ -134,6 +135,7 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
+            activitylist();
         }, 'json');}
     function savequestion(){
         var idactivity = document.getElementById("selectquestionactivity");
@@ -210,6 +212,43 @@
             });
             glosarylist();
         },'json');}
+    function studentsaveclass(checkload){
+        var checked = 0;
+        var idclass = document.getElementById("idselectclassstudent").value;
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectstudent' + i).prop('checked')){
+                checked += 1;}
+        }
+        if(checked === 0){
+           var msj = "<p class='black-text'><strong>Any student Select</strong></p>";
+             Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for (i = 0; i <= checkload; i++) {
+            if($('#selectstudent' + i).prop('checked')){
+               var idgender = document.getElementById("idselectgender"+ i).value;
+            $.post(base_url + 'controller/studentsaveclass',{
+                idclass: idclass,
+                idstudent: $('#id_student_edit'+i).val(),
+                idgender: idgender
+            },function (datos) {
+            var msjsstudenclass = datos;
+            $.each(msjsstudenclass, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            studentlist();
+        },'json');
+            }
+        }
+        }
+    }
 //Load Update
     function updateclass(id) {
         $.post(base_url + 'controller/updateclass', {
@@ -233,6 +272,36 @@
             });
             classlist();
         },'json');}
+    function updateunit(id){
+        var idclass = document.getElementById("selectclassunit"+ id).value;
+        var idunity = $("#editunitid"+id).val();
+        var unitname = $("#editunitname"+id).val();
+        var descriptioncenter = $("#editunitdescriptioncenter"+id).val();
+        var descriptionleft = $("#editunitdescriptionleft"+id).val();
+        var descriptionright = $("#editunitdescriptionright"+id).val();
+         $.post(base_url + 'controller/updateunit', {
+            idunity: idunity,
+            unityname: unitname,
+            descriptioncenter: descriptioncenter,
+            descriptionleft: descriptionleft,
+            descriptionright: descriptionright,
+            class_idclass: idclass
+        }, function (datos) {
+            var msjunit = datos;
+            $.each(msjunit, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            unitylist();
+        }, 'json');
+    }
     function updatestudent(id) {
         var idgender = document.getElementById("idselectgender"+ id).value;
             $.post(base_url + 'controller/updatestudent', {
@@ -259,6 +328,40 @@
                     studentlist();
                 });
             }, 'json');}
+    function updateactivity(id){
+        var idunity = document.getElementById("idselectmaterial"+ id).value;
+        var idmaterial = document.getElementById("idselectmaterial"+ id).value;
+        var idclass = $("#id_activity_class_edit"+id).val();
+        var idactivity = $("#id_activity_edit"+id).val();
+        var activityname = $("#name_activity_edit"+id).val();
+        var descriptionleft = $("#descriptionleft_activity_edit"+id).val();
+        var descriptionright = $("#descriptionright_activity_edit"+id).val();
+        var idmaterialtype = $("#id_activity_material_type_edit"+id).val();
+         $.post(base_url + 'controller/updateactivity', {
+            idactivity: idactivity,
+            activityname: activityname,
+            descriptionleft: descriptionleft,
+            descriptionright: descriptionright,
+            unity_idunity: idunity,
+            unity_class_idclass : idclass,
+            material_idmaterial: idmaterial,
+            materialmaterial_materialtype_idmaterialtype : idmaterialtype
+        }, function (datos) {
+            var msjactivity = datos;
+            $.each(msjactivity, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            activitylist();
+        }, 'json');
+    }
 //Load View
     function teacherlist() {
         $.post(base_url + 'controller/teacherlist', {}, function (page, datos) {
@@ -335,6 +438,26 @@
                 });
                 classlist();
             },'json');}
+        function deleteunity(id){
+            $.post(base_url  + 'controller/deleteunity',{
+                idunity: $("#editunitid"+id).val(),
+                password: $("#deleteclassValidate"+id).val()
+            },function(datos){
+                var msjdeleteclass = datos;
+                $.each(msjdeleteclass, function (i, o) {
+                    if (o.msjw !== "") {
+                        Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                    }
+                    if (o.msjs !== "") {
+                        Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                    }
+                    if (o.msje !== "") {
+                        Materialize.toast(o.msje, 4000, 'red lighten-3');
+                    }
+                });
+                unitylist();
+            },'json');
+        }
         function deleteStudent(id){
              $.post(base_url  + 'controller/deleteStudent',{
                 idstudent: $("#id_student_edit"+id).val(),
