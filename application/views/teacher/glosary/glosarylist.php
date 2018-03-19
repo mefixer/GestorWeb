@@ -20,7 +20,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" type="button" id="btnsaveunity" onclick="saveword()"><i class="material-icons right">save</i> SAVE WORD</button>
+      <a href="#!" class="modal-action modal-close btn waves-effect waves-green red darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></a>
+        <button class="modal-action modal-close btn waves-effect waves-green green darken-1" type="button" id="btnsaveunity" onclick="saveword()"><i class="material-icons right">save</i> SAVE WORD</button>
     </div>
    <br>
 </div>
@@ -83,25 +84,24 @@
                 </div>
 
 
-                             <div class="modal" tabindex="-1" role="dialog" id="Modal_delete_teacher">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <p class="passTl">Para confirmar Ingrese su contraseña!</p>
-                                  <div class="form-group" id="passCont">
-                                    <label class="col-sm-4 control-label">Contraseña</label>
-                                    <div class="col-sm-8" id="ecErrorP2">
-                                      <input type="password" class="form-control" id="mepPass2" onblur="passVer2(this.value)">
-                                      <input type="hidden" id="ecpass2" value="" disabled="true">
-                                    </div>
-                                  </div>
-                                  <input type="hidden" id="wid" value="" disabled="true">
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" href+"#modal_delete_teacher" class="btn modal-trigger" >Cancelar</button>
-                                  <button type="button" class="btn " onclick="deleteWorker()">Eliminar</button>
-                                </div>
-                              </div>
-                            </div>
+                                     <div class="modal modal-fixed-footer" tabindex="-2" role="dialog" id="Modal_delete_class<?php echo $i ?>">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="card-panel">
+                <h3><strong>Are you shure?</strong></h3>
+              <p>Pleace insert your password and delete.</p>
+            </div>
+            <div class="input-field col s4">
+                <input type="password" class="form-control" id="deleteclassValidate<?php echo $i ?>">
+                <label for="deleteclassValidate<?php echo $i ?>" >Password</label>
+              </div>
+          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn modal-trigger modal-close grey darken-1" ><i class="material-icons right">expand_more</i><strong> Done</strong></button>
+              <button type="button" class="btn modal-trigger modal-close  red darken-3" id="btndeleteclass<?php echo $i ?>" onclick="deleteclass(<?php echo $i ?>)"><i class="material-icons right">delete_forever</i><strong> Delete</strong></button>
+            </div>
+          </div>
+        </div>
     </tr>
         <?php $i++; endforeach; ?>
     <?php endif; ?>

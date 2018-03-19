@@ -1,5 +1,5 @@
 <br>
-<div class="card-panel">
+<div class="card-panel z-depth-5">
 
   <a class="btn modal-trigger grey darken-1" href="#NewClass"><i class="material-icons right">add_box</i><strong> New Class</strong></a>
   <!-- MODALs News-->
