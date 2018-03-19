@@ -37,7 +37,8 @@ class Controller extends CI_Controller {
                 $data['lastname'] = $this->session->userdata('lastname');
                 $data['email'] = $this->session->userdata('email');
                 $data['idteacher'] = $this->session->userdata('idteacher');
-                                $data['gender_name'] = $gender['name'];
+                $data['gender_name'] = $gender['name'];
+                $data['materialtype'] = $this->modelo->materialtypelist()->result();
                 //si es profesor pasa se carga su vista y nombre de usuario
                 $this->load->view('teacher/home-teacher', $data);
                 break;
@@ -46,7 +47,9 @@ class Controller extends CI_Controller {
                 $data['lastname'] = $this->session->userdata('lastname');
                 $data['email'] = $this->session->userdata('email');
                 $data['idstudent'] = $this->session->userdata('idstudent');
-                                $data['gender_name'] = $gender['name'];
+                $data['gender_name'] = $gender['name'];
+
+                $data['unity'] = $this->modelo->studentunit($this->session->userdata('idstudent'))->result();
                 //si es alumno pasa se carga su vista y nombre de usuario
                 $this->load->view('student/home-student', $data);
                 break;
@@ -215,7 +218,7 @@ class Controller extends CI_Controller {
             if ($nconfirm){
                 $si += 1;
             }else{
-                $m = array('msjw' => "<strong class='black-text'>Class exit in sistem, pleace change name!</strong>");
+                $m = array('msjw' => "<strong class='black-text'>Class exit in system, please change name!</strong>");
                 array_push($classmsj, $m);
                 $no += 1;
             }
@@ -309,12 +312,7 @@ class Controller extends CI_Controller {
         $questionname = $this->input->post('questionname');
         $description = $this->input->post('description');
         $activity_idactivity = $this->input->post('activity_idactivity');
-        $datos = $this->modelo->questionactivity($activity_idactivity);
-        $activity_unity_idunity = $datos['unity_idunity'];
-        $activity_unity_class_idclass = $datos['unity_class_idclass'];
         $activity_unity_class_teacher_idteacher = $this->session->userdata('idteacher');
-        $activity_material_idmaterial = $datos['material_idmaterial'];
-        $activity_material_materialtype_idmaterialtype = $datos['material_materialtype_idmaterialtype'];
         
         $msjquestion = array();
         $m = array();
@@ -323,7 +321,7 @@ class Controller extends CI_Controller {
         
         if($this->c_valide_field($questionname) == true) {$si += 1;}else{$no += 1;}
         if($si === 1){
-            if($this->modelo->savequestion($questionname,$description,$activity_idactivity,$activity_unity_idunity,$activity_unity_class_idclass,$activity_unity_class_teacher_idteacher,$activity_material_idmaterial,$activity_material_materialtype_idmaterialtype)){
+            if($this->modelo->savequestion($questionname,$description,$activity_idactivity,$activity_unity_class_teacher_idteacher)){
                 $m = array('msjs' => "<strong class='black-text'>Save question!</strong>");
             array_push($msjquestion, $m);
             }else{
@@ -480,14 +478,14 @@ class Controller extends CI_Controller {
         $descriptionleft = $this->input->post('descriptionleft');
         $descriptionright = $this->input->post('descriptionright');
         $unity_idunity = $this->input->post('unity_idunity');
-        $unity_class_idclass = $this->input->post('unity_class_idclass');
         $material_idmaterial = $this->input->post('material_idmaterial');
-        $idmaterialtype = $this->input->post('materialmaterial_materialtype_idmaterialtype');
         $idteacher = $this->session->userdata('idteacher');
+
         $msjactivityupdate = array();
         $m = array();
+        
         if ($this->c_valide_field($activityname)){
-            if ($this->modelo->updateactivity($idactivity,$activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$idteacher,$material_idmaterial,$idmaterialtype)) {
+            if ($this->modelo->updateactivity($idactivity,$activityname,$descriptionleft,$descriptionright,$unity_idunity,$idteacher,$material_idmaterial)) {
                 $m = array('msjs' => "<strong class='black-text'>Save activity!</strong>");
                 array_push($msjactivityupdate, $m);
             }else{
@@ -650,42 +648,34 @@ class Controller extends CI_Controller {
         echo json_encode($msjdeletestudent);
     }
 //Files Transaction
-    public function upload_audio(){
+    public function upload_video(){
+            $config['file_name'] =  $this->input->post('archivename');
             $config['upload_path']          = './media';
             $config['allowed_types']        = '*';
-            $config['max_size']             = 10000000;
+            $config['max_size']             = 10000000000;
 
             $this->load->library('upload', $config);
 
             if ( ! $this->upload->do_upload('userfile')){
-                //error
+                //no se a seleccionado archivo de video
             }else{
-                $data = array('upload_data' => $this->upload->data());
-                redirect(base_url());
-            }}
-    public function upload_video(){
-            $config['upload_path']          = './media';
-            $config['allowed_types']        = '*';
-            $config['max_size']             = 1000000000;
-
-            $this->load->library('upload', $config);
-
-            if ( ! $this->upload->do_upload('userfile'))
-            {
-                //error
-            }
-            else
-            {
-                $data = array('upload_data' => $this->upload->data());
-
-                redirect(base_url());
+                if($this->upload->data('file_name') != ""){
+                    $name = $this->upload->data('file_name');
+                    $type = $this->input->post('selectmaterialtype');
+                    $this->modelo->savevideo($name,$type);
+                    $data = array('upload_data' => $this->upload->data());
+                    $msjsavevideo= "<strong class='black-text'>save video!</strong>";
+                    echo json_encode(array('msjs' => $msjsavevideo));
+                    redirect($this->load->view('teacher/home-teacher'));
+                } else{
+                    //no se a asignado nombre al archivo de video
+                }
             }}
 //---------Select List Transaction---------
     function teacherlist(){
         $list['teacher'] = $this->modelo->teacherlist()->result();
         $list['gender'] = $this->modelo->genderlist()->result();
-        $this->load->view('coordinator/teacherlist',$list);
-    }
+        $this->load->view('coordinator/teacherlist',$list);}
     function studentlist(){
         $list['class'] = $this->modelo->classlist($this->session->userdata('idteacher'))->result();
         $list['student'] = $this->modelo->studentlist()->result();
@@ -722,21 +712,33 @@ class Controller extends CI_Controller {
         $list['answer'] = $this->modelo->answerlist()->result();
         $list['question'] = $this->modelo->questionlist($this->session->userdata('idteacher'))->result();
         $list['activity'] = $this->modelo->activitylist($this->session->userdata('idteacher'))->result();
-        $this->load->view('teacher/activity/questionlist',$list);
-    }
+        $this->load->view('teacher/activity/questionlist',$list);}
     function glosarylist(){
         $list['glosary'] = $this->modelo->glosarylist()->result();
-        $this->load->view('teacher/glosary/glosarylist',$list);
-    }
-    function progresslist(){
-        $this->load->view('teacher/progress/progresslist');
-    }
+        $this->load->view('teacher/glosary/glosarylist',$list);}
+    function progresslist(){$this->load->view('teacher/progress/progresslist');}
 //---------Load Page Web---------
     function load_teacher(){$list = $this->modelo->user_list_teacher(); echo json_encode($list);}
     function load_student(){$list = $this->modelo->user_list_student(); echo json_encode($list);}
     function student_load_menu(){$this->load->view('teacher/class/menu-students');}
     function learning_load(){$this->load->view('teacher/class/menu-learning');}
     function newclass(){$this->load->view('teacher/class/newclass');}
+
+
+//-----------------------------Student--------------------------------------
+        function unity_activities(){
+        $idunity = $this->input->post('idunity');
+
+        $data['activity'] = $this->modelo->unity_activities($idunity)->result();
+        $data['material'] = $this->modelo->materiallist()->result();
+        $data['materialtype'] = $this->modelo->materialtypelist()->result();
+        $data['teacher'] = $this->modelo->teacherlist()->result();
+        $data['gender'] = $this->modelo->genderlist()->result();
+
+        $this->load->view('student/activity',$data);
+    }
+
+
 //-------------------------validaciones-----------------------------
         //valida que los camposs no esten vacios y que no sean menores de 3 caracteres
         function c_valide_field($field){ 
@@ -745,7 +747,7 @@ class Controller extends CI_Controller {
               return false; 
            } 
            //comprueba que los caracteres sean los permitidos 
-           $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ @.,:;'?#"; 
+           $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ @.,:;'¿?#"; 
            for ($i=0; $i<strlen($field); $i++){ 
               if (strpos($permitidos, substr($field,$i,1))===false){ 
                  return false; 

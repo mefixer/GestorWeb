@@ -1,6 +1,6 @@
 <br>
 <?php $checkcount = 0?>
-<div class="card-panel">
+<div class="card-panel z-depth-5">
   <div>
     
     <a class="btn modal-trigger grey darken-1" href="#NewStudent"><i class="material-icons right">add_box</i><strong> New Student</strong></a>

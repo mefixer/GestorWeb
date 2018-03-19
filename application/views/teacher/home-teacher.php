@@ -61,87 +61,78 @@
 
 <!--Floatting Tooltipped-->
 <div class="fixed-action-btn horizontal  click-to-toggle">
-    <a class="btn-floating btn-large red tooltipped" data-position="top" data-delay="50" data-tooltip="Multimedia Upload">
+    <a class="btn-floating btn-large black tooltipped" data-position="top" data-delay="50" data-tooltip="Multimedia Upload">
         <i class="material-icons">menu</i>
     </a>
     <ul>
-        <li><a class="btn-floating red tooltipped modal-trigger" onclick="$('#modaluploadvideo').modal('open')" data-position="top" data-delay="50" data-tooltip="Upload Video"><i class="material-icons">insert_link</i></a></li>
-        <li><a class="btn-floating yellow darken-1 tooltipped" onclick="$('#modaluploadaudio').modal('open')" data-position="top" data-delay="50" data-tooltip="Audio Listening"><i class="material-icons">headset</i></a></li>
+        <li><a class="btn-floating blue tooltipped modal-trigger" onclick="$('#modaluploadvideo').modal('open')" data-position="top" data-delay="50" data-tooltip="Upload archive"><i class="material-icons">insert_link</i></a></li>
         <li><a class="btn-floating red tooltipped" onclick="$('#modalyoutubelink').modal('open')" data-position="top" data-delay="50" data-tooltip="Youtube Link's"><i class="material-icons">subscriptions</i></a></li>
-        <li><a class="btn-floating blue tooltipped" data-position="top" data-delay="50" data-tooltip="Files"><i class="material-icons">attach_file</i></a></li>
     </ul>
 </div>
 <!--End Floatting Tooltipped-->
 
 
 <!--Modal UploadVideo Structure -->
-<div id="modaluploadvideo" class="modal">
+<div id="modaluploadvideo" class="modal modal-fixed-footer">
+    <?php echo form_open_multipart('controller/upload_video'); ?>
     <div class="modal-content">
-        <h4>Load Archive</h4>
-        <div class="card">
-            <?php echo form_open_multipart('controller/upload_video'); ?>
-            <input type="file" name="userfile" size="20" />
-            <input type="submit" value="upload" />
-        </div>
+        <h4>Load archive</h4>
+        <br>
+            <div class="input-field col s3">
+                <input type="text" name="archivename" id="videoinput">
+                <label for="videoinput" class="active">Name archive</label>
+            </div>
+            <br>
+            <div class="input-field col s3">
+                <select name="selectmaterialtype" id="selectmaterialtype">
+                 <?php $io = 0; foreach ($materialtype as $filmaterialtype):?>
+                    <option value="<?php echo $filmaterialtype->idmaterialtype ?>" <?php if ($filmaterialtype->materialtypename === "Youtube") echo "disabled"?>><?php echo $filmaterialtype->materialtypename ?></option>
+                 <?php $io++;  endforeach; ?>
+                </select>
+                <label>Select Material Type</label>
+            </div>
+            <br>
+    <div class="file-field input-field">
+      <div class="btn">
+        <span>File</span>
+        <input type="file" name="userfile" size="20" />
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="">SAVE</a>
+        <a href="#!" class="modal-action modal-close btn waves-effect waves-green red darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></a>
+        <input class="btn waves-effect waves-green green darken-1" type="submit" value="Save" />
     </div>
 </div>
 <!--End Modal UploadVideo Structure -->
 
-<!--Modal UploadAudio Structure -->
-<div id="modaluploadaudio" class="modal">
-    <div class="modal-content">
-        <h4>Load Archive</h4>
-        <div class="card">
-            <?php echo form_open_multipart('controller/upload_audio'); ?>
-            <input type="file" name="userfile" size="20" />
-            <input type="submit" value="upload" />  
-        </div>
-        <div class="modal-footer">
-        </div>
-    </div>
-</div>
-<!--End Modal UploadAudio Structure -->
-
 <!--Modal Upload Youtube Link Structure -->
-<div id="modalyoutubelink" class="modal">
+<div id="modalyoutubelink" class="modal modal-fixed-footer">
     <div class="modal-content">
-        <h4>Load Youtube Link</h4>
-        <div class="card">
-
-        </div>
-        <form action="#">
-            <div class="row">
-                <div class="col s3">
-                    <div class="input-field">
+        <h4>Youtube Link</h4>
+                    <div class="input-field col s3">
                         <input type="text" class="validate" maxlength="45" required  id="materialname" value="">
-                        <label for="materialname">NAME</label>
+                        <label for="materialname">Name</label>
                     </div>
-                </div>
-                <div class="col s6">
                     <div class="input-field">
                         <textarea id="descriptionleft"  class="materialize-textarea" required maxlength="200" ></textarea>
-                        <label for="descriptionleft">DESCRIPTION LEFT</label>
+                        <label for="descriptionleft">Description Left</label>
                     </div>
                     <div class="input-field">
                         <textarea id="descriptionright" class="materialize-textarea" maxlength="200" ></textarea>
-                        <label for="descriptionclassright">DESCRIPTION RIGHT</label>
+                        <label for="descriptionclassright">Description Right</label>
                     </div>
-                </div>
-                <div class="col s12">
                     <div class="input-field">
                         <input class="input" type="text" id="uploadyoutubelink">
                         <label for="uploadyoutubelink">Youtube Link</label>
                     </div>
-                </div>
-            </div>
-        </form>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="saveyoutubelink()">SAVE</a>
+        <a href="#!" class="modal-action modal-close btn waves-effect waves-green red darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></a>
+        <a href="#!" class="modal-action modal-close btn waves-effect waves-green green darken-1" onclick="saveyoutubelink()"><i class="material-icons right">save</i> Save</a>
     </div>
 </div>
 <!--End Modal Upload Youtube Link Structure -->

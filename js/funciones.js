@@ -182,6 +182,7 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
+            questionlist();
         }, 'json');}
     function saveyoutubelink() {
         $.post(base_url + 'controller/saveyoutubelink', {
@@ -329,23 +330,20 @@
                 });
             }, 'json');}
     function updateactivity(id){
-        var idunity = document.getElementById("idselectmaterial"+ id).value;
+        var idunity = document.getElementById("idselectunity"+ id).value;
         var idmaterial = document.getElementById("idselectmaterial"+ id).value;
-        var idclass = $("#id_activity_class_edit"+id).val();
         var idactivity = $("#id_activity_edit"+id).val();
         var activityname = $("#name_activity_edit"+id).val();
         var descriptionleft = $("#descriptionleft_activity_edit"+id).val();
         var descriptionright = $("#descriptionright_activity_edit"+id).val();
-        var idmaterialtype = $("#id_activity_material_type_edit"+id).val();
+        
          $.post(base_url + 'controller/updateactivity', {
             idactivity: idactivity,
             activityname: activityname,
             descriptionleft: descriptionleft,
             descriptionright: descriptionright,
             unity_idunity: idunity,
-            unity_class_idclass : idclass,
-            material_idmaterial: idmaterial,
-            materialmaterial_materialtype_idmaterialtype : idmaterialtype
+            material_idmaterial: idmaterial
         }, function (datos) {
             var msjactivity = datos;
             $.each(msjactivity, function (i, o) {
@@ -478,6 +476,18 @@
                 studentlist();
             },'json');
         }
+        function mensajevideo(msj){
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }
+
+//------------------student-------------------
+function unityactivities(idunity){
+    $.post(base_url + 'controller/unity_activities',{
+        idunity : idunity
+    },function(pagina, datos){
+        $("#contentstudent").html(pagina,datos);
+    });
+}
 //*Valida Campos*/
         function checkRut(rut) {
             // Despejar Puntos

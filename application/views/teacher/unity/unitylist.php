@@ -1,4 +1,4 @@
-<div class="card-panel">
+<div class="card-panel z-depth-5">
     <a class="btn modal-trigger grey darken-1" href="#NewUnity"><i class="material-icons right">add_box</i><strong> New Unit</strong></a>
     <div id="NewUnity" class="modal modal-fixed-footer">
       <div class="modal-content">

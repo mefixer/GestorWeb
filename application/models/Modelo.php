@@ -3,7 +3,7 @@
 class Modelo extends CI_Model{
 
 
-//seccion usuarios
+//teacher
 
 	function login($username, $password){
 	//se consulta por el rut y contraseña en la tabla teacher
@@ -147,25 +147,25 @@ class Modelo extends CI_Model{
                 }
             return $idmaterial;
         }
-        function questionactivity($activity_idactivity){
-            $this->db->select('*');
-            $this->db->where('idactivity',$activity_idactivity);
-            $this->db->limit(1);
-            $query = $this->db->get('activity');
+        // function questionactivity($activity_idactivity){
+        //     $this->db->select('*');
+        //     $this->db->where('idactivity',$activity_idactivity);
+        //     $this->db->limit(1);
+        //     $query = $this->db->get('activity');
             
-            $datos['unity_idunity']="";
-            $datos['unity_class_idclass']="";
-            $datos['material_idmaterial']="";
-            $datos['material_materialtype_idmaterialtype']="";
+        //     $datos['unity_idunity']="";
+        //     $datos['unity_class_idclass']="";
+        //     $datos['material_idmaterial']="";
+        //     $datos['material_materialtype_idmaterialtype']="";
             
-            foreach ($query->result() as $fila){
-                $datos['unity_idunity']= $fila->unity_idunity;
-                $datos['unity_class_idclass']= $fila->unity_class_idclass;
-                $datos['material_idmaterial']= $fila->material_idmaterial;
-                $datos['material_materialtype_idmaterialtype']= $fila->material_materialtype_idmaterialtype;
-            }
-            return $datos;
-        }
+        //     foreach ($query->result() as $fila){
+        //         $datos['unity_idunity']= $fila->unity_idunity;
+        //         $datos['unity_class_idclass']= $fila->unity_class_idclass;
+        //         $datos['material_idmaterial']= $fila->material_idmaterial;
+        //         $datos['material_materialtype_idmaterialtype']= $fila->material_materialtype_idmaterialtype;
+        //     }
+        //     return $datos;
+        // }
 
 	function studentexist($idnumber){
 	//valida si existe el rut que se intenta ingresar
@@ -287,16 +287,12 @@ class Modelo extends CI_Model{
             return true;
         }
         
-        function savequestion($questionname,$description,$activity_idactivity,$activity_unity_idunity,$activity_unity_class_idclass,$activity_unity_class_teacher_idteacher,$activity_material_idmaterial,$activity_material_materialtype_idmaterialtype){
+        function savequestion($questionname,$description,$activity_idactivity,$teacher_idteacher){
             $insertquestion = array(
                 'questionname' => $questionname,
                 'description' => $description,
                 'activity_idactivity' => $activity_idactivity,
-                'activity_unity_idunity' => $activity_unity_idunity,
-                'activity_unity_class_idclass' => $activity_unity_class_idclass,
-                'activity_unity_class_teacher_idteacher' => $activity_unity_class_teacher_idteacher,
-                'activity_material_idmaterial' => $activity_material_idmaterial,
-                'activity_material_materialtype_idmaterialtype' => $activity_material_materialtype_idmaterialtype
+                'teacher_idteacher' => $teacher_idteacher
             );
             $this->db->insert('question', $insertquestion);
             return true;
@@ -361,7 +357,7 @@ class Modelo extends CI_Model{
 	}
         function questionlist($idteacher){
             $this->db->select("*");
-            $this->db->where('activity_unity_class_teacher_idteacher', $idteacher);
+            $this->db->where('teacher_idteacher', $idteacher);
             return $this->db->get('question');
         }
         function answerlist(){
@@ -432,28 +428,37 @@ class Modelo extends CI_Model{
             $this->db->update('unity', $query);
             return true;
         }
-        function updateactivity($idactivity,
-                $activityname,
-                $descriptionleft,
-                $descriptionright,
-                $unity_idunity,
-                $unity_class_idclass,
-                $idteacher,
-                $material_idmaterial,
-                $idmaterialtype){
-            $this->db->where('idactivity',$idactivity);
-            
-            $query = array(
+        function updateactivity($idactivity,$activityname,$descriptionleft,$descriptionright,$unity_idunity,$idteacher,$material_idmaterial){
+        	$this->db->select('class_idclass');
+        	$this->db->where('idunity',$unity_idunity);
+        	$resunity = $this->db->get('unity');
+
+        	$idclass = "";
+			foreach ($resunity->result() as $fila) {
+                $idclass = $fila->class_idclass;
+            }
+            $this->db->select('materialtype_idmaterialtype');
+        	$this->db->where('idmaterial',$material_idmaterial);
+        	$resmaterial = $this->db->get('material');
+
+        	$idmaterialtype = "";
+			foreach ($resmaterial->result() as $fila) {
+                $idmaterialtype = $fila->materialtype_idmaterialtype;
+            }
+
+
+        	$queryactivity = array(
                 'activityname' => $activityname,
                 'descriptionleft' => $descriptionleft, 
                 'descriptionright' => $descriptionright,
                 'unity_idunity' => $unity_idunity,
-                'unity_class_idclass' => $unity_class_idclass,
+                'unity_class_idclass' => $idclass,
                 'unity_class_teacher_idteacher' => $idteacher,
                 'material_idmaterial' => $material_idmaterial,
-                'material_materialtype_idmaterialtype' => $idmaterialtype
-            );
-            $this->db->update('activity', $query);
+                'material_materialtype_idmaterialtype' => $idmaterialtype);
+
+            $this->db->where('idactivity',$idactivity);
+            $this->db->update('activity', $queryactivity);
             return true;
         }
 
@@ -501,12 +506,45 @@ class Modelo extends CI_Model{
             return false;
         }
     }
+    function savevideo($video,$type){
+    	$query = array(
+    		'materialname' => $video,
+    		'descriptionleft' => "",
+    		'descriptionright' => "",
+    		'link' => "",
+    		'route' => $video,
+    		'url' => "",
+    		'materialtype_idmaterialtype' => $type
+    	);
+    	$this->db->insert('material', $query);
+    	return true;
+    }
 
+//Student
+    function studentunit($idstudent){
+    	$this->db->select('class_idclass');
+    	$this->db->where('student_idstudent',$idstudent);
+    	$query = $this->db->get('student_has_class');
 
+    	$idclass = "";
+		foreach ($query->result() as $fila) {
+                $idclass = $fila->class_idclass;
+            }
 
+    	$this->db->select('*');
+    	$this->db->where('class_idclass',$idclass);
+        $unity = $this->db->get('unity');
 
+        return $unity;
+    }
 
+    function unity_activities($idunity){
+    	$this->db->select('*');
+    	$this->db->where('unity_idunity', $idunity);
+    	$query = $this->db->get('activity');
 
+    	return $query;
+    }
 
 }
 
