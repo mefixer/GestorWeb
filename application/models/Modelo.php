@@ -120,52 +120,47 @@ class Modelo extends CI_Model{
             return $data_response;
         }
 
+        function activityunity($idactivity){
+        	$this->db->select('*');
+        	$this->db->where('idactivity', $idactivity);
+                $this->db->limit(1);
+        	$res = $this->db->get('activity');
+                
+                $idunity = "";
+                
+                foreach ($res->result() as $fila){
+                    $idunity = $fila->unity_idunity;
+                }
+                return $idunity;
+        }
+
         function unityclass($unity_idunity){
         	$this->db->select('*');
         	$this->db->where('idunity', $unity_idunity);
                 $this->db->limit(1);
         	$res = $this->db->get('unity');
                 
-                $idclass['unity_class_idclass'] = "";
+                $idclass = "";
                 
                 foreach ($res->result() as $fila){
-                    $idclass['class_idclass'] = $fila->class_idclass;
+                    $idclass = $fila->class_idclass;
                 }
                 return $idclass;
         }
 
-        function unitymaretialtype($material_idmaterial){
+        function materialtyṕe($material_idmaterial){
         	$this->db->select('*');
         	$this->db->where('idmaterial', $material_idmaterial);
                 $this->db->limit(1);
         	$query = $this->db->get('material');
                 
-                $idmaterial['materialtype_idmaterialtype']= "";
+                $idmaterialtype = "";
                 
                 foreach ($query->result() as $fila){
-                    $idmaterial['materialtype_idmaterialtype']= $fila->materialtype_idmaterialtype;
+                    $idmaterialtype = $fila->materialtype_idmaterialtype;
                 }
-            return $idmaterial;
+            return $idmaterialtype;
         }
-        // function questionactivity($activity_idactivity){
-        //     $this->db->select('*');
-        //     $this->db->where('idactivity',$activity_idactivity);
-        //     $this->db->limit(1);
-        //     $query = $this->db->get('activity');
-            
-        //     $datos['unity_idunity']="";
-        //     $datos['unity_class_idclass']="";
-        //     $datos['material_idmaterial']="";
-        //     $datos['material_materialtype_idmaterialtype']="";
-            
-        //     foreach ($query->result() as $fila){
-        //         $datos['unity_idunity']= $fila->unity_idunity;
-        //         $datos['unity_class_idclass']= $fila->unity_class_idclass;
-        //         $datos['material_idmaterial']= $fila->material_idmaterial;
-        //         $datos['material_materialtype_idmaterialtype']= $fila->material_materialtype_idmaterialtype;
-        //     }
-        //     return $datos;
-        // }
 
 	function studentexist($idnumber){
 	//valida si existe el rut que se intenta ingresar
@@ -219,8 +214,6 @@ class Modelo extends CI_Model{
         function studentsaveclass($idclass,$idstudent,$idgender,$idteacher){
             $insert_sc = array(
                 'student_idstudent' => $idstudent,
-                'student_role_idrole' => 1,
-                'student_gender_idgender' => $idgender,
                 'class_idclass' => $idclass,
                 'class_teacher_idteacher' => $idteacher
             );
@@ -271,16 +264,14 @@ class Modelo extends CI_Model{
 		return true;
 	}
         
-        function saveactivity($activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$unity_class_teacher_idteacher,$material_idmaterial,$material_materialtype_idmaterialtype){
+        function saveactivity($activityname,$descriptionleft,$descriptionright,$unity_idunity,$unity_class_idclass,$unity_class_teacher_idteacher){
             $insertactivity = array(
                 'activityname' => $activityname,
                 'descriptionleft' => $descriptionleft,
                 'descriptionright' => $descriptionright,
                 'unity_idunity' => $unity_idunity,
                 'unity_class_idclass' => $unity_class_idclass,
-                'unity_class_teacher_idteacher' => $unity_class_teacher_idteacher,
-                'material_idmaterial' => $material_idmaterial,
-                'material_materialtype_idmaterialtype' => $material_materialtype_idmaterialtype
+                'unity_class_teacher_idteacher' => $unity_class_teacher_idteacher
             );
             
             $this->db->insert('activity', $insertactivity);
@@ -506,6 +497,30 @@ class Modelo extends CI_Model{
             return false;
         }
     }
+    function materialsaveactivity($idmaterial,$materialidtype,$idactivity,$idunity,$idclass,$idteacher){
+    	$result = $this->db->query(
+    		"SELECT * 
+    			FROM `material_has_activity` 
+    			WHERE `material_idmaterial` = $idmaterial 
+    			AND `material_idtype` = $materialidtype 
+    			AND `activity_idactivity` = $idactivity 
+    			AND `activity_idunity` = $idunity 
+    			AND `activity_idclass` = $idclass 
+    			AND `activity_idteacher` = $idteacher");
+    	if ($result->num_rows() === 0) {
+    		$query = array(
+    		'material_idmaterial' => $idmaterial,
+    		'material_idtype' => $materialidtype,
+    		'activity_idactivity' => $idactivity,
+    		'activity_idunity' => $idunity,
+    		'activity_idclass' => $idclass,
+    		'activity_idteacher' =>  $idteacher);
+    		$this->db->insert('material_has_activity', $query);
+    		return true;
+    	}else{
+    		return false;	
+    	}
+    }
     function savevideo($video,$type){
     	$query = array(
     		'materialname' => $video,
@@ -522,13 +537,16 @@ class Modelo extends CI_Model{
 
 //Student
     function studentunit($idstudent){
-    	$this->db->select('class_idclass');
+    	$this->db->select('*');
     	$this->db->where('student_idstudent',$idstudent);
     	$query = $this->db->get('student_has_class');
 
     	$idclass = "";
+    	$idteacher = "";
+
 		foreach ($query->result() as $fila) {
                 $idclass = $fila->class_idclass;
+                $idteacher = $fila->class_teacher_idteacher;
             }
 
     	$this->db->select('*');
@@ -540,10 +558,28 @@ class Modelo extends CI_Model{
 
     function unity_activities($idunity){
     	$this->db->select('*');
-    	$this->db->where('unity_idunity', $idunity);
-    	$query = $this->db->get('activity');
+    	$this->db->where('activity_idunity', $idunity);
+    	$query = $this->db->get('material_has_activity');
 
     	return $query;
+    }
+    function activitybyunity($idunity){
+    	$this->db->select('*');
+    	$this->db->where('unity_idunity', $idunity);
+    	$query = $this->db->get('activity');
+    	return $query;
+    }
+    function teacherbyidunity($idunity){
+    	$this->db->select('*');
+    	$this->db->where('idunity', $idunity);
+    	$this->db->limit(1);
+    	$res = $this->db->get('unity');
+
+    	$idteacher = 0;
+    	foreach ($res->result()  as $fil) {
+    		$idteacher = $fil->class_teacher_idteacher;
+    	}
+    	return $idteacher;
     }
 
 }

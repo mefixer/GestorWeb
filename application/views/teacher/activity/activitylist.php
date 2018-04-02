@@ -23,14 +23,6 @@
         </select>
         <label>UNITY</label>
       </div>
-      <div class="input-field col s6">
-        <select id="selectmaterialactivity">
-          <?php $ie = 0;foreach ($material as $filmaterial): ?>
-          <option value="<?php echo $filmaterial->idmaterial ?>"><?php echo $filmaterial->materialname ?></option>
-          <?php $ie++; endforeach;?>
-        </select>
-        <label>MATERIAL</label>
-      </div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn modal-trigger modal-close red darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></button>
@@ -46,7 +38,6 @@
         <th>Description Right</th>
         <th>Unity</th>
         <th>Teacher</th>
-        <th>Material</th>
       </tr>
     </thead>
     <tbody>
@@ -71,11 +62,6 @@
             <?php echo $name ?> <?php echo $lastname ?>
           </td>
           <td>
-            <?php $ia = 0; foreach ($material as $filmaterial):?>
-            <?php if($filmaterial->idmaterial === $filactivity->material_idmaterial) echo $filmaterial->materialname?>
-            <?php $ia++; endforeach; ?>
-          </td>
-          <td>
             <span class="card-title modal-trigger blue-grey darken-1" id="btneditactivitymodal<?php echo $i ?>" style="cursor: pointer;" href="#Modal_edit_activity<?php echo $i ?>" data-tooltip="Edit Activity"><i class="material-icons right">edit</i></span>
           </td>
           <div class="modal modal-fixed-footer" tabindex="-1" role="dialog" id="Modal_edit_activity<?php echo $i ?>">
@@ -92,14 +78,6 @@
                   <?php $a++; endforeach; ?>
                 </select>
                 <label>Select Unity</label>
-              </div>
-              <div class="input-field col s6">
-                <select id="idselectmaterial<?php echo $i?>">
-                  <?php $e = 0; foreach ($material as $fil_material):?>
-                  <option id="activity_material_edit<?php echo $e?>" value="<?php echo $fil_material->idmaterial?>" <?php if($filactivity->material_idmaterial === $fil_material->idmaterial) echo "selected"?>> <?php echo $fil_material->materialname?> </option>
-                  <?php $e++; endforeach; ?>
-                </select>
-                <label>Select Material</label>
               </div>
               <div class="input-field col s6">
                 <input id="name_activity_edit<?php echo $i?>" type="text" value="<?php echo $filactivity->activityname?>">

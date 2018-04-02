@@ -16,22 +16,26 @@
 <br>
 <!-- BODY PAGE AND BUTTON LIST-->
       <div class="row">
-          <div class="col s12 m3">
-            <?php $i = 0; foreach ($unity as $filunity):?>
-              <ul class="collapsible popout" data-collapsible="accordion">
-                <li>
-                  <div class="collapsible-header" id="btnunity<?php $i?>" onclick="unityactivities(<?php echo $filunity->idunity?>)"><i class="material-icons">extension</i>Unit: <?php echo $filunity->unityname?></div>
-                </li>
-              </ul>
-            <?php $i++; endforeach; ?>
+        <div class="col s12 m3">
+          <?php $i = 0; foreach ($unity as $filunity):?>
+          <div class="card grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="material-icons">extension</i> Unit</span>
+              <p><?php echo $filunity->unityname?></p>
+            </div>
+            <div class="card-action">
+              <button class="btn blue waves-effect waves" id="btnunity<?php $i?>" onclick="unityactivities(<?php echo $filunity->idunity?>)"><strong>Activities</strong> 
+              </button>
+            </div>
           </div>
+          <?php $i++; endforeach; ?>
+        </div>
             <div class="col s12 m9 19">
                 <div id="contentstudent">
                     
                 </div>
             </div>
-      </div>
-
+</div>
 
       <script type="text/javascript">
     $(document).ready(function () {

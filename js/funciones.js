@@ -112,16 +112,12 @@
             unitylist();
         }, 'json');}
     function saveactivity() {
-        var idunity = document.getElementById("selectunityactivity");
-        var unity_idunity = idunity.options[idunity.selectedIndex].value;
-        var idmaterial = document.getElementById("selectmaterialactivity");
-        var material_idmaterial = idmaterial.options[idmaterial.selectedIndex].value;
+        var unity_idunity = document.getElementById("selectunityactivity").value;
         $.post(base_url + 'controller/saveactivity', {
             activityname: $("#activityname").val(),
             descriptionleft: $("#descriptionleftactivity").val(),
             descriptionright: $("#descriptionrightactivity").val(),
-            unity_idunity: unity_idunity,
-            material_idmaterial: material_idmaterial
+            unity_idunity: unity_idunity
         }, function (datos) {
             var msjactivity = datos;
             $.each(msjactivity, function (i, o) {
@@ -249,6 +245,43 @@
             }
         }
         }
+    }
+    function materialsaveactivity(checkload){
+        var checked = 0;
+        var idactivity = document.getElementById("selectmaterialactivity").value;
+        for (i = 0; i <= checkload; i++) {
+            if($("#selectmaterial" + i).prop('checked')){
+                checked += 1;
+            }
+        }
+        if(checked === 0){
+            var msj = "<p class='black-text'><strong>Any material Select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for (i = 0; i <= checkload; i++) {
+                if($("#selectmaterial" + i).prop('checked')){
+                    var idmaterial = document.getElementById("idmaterial"+i).value;
+                     $.post(base_url + 'controller/materialsaveactivity',{
+                        idmaterial: idmaterial,
+                        idactivity: idactivity
+                    },function (datos) {
+                        var msjsstudenclass = datos;
+                        $.each(msjsstudenclass, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                        materiallist();
+                    },'json');
+                }
+            }
+        }   
     }
 //Load Update
     function updateclass(id) {
