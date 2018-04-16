@@ -39,6 +39,47 @@
                         }, 'json');}
 
 //load save
+    function saveteacher(){
+        var idgender = document.getElementById("idselectgenderteacher").value;
+        $.post(base_url + 'controller/saveteacher',{
+            idnumber: $("#idnumber").val(),
+            name: $("#name").val(),
+            lastname: $("#lastname").val(),
+            username: $("#username").val(),
+            password: $("#password").val(),
+            passwordconfirm: $("#passwordconfirm").val(),
+            email: $("#email").val(),
+            gender: idgender
+        },function(datos){
+            var msj_teacher = datos;
+            $.each(msj_teacher, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');}
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');}
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');}});
+            teacherlist();
+        }, 'json');}
+    function savesection(){
+        $.post(base_url + 'controller/savesection',{
+            sectionname: $("#sectionname").val(),
+            description: $("#description").val()
+        },function(datos){
+            var msj_section = datos;
+            $.each(msj_section, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            sectionlist();
+        }, 'json');}
     function saveclass() {
         $.post(base_url + 'controller/saveclass', {
             classname: $('#classname').val(),
@@ -58,11 +99,10 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            classlist();
+            classlistadmin();
         }, 'json');}
-    function savestudent() {
-        var idgenders = document.getElementById("idselectgender");
-        var idgender = idgenders.options[idgenders.selectedIndex].value;
+    function savestudentadmin() {
+        var idgender = document.getElementById("idselectgenderstudent").value;
         $.post(base_url + 'controller/savestudent', {
             idnumber: $('#studentidnumber').val(),
             name: $('#studentname').val(),
@@ -85,17 +125,14 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            studentlist();
+            studentlistadmin();
         }, 'json');}
     function saveunity() {
-        var idclass = document.getElementById("selectclassunity");
-        var class_idclass = idclass.options[idclass.selectedIndex].value;
         $.post(base_url + 'controller/saveunity', {
             unityname: $("#unityname").val(),
             descriptioncenter: $("#descriptionunitycenter").val(),
             descriptionleft: $("#descriptionunityleft").val(),
-            descriptionright: $("#descriptionunityright").val(),
-            class_idclass: class_idclass
+            descriptionright: $("#descriptionunityright").val()
         }, function (datos) {
             var msjunity = datos;
             $.each(msjunity, function (i, o) {
@@ -109,15 +146,13 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            unitylist();
+            unitylistadmin();
         }, 'json');}
     function saveactivity() {
-        var unity_idunity = document.getElementById("selectunityactivity").value;
         $.post(base_url + 'controller/saveactivity', {
             activityname: $("#activityname").val(),
             descriptionleft: $("#descriptionleftactivity").val(),
-            descriptionright: $("#descriptionrightactivity").val(),
-            unity_idunity: unity_idunity
+            descriptionright: $("#descriptionrightactivity").val()
         }, function (datos) {
             var msjactivity = datos;
             $.each(msjactivity, function (i, o) {
@@ -131,15 +166,14 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            activitylist();
+            activitylistadmin();
         }, 'json');}
     function savequestion(){
-        var idactivity = document.getElementById("selectquestionactivity");
-        var activity_idactivity = idactivity.options[idactivity.selectedIndex].value;
+        var idquestiontype = document.getElementById("idselectquestiontype").value;
         $.post(base_url + 'controller/savequestion', {
             questionname: $("#questionname").val(),
             description: $("#questiondescription").val(),
-            activity_idactivity: activity_idactivity
+            idquestiontype: idquestiontype
         }, function (datos) {
             var msjquestion = datos;
             $.each(msjquestion, function (i, o) {
@@ -153,21 +187,19 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            questionlist();
+            questionlistadmin();
         }, 'json');}
-    function saveanswere(){
-        var idquestion = document.getElementById("selectquestionanswere");
-        var question_idquestion = idquestion.options[idquestion.selectedIndex].value;
-        var idvalue = document.getElementById("selectvalueanswere");
-        var value_idvalue = idvalue.options[idvalue.selectedIndex].value;
-        $.post(base_url + 'controller/saveanswere', {
-            answerename: $("#answerename").val(),
-            description: $("#answeredescription").val(),
-            value_idvalue: value_idvalue,
-            question_idquestion:question_idquestion
+    function saveanswer(id){
+        var idquestion = document.getElementById("addidquestionanswer"+id).value;
+        var idvalue = document.getElementById("addselectanswervalue"+id).value;
+        $.post(base_url + 'controller/saveanswer', {
+            answerename: $("#addanswername"+id).val(),
+            description: $("#addanswerdescription"+id).val(),
+            value_idvalue: idvalue,
+            question_idquestion: idquestion
         }, function (datos) {
-            var msjanswere = datos;
-            $.each(msjanswere, function (i, o) {
+            var msjanswer = datos;
+            $.each(msjanswer, function (i, o) {
                 if (o.msjw !== "") {
                     Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
                 }
@@ -178,7 +210,7 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            questionlist();
+            questionlistadmin();
         }, 'json');}
     function saveyoutubelink() {
         $.post(base_url + 'controller/saveyoutubelink', {
@@ -207,7 +239,7 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            glosarylist();
+            glosarylistadmin();
         },'json');}
     function studentsaveclass(checkload){
         var checked = 0;
@@ -244,8 +276,351 @@
         },'json');
             }
         }
+        }}
+    function sectionhasclass(checkload){
+        var checked = 0;
+        var idclass = document.getElementById("idselectclasssection").value;
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectsection' + i).prop('checked')){
+                checked += 1;}
+        }
+        if (checked === 0) {
+            var msj = "<p class='black-text'><strong>Any Section select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for(i = 0; i <= checkload; i++){
+                if ($("#selectsection" + i).prop('checked')) {
+                    var idclass = document.getElementById("idselectclasssection").value;
+                    var idsection = document.getElementById("idsectionedit"+i).value;
+                    $.post(base_url + 'controller/sectionhasclass',{
+                        idsection: idsection,
+                        idclass: idclass
+                    },function(datos){
+                        var msjs = datos;
+                        $.each(msjs, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                    sectionlist();
+                    },'json');
+                }
+            }
+        }}
+    function teachersavesection(checkload){
+        var checked = 0;
+        var idsection = document.getElementById("idselectsectionteacher").value;
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectteacher' + i).prop('checked')){
+                checked += 1;}
+        }
+        if (checked === 0) {
+            var msj = "<p class='black-text'><strong>Any teacher select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for(i = 0; i <= checkload; i++){
+                if ($("#selectteacher" + i).prop('checked')) {
+                    var teacher_idteacher = document.getElementById("id_teacher_edit"+i).value;
+                    var teacher_role_idrole = document.getElementById("id_role_edit"+i).value;
+                    var teacher_gender_idgender = document.getElementById("idselectgender"+i).value;
+                    var section_idsection = idsection;
+                    $.post(base_url + 'controller/teachersavesection',{
+                        teacher_idteacher: teacher_idteacher,
+                        teacher_role_idrole: teacher_role_idrole,
+                        teacher_gender_idgender: teacher_gender_idgender,
+                        section_idsection: section_idsection
+                    },function(datos){
+                        var msjs = datos;
+                        $.each(msjs, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                    teacherlist();
+                    }, 'json');}
+            }
         }
     }
+    function unitysavesection(checkload){
+        var checked = 0;
+        var idsection = document.getElementById("idselectsectionunity").value;
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectunity' + i).prop('checked')){
+                checked += 1;}
+        }
+        if (checked === 0) {
+            var msj = "<p class='black-text'><strong>Any unity select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for(i = 0; i <= checkload; i++){
+                if ($("#selectunity" + i).prop('checked')) {
+                    var unity_idunity = document.getElementById("editunitid"+i).value;
+                    $.post(base_url + 'controller/unitysavesection',{
+                        unity_idunity: unity_idunity,
+                        section_idsection: idsection
+                    },function(datos){
+                        var msjs = datos;
+                        $.each(msjs, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                    unitylistadmin();
+                    },'json');}
+            }
+        }
+    }
+    function activitysaveunity(checkload){
+        var checked = 0;
+        var unity_idunity = document.getElementById("idselectactivityunity").value;
+        
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectactivity' + i).prop('checked')){
+                checked += 1;}
+        }
+        if (checked === 0) {
+            var msj = "<p class='black-text'><strong>Any activity select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for(i = 0; i <= checkload; i++){
+                if ($("#selectactivity" + i).prop('checked')) {
+                    var activity_idactivity= document.getElementById("id_activity_edit"+i).value;
+                    $.post(base_url + 'controller/activitysaveunity',{
+                        unity_idunity: unity_idunity,
+                        activity_idactivity: activity_idactivity
+                    },function(datos){
+                        var msjs = datos;
+                        $.each(msjs, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                    activitylistadmin();
+                    },'json');}
+            }
+        }
+    }
+    function materialhasclass(checkload){
+        var checked = 0;
+        var class_idclass = document.getElementById("selectmaterialhasclass").value;
+        
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectmaterial' + i).prop('checked')){
+                checked += 1;}
+        }
+        if (checked === 0) {
+            var msj = "<p class='black-text'><strong>Any activity select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for(i = 0; i <= checkload; i++){
+                if ($("#selectmaterial" + i).prop('checked')) {
+                    var material_idmaterial = document.getElementById("idmaterial"+i).value;
+                    var material_materialtype_idmaterialtype = document.getElementById("idmaterialtype"+i).value;
+                    $.post(base_url + 'controller/materialhasclass',{
+                        class_idclass: class_idclass,
+                        material_idmaterial: material_idmaterial,
+                        material_materialtype_idmaterialtype:material_materialtype_idmaterialtype
+                    },function(datos){
+                        var msjs = datos;
+                        $.each(msjs, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                    materiallistadmin();
+                    },'json');}
+            }
+        }
+    }
+    function studentsavesection(checkload){
+        var checked = 0;
+        var idsection = document.getElementById("idselectsectionstudent").value;
+        for (i = 0; i <= checkload; i++) {
+            if($('#selectstudent' + i).prop('checked')){
+                checked += 1;}
+        }
+        if (checked === 0) {
+            var msj = "<p class='black-text'><strong>Any student select</strong></p>";
+            Materialize.toast(msj, 4000, 'yellow lighten-3');
+        }else{
+            for(i = 0; i <= checkload; i++){
+                if ($("#selectstudent" + i).prop('checked')) {
+                    var student_idstudent = document.getElementById("id_student_edit"+i).value;
+                    var student_role_idrole = document.getElementById("id_role_edit_student"+i).value;
+                    var student_gender_idgender = document.getElementById("idselectgender"+i).value;
+                    var section_idsection = idsection;
+                $.post(base_url + 'controller/studentsavesection',{
+                        student_idstudent: student_idstudent,
+                        student_role_idrole: student_role_idrole,
+                        student_gender_idgender: student_gender_idgender,
+                        section_idsection: section_idsection
+                    },function(datos){
+                        var msjs = datos;
+                        $.each(msjs, function (i, o) {
+                            if (o.msjw !== "") {
+                                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                            }
+                            if (o.msjs !== "") {
+                                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                            }
+                            if (o.msje !== "") {
+                                Materialize.toast(o.msje, 4000, 'red lighten-3');
+                            }
+                        });
+                    studentlistadmin();
+                    }, 'json');}
+            } 
+        }
+    }
+    function deleterelstudentsection(student_idstudent,section_idsection){
+        $student_idstudent = student_idstudent;
+        $section_idsection = section_idsection;
+        $.post(base_url + 'controller/deleterelstudentsection',{
+            student_idstudent: $student_idstudent,
+            section_idsection: $section_idsection
+        },function(datos){
+            var msjsstuden = datos;
+            $.each(msjsstuden, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            studentlistadmin();
+        },'json');}
+    function deleterelsectionclass(section_idsection,class_idclass){
+        $.post(base_url + 'controller/deleterelsectionclass',{
+            section_idsection: section_idsection,
+            class_idclass: class_idclass
+        },function(datos){
+            var msj = datos;
+            $.each(msj , function(i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            sectionlist();
+        },'json');}
+    function deleterelactivityunity(activity_idactivity,unity_idunity){
+        $.post(base_url + 'controller/deleterelactivityunity',{
+            activity_idactivity: activity_idactivity,
+            unity_idunity: unity_idunity
+        },function(datos){
+            var msj = datos;
+            $.each(msj , function(i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            activitylistadmin();
+        },'json');
+    }
+    function deleterelmaterialclass(material_idmaterial,material_materialtype_idmaterialtype,class_idclass){
+                $.post(base_url + 'controller/deleterelmaterialclass',{
+            material_idmaterial: material_idmaterial,
+            material_materialtype_idmaterialtype: material_materialtype_idmaterialtype,
+            class_idclass: class_idclass
+        },function(datos){
+            var msj = datos;
+            $.each(msj , function(i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            materiallistadmin();
+        },'json');
+    }
+    function deletereltechersection(section_idsection, teacher_idteacher){
+        $.post(base_url + 'controller/deletereltechersection',{
+            section_idsection: section_idsection,
+            teacher_idteacher: teacher_idteacher
+        },function(datos){
+            var msj = datos;
+            $.each(msj , function(i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            teacherlist();
+        }, 'json');}
+    function deleterelunitysection(section_idsection,unity_idunity){
+        $.post(base_url + 'controller/deleterelunitysection',{
+            section_idsection: section_idsection,
+            unity_idunity: unity_idunity
+        },function(datos){
+            var msj = datos;
+            $.each(msj , function(i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            unitylistadmin();
+        },'json');}
     function materialsaveactivity(checkload){
         var checked = 0;
         var idactivity = document.getElementById("selectmaterialactivity").value;
@@ -281,8 +656,7 @@
                     },'json');
                 }
             }
-        }   
-    }
+        }     }
 //Load Update
     function updateclass(id) {
         $.post(base_url + 'controller/updateclass', {
@@ -304,10 +678,51 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            classlist();
+            classlistadmin();
         },'json');}
+    function updateword(id){
+        $.post(base_url + 'controller/updateword',{
+            idglosary: $("#edit_id_class"+id).val(),
+            wordname: $("#edit_class_name"+id).val(),
+            description: $("#edit_description_center"+id).val(),
+            aditionaldescription: $("#edit_description_left"+id).val()
+        },function(datos){
+            var msj = datos;
+            $.each(msj, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            glosarylistadmin();
+        },'json');
+    }
+    function updatesection(id){
+        $.post(base_url + 'controller/updatesection', {
+            idsection: $("#idsectionedit"+id).val(),
+            sectionname: $("#edit_section_name"+id).val(),
+            description: $("#edit_description"+id).val()
+        }, function(datos){
+            var $msj = datos;
+                $.each($msj, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+            sectionlist();
+        }, 'json');}
     function updateunit(id){
-        var idclass = document.getElementById("selectclassunit"+ id).value;
         var idunity = $("#editunitid"+id).val();
         var unitname = $("#editunitname"+id).val();
         var descriptioncenter = $("#editunitdescriptioncenter"+id).val();
@@ -318,8 +733,7 @@
             unityname: unitname,
             descriptioncenter: descriptioncenter,
             descriptionleft: descriptionleft,
-            descriptionright: descriptionright,
-            class_idclass: idclass
+            descriptionright: descriptionright
         }, function (datos) {
             var msjunit = datos;
             $.each(msjunit, function (i, o) {
@@ -333,9 +747,8 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            unitylist();
-        }, 'json');
-    }
+            unitylistadmin();
+        }, 'json');}
     function updatestudent(id) {
         var idgender = document.getElementById("idselectgender"+ id).value;
             $.post(base_url + 'controller/updatestudent', {
@@ -362,21 +775,16 @@
                     studentlist();
                 });
             }, 'json');}
-    function updateactivity(id){
-        var idunity = document.getElementById("idselectunity"+ id).value;
-        var idmaterial = document.getElementById("idselectmaterial"+ id).value;
+    function updateactivityadmin(id){
         var idactivity = $("#id_activity_edit"+id).val();
         var activityname = $("#name_activity_edit"+id).val();
         var descriptionleft = $("#descriptionleft_activity_edit"+id).val();
         var descriptionright = $("#descriptionright_activity_edit"+id).val();
-        
-         $.post(base_url + 'controller/updateactivity', {
+        $.post(base_url + 'controller/updateactivity', {
             idactivity: idactivity,
             activityname: activityname,
             descriptionleft: descriptionleft,
-            descriptionright: descriptionright,
-            unity_idunity: idunity,
-            material_idmaterial: idmaterial
+            descriptionright: descriptionright
         }, function (datos) {
             var msjactivity = datos;
             $.each(msjactivity, function (i, o) {
@@ -390,45 +798,60 @@
                     Materialize.toast(o.msje, 4000, 'red lighten-3');
                 }
             });
-            activitylist();
-        }, 'json');
-    }
+            activitylistadmin();
+        }, 'json');}
 //Load View
     function teacherlist() {
         $.post(base_url + 'controller/teacherlist', {}, function (page, datos) {
-            $("#bodyusermanagement").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         }), 'json';}
     function studentlist() {
         $.post(base_url + 'controller/studentlist', {}, function (page, datos) {
             $("#contentteacher").html(page, datos);
         });}
+    function studentlistadmin(){
+        $.post(base_url + 'controller/studentlist', {}, function (page, datos) {
+            $("#contentadministrator").html(page, datos);
+        });}
+    function sectionlist(){
+        $.post(base_url + 'controller/sectionlist', {}, function (page, datos){
+            $("#contentadministrator").html(page, datos);
+        });}
     function classlist() {
         $.post(base_url + 'controller/classlist', {}, function (page, datos) {
             $("#contentteacher").html(page, datos);
         });}
-    function unitylist() {
+    function classlistadmin() {
+        $.post(base_url + 'controller/classlist', {}, function (page, datos) {
+            $("#contentadministrator").html(page, datos);
+        });}
+    function unitylistadmin() {
         $.post(base_url + 'controller/unitylist', {}, function (page, datos) {
-            $("#contentteacher").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         });}
-    function activitylist() {
+    function activitylistadmin() {
         $.post(base_url + 'controller/activitylist', {}, function (page, datos) {
-            $("#contentteacher").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         });}
-    function questionlist(){
+    function examlistadmin() {
+        $.post(base_url + 'controller/examlist', {}, function (page, datos) {
+            $("#contentadministrator").html(page, datos);
+        });}
+    function questionlistadmin(){
         $.post(base_url + 'controller/questionlist', {}, function (page, datos) {
-            $("#contentteacher").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         });}
-    function materiallist() {
+    function materiallistadmin() {
         $.post(base_url + 'controller/materiallist', {}, function (page, datos) {
-            $("#contentteacher").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         });}
-    function glosarylist(){
+    function glosarylistadmin(){
         $.post(base_url + 'controller/glosarylist', {}, function (page, datos) {
-            $("#contentteacher").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         });}
-    function progresslist(){
+    function progresslistadmin(){
         $.post(base_url + 'controller/progresslist', {}, function (page, datos) {
-            $("#contentteacher").html(page, datos);
+            $("#contentadministrator").html(page, datos);
         });}
 //editar y eliminar
         function deleteteacher(id){
@@ -467,7 +890,26 @@
                         Materialize.toast(o.msje, 4000, 'red lighten-3');
                     }
                 });
-                classlist();
+                classlistadmin();
+            },'json');}
+        function deletesection(id){
+            $.post(base_url + 'controller/deletesection',{
+                idsection: $("#idsectionedit"+id).val(),
+                password: $("#deleteclassValidate"+id).val()
+            },function(datos){
+                var msj = datos;
+                $.each(msj, function (i, o) {
+                    if (o.msjw !== "") {
+                        Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                    }
+                    if (o.msjs !== "") {
+                        Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                    }
+                    if (o.msje !== "") {
+                        Materialize.toast(o.msje, 4000, 'red lighten-3');
+                    }
+                });
+                sectionlist();
             },'json');}
         function deleteunity(id){
             $.post(base_url  + 'controller/deleteunity',{
@@ -487,15 +929,14 @@
                     }
                 });
                 unitylist();
-            },'json');
-        }
-        function deleteStudent(id){
-             $.post(base_url  + 'controller/deleteStudent',{
-                idstudent: $("#id_student_edit"+id).val(),
-                password: $("#deletestudentValidate"+id).val()
+            },'json');}
+        function deleteactivity(id){
+            $.post(base_url + 'controller/deleteactivity',{
+                idactivity: $("#id_activity_edit"+ id).val(),
+                password: $("#deleteactivityValidate"+ id).val()
             },function(datos){
-                var msjdeleteclass = datos;
-                $.each(msjdeleteclass, function (i, o) {
+                var msjdeleteactivity = datos;
+                $.each(msjdeleteactivity, function (i, o) {
                     if (o.msjw !== "") {
                         Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
                     }
@@ -506,12 +947,46 @@
                         Materialize.toast(o.msje, 4000, 'red lighten-3');
                     }
                 });
-                studentlist();
-            },'json');
-        }
-        function mensajevideo(msj){
-            Materialize.toast(msj, 4000, 'yellow lighten-3');
-        }
+                activitylist();
+            },'json');}
+        function deleteStudent(id){
+            $.post(base_url  + 'controller/deleteStudent',{
+                    idstudent: $("#id_student_edit"+id).val(),
+                    password: $("#deletestudentValidate"+id).val()
+                },function(datos){
+                    var msjdeleteclass = datos;
+                    $.each(msjdeleteclass, function (i, o) {
+                        if (o.msjw !== "") {
+                            Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                        }
+                        if (o.msjs !== "") {
+                            Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                        }
+                        if (o.msje !== "") {
+                            Materialize.toast(o.msje, 4000, 'red lighten-3');
+                        }
+                    });
+                    studentlistadmin();
+                },'json');}
+        function deleteword(id){
+            $.post(base_url + 'controller/deleteword',{
+                idglosary: $("#edit_id_class"+id).val(),
+                password: $("#deleteclassValidate"+id).val()
+            },function(datos){
+                var msj = datos;
+                    $.each(msj, function (i, o) {
+                        if (o.msjw !== "") {
+                            Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                        }
+                        if (o.msjs !== "") {
+                            Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                        }
+                        if (o.msje !== "") {
+                            Materialize.toast(o.msje, 4000, 'red lighten-3');
+                        }
+                    });
+                    glosarylistadmin();
+            },'json');}
 
 //------------------student-------------------
 function unityactivities(idunity){

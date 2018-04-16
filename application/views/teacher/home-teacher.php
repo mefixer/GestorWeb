@@ -25,6 +25,9 @@
           <div class="col s12 m3">
             <ul class="collapsible popout" data-collapsible="accordion">
                 <li>
+                  <div class="collapsible-header" onclick="sectionlist()"><i class="material-icons">dehaze</i>SECTION</div>
+                </li>
+                <li>
                   <div class="collapsible-header" onclick="classlist()"><i class="material-icons">class</i>COURSES</div>
                 </li>
                 <li>
