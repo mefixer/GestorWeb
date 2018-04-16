@@ -1,6 +1,6 @@
 <?php $checkcount = 0?>
 <div class="col s12 m12">
-   <a class="btn modal-trigger" href="#AddActivity"><i class="material-icons right">playlist_add_check</i><strong> Add Material to Activity</strong></a>
+   <a class="btn modal-trigger" href="#Addclass"><i class="material-icons right">playlist_add_check</i><strong> Add Material to Class</strong></a>
 
 <p><input type="checkbox" class="filled-in" id="materialcheckedall"/>
 <label for="materialcheckedall">Check all</label></p>
@@ -8,7 +8,7 @@
     <?php $i = 0; foreach ($material as $filmaterial):?>
     
         <?php if($filmaterial->materialtype_idmaterialtype === '1'):?>
-           <div class="card" id="cardpdf<?php echo $i?>">
+           <div class="card blue-grey lighten-5" id="cardpdf<?php echo $i?>">
                   <div class="card-image">
                     <br><object data="media/<?php echo $filmaterial->route?>" type="application/pdf" width="100%" height="100%"/><br>
                   </div>
@@ -17,8 +17,29 @@
                       <label for="selectmaterial<?php echo $i?>"> Select</label></p>
                     <h4><?php echo $filmaterial->materialname?></h4>
                     <input id="idmaterial<?php echo $i?>" type="text" hidden value="<?php echo $filmaterial->idmaterial?>" >
+                    <input id="idmaterialtype<?php echo $i?>" type="text" hidden value="<?php echo $filmaterial->materialtype_idmaterialtype?>" >
                     <blockquote><?php echo $filmaterial->descriptionleft?></blockquote>
                     <blockquote><?php echo $filmaterial->descriptionright?></blockquote>
+
+                    <?php $r = 0; foreach ($material_has_class as $filmhc):?>
+                        <?php $ro = 0; foreach ($class as $fil_class): ?>
+                        <?php if($fil_class->idclass === $filmhc->class_idclass && $filmhc->material_idmaterial === $filmaterial->idmaterial): ?>
+                          <div class="chip" >
+                            <img src="img/class.png" alt="Contact Person">
+                            <span >
+                              Class :
+                              <?php $idmaterial = $filmhc->material_idmaterial?>
+                              <?php $idclass = $filmhc->class_idclass ?>
+                              <?php $idmaterialtype = $filmhc->material_materialtype_idmaterialtype?>
+                              <?php echo $fil_class->classname ?>
+                              <i id="idmhc<?php echo $i?>" onclick="deleterelmaterialclass(<?php echo $idmaterial?>,<?php echo $idclass?>,<?php echo $idmaterialtype?>)" class="close material-icons" >close</i>
+                            </span>
+
+                          </div>
+                        <?php endif; ?>
+                        <?php $ro++; endforeach; ?>
+                    <?php $r++; endforeach;?>
+                
                   </div>
                   <div class="card-action">
                     <button class="btn modal-trigger white black-text pulse"><i class="material-icons right">edit</i>Edit</button>
@@ -27,7 +48,7 @@
            </div>
         <?php endif;?>
         <?php if($filmaterial->materialtype_idmaterialtype === '2'):?>
-              <div class="card" id="cardaudio<?php echo $i?>">
+              <div class="card blue-grey lighten-5" id="cardaudio<?php echo $i?>">
                   <div class="card-image">
                     <br>
                     <audio controls>
@@ -45,6 +66,23 @@
                     <input id="idmaterial<?php echo $i?>" type="text" hidden value="<?php echo $filmaterial->idmaterial?>" >
               <blockquote><?php echo $filmaterial->descriptionleft?></blockquote>
               <blockquote><?php echo $filmaterial->descriptionright?></blockquote>
+              <?php $r = 0; foreach ($material_has_class as $filmhc):?>
+                        <?php $ro = 0; foreach ($class as $fil_class): ?>
+                        <?php if($fil_class->idclass === $filmhc->class_idclass && $filmhc->material_idmaterial === $filmaterial->idmaterial): ?>
+                          <div class="chip" >
+                            <img src="img/class.png" alt="Contact Person">
+                            <span >
+                              Class :
+                              <?php $idmaterial = $filmhc->material_idmaterial?>
+                              <?php $idclass = $filmhc->class_idclass ?>
+                              <?php $idmaterialtype = $filmhc->material_materialtype_idmaterialtype?>
+                              <?php echo $fil_class->classname ?>
+                              <i id="idmhc<?php echo $i?>" onclick="deleterelmaterialclass(<?php echo $idmaterial?>,<?php echo $idclass?>,<?php echo $idmaterialtype?>)" class="close material-icons" >close</i>
+                            </span>
+                          </div>
+                        <?php endif; ?>
+                        <?php $ro++; endforeach; ?>
+                    <?php $r++; endforeach;?>
                   </div>
                   <div class="card-action">
                     <button class="btn modal-trigger white black-text pulse"><i class="material-icons right">edit</i>Edit</button>
@@ -53,7 +91,7 @@
                 </div>
         <?php endif;?>
         <?php if($filmaterial->materialtype_idmaterialtype === '3'):?>
-         <div class="card" id="cardvideo<?php echo $i?>">
+         <div class="card blue-grey lighten-5" id="cardvideo<?php echo $i?>">
           <div class="card-image">
 
             <video class="responsive-video" controls>
@@ -69,6 +107,23 @@
               <input id="idmaterial<?php echo $i?>" type="text" hidden value="<?php echo $filmaterial->idmaterial?>" >
               <blockquote><?php echo $filmaterial->descriptionleft?></blockquote>
               <blockquote><?php echo $filmaterial->descriptionright?></blockquote>
+              <?php $r = 0; foreach ($material_has_class as $filmhc):?>
+                        <?php $ro = 0; foreach ($class as $fil_class): ?>
+                        <?php if($fil_class->idclass === $filmhc->class_idclass && $filmhc->material_idmaterial === $filmaterial->idmaterial): ?>
+                          <div class="chip" >
+                            <img src="img/class.png" alt="Contact Person">
+                            <span >
+                              Class :
+                              <?php $idmaterial = $filmhc->material_idmaterial?>
+                              <?php $idclass = $filmhc->class_idclass ?>
+                              <?php $idmaterialtype = $filmhc->material_materialtype_idmaterialtype?>
+                              <?php echo $fil_class->classname ?>
+                              <i id="idmhc<?php echo $i?>" onclick="deleterelmaterialclass(<?php echo $idmaterial?>,<?php echo $idclass?>,<?php echo $idmaterialtype?>)" class="close material-icons" >close</i>
+                            </span>
+                          </div>
+                        <?php endif; ?>
+                        <?php $ro++; endforeach; ?>
+                    <?php $r++; endforeach;?>
             </div>
             <div class="card-action">
               <button class="btn modal-trigger white black-text pulse"><i class="material-icons right">edit</i>Edit</button>
@@ -77,7 +132,7 @@
           </div>
         <?php endif;?>
         <?php if($filmaterial->materialtype_idmaterialtype === '4'):?>
-          <div class="card" id="cardyoutube<?php echo $i?>">
+          <div class="card blue-grey lighten-5" id="cardyoutube<?php echo $i?>">
             <div class="card-image">
 
               <div class="video-container">
@@ -103,6 +158,23 @@
               <input id="idmaterial<?php echo $i?>" type="text" hidden value="<?php echo $filmaterial->idmaterial?>" hidden>
               <blockquote><?php echo $filmaterial->descriptionleft?></blockquote>
               <blockquote><?php echo $filmaterial->descriptionright?></blockquote>
+              <?php $r = 0; foreach ($material_has_class as $filmhc):?>
+                        <?php $ro = 0; foreach ($class as $fil_class): ?>
+                        <?php if($fil_class->idclass === $filmhc->class_idclass && $filmhc->material_idmaterial === $filmaterial->idmaterial): ?>
+                          <div class="chip" >
+                            <img src="img/class.png" alt="Contact Person">
+                            <span >
+                              Class :
+                              <?php $idmaterial = $filmhc->material_idmaterial?>
+                              <?php $idclass = $filmhc->class_idclass ?>
+                              <?php $idmaterialtype = $filmhc->material_materialtype_idmaterialtype?>
+                              <?php echo $fil_class->classname ?>
+                              <i id="idmhc<?php echo $i?>" onclick="deleterelmaterialclass(<?php echo $idmaterial?>,<?php echo $idclass?>,<?php echo $idmaterialtype?>)" class="close material-icons" >close</i>
+                            </span>
+                          </div>
+                        <?php endif; ?>
+                        <?php $ro++; endforeach; ?>
+                    <?php $r++; endforeach;?>
             </div>
             <div class="card-action">
               <button class="btn modal-trigger white black-text pulse"><i class="material-icons right">edit</i>Edit</button>
@@ -115,21 +187,21 @@
   </div>
 </div>
 
-    <div id="AddActivity" class="modal modal-fixed-footer">
+    <div id="Addclass" class="modal modal-fixed-footer">
       <div class="modal-content">
 
         <div class="input-field col s6">
-          <select id="selectmaterialactivity">
-            <?php $io = 0; foreach ($activity as $filactivity):?>
-            <option value="<?php echo $filactivity->idactivity ?>"><?php echo $filactivity->activityname ?></option>
+          <select id="selectmaterialhasclass">
+            <?php $io = 0; foreach ($class as $fil_class):?>
+            <option value="<?php echo $fil_class->idclass ?>"><?php echo $fil_class->classname ?></option>
             <?php $io++;  endforeach; ?>
           </select>
-          <label>Activity</label>
+          <label>Select Class</label>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn modal-trigger modal-close red darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></button>
-        <button type="button" class="btn modal-trigger modal-close green darken-1" id="btnmaterialactivity" onclick="materialsaveactivity(<?php echo $checkcount?>)"><i class="material-icons right">save</i><strong> Add</strong></button>
+        <button type="button" class="btn modal-trigger modal-close green darken-1" id="btnmaterialclass" onclick="materialhasclass(<?php echo $checkcount?>)"><i class="material-icons right">save</i><strong> Add</strong></button>
       </div>
     </div>
 <script type="text/javascript">

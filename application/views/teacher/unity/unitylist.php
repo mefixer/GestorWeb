@@ -1,22 +1,9 @@
 <div class="card-panel z-depth-5">
-    <a class="btn modal-trigger grey darken-1" href="#NewUnity"><i class="material-icons right">add_box</i><strong> New Unit</strong></a>
+    <a class="modal-trigger btn waves-effect waves-green grey darken-3" href="#NewUnity"><i class="material-icons right">add_box</i><strong> New Unit</strong></a>
+    <button class="btn modal-trigger" href="#unityhassection"><i class="material-icons right">playlist_add_check</i> Add Unity to Section</button>
     <div id="NewUnity" class="modal modal-fixed-footer">
       <div class="modal-content">
                 <h4><strong>NEW UNIT</strong></h4>
-                                <div class="input-field col s6">
-                        <select disabled id="selectteacher">
-                            <option id="<?php echo $idteacher ?>"><?php echo $name ?> <?php echo $lastname ?></option>
-                        </select>
-                        <label>teacher</label>
-                </div>
-                <div class="input-field col s6">
-                    <select id="selectclassunity">
-                        <?php $i = 0; foreach ($class as $filclass): ?>
-                            <option id="<?php echo $i ?>" value="<?php echo $filclass->idclass ?>"><?php echo $filclass->classname ?></option>
-                            <?php $i++; endforeach;?>
-                    </select>
-                    <label>Select Class</label>
-                </div>
                 <div class="input-field col s6">
                     <input type="text" class="validate" data-length="45" maxlength="45" required id="unityname" value="">
                     <label for="unityname">UNITY NAME</label>
@@ -36,44 +23,78 @@
                 </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn modal-trigger modal-close grey darken-1"><i class="material-icons right">expand_more</i><strong> Done</strong></button>
-          <button type="button" class="btn modal-trigger modal-close green darken-1" id="btneditstudent<?php echo $i ?>" onclick="saveunity()"><i class="material-icons right">save</i><strong> Save</strong></button>
+          <button type="button" class="modal-trigger modal-close btn waves-effect waves-green grey lighten-3 black-text"><i class="material-icons right">expand_more</i><strong> Done</strong></button>
+          <button type="button" class="btn modal-trigger modal-close green darken-1" id="btnsaveunity" onclick="saveunity()"><i class="material-icons right">save</i><strong> Save</strong></button>
         </div>
-</div>
+      </div>
 
 
-<table class="responsive-table">
-    <thead>
-      <tr>
-          <th>Unit Name</th>
-          <th>Description Center</th>
-          <th>Desccription Left</th>
-          <th>Description Right</th>
-          <th>Teacher</th>
-      </tr>
-  </thead>
-  <tbody>
+<p class=""><input type="checkbox" class="filled-in" id="unitycheckedall"/>
+<label for="unitycheckedall">Check all</label></p>
+
+<div class="card-panel z-depth-3">
+    <div id="check">
+
     <?php if ($unity == 0): ?><p>Don't unity save!</p><?php else: ?>
         <?php $i = 0; foreach ($unity as $filunity):?>
-        <tr>
-            <td>
-                <?php echo $filunity->unityname ?>
-            </td>
-            <td>
-                <?php echo $filunity->descriptioncenter ?>
-            </td>
-            <td>
-                <?php echo $filunity->descriptionleft ?>
-            </td>
-            <td>
-                <?php echo $filunity->descriptionright ?>
-            </td>
-            <td>
-                <?php echo $name ?> <?php echo $lastname ?>
-            </td>
-            <td>
-                <span class="card-title modal-trigger blue-grey darken-1" id="btneditunittable<?php echo $i ?>" style="cursor: pointer;" href="#ModalEditunit<?php echo $i ?>" data-tooltip="Edit Unit"><i class="material-icons right">edit</i></span>
-            </td>
+        <?php $checkcount = $i?>
+            <div class="row">
+                <div class="col s12 m12">
+                  <div class="card blue-grey lighten-5 z-depth-5">
+                    <div class="card-content">
+                        <p>
+                        <input type="checkbox" id="selectunity<?php echo $i?>"/>
+                        <label for="selectunity<?php echo $i?>">Select </label></p>
+                      <span class="card-title"><?php echo $filunity->unityname ?></span>
+                      <blockquote><?php echo $filunity->descriptioncenter ?></blockquote>
+                        <blockquote>
+                            <?php echo $filunity->descriptionleft ?>
+                        </blockquote>
+                        <blockquote>
+                            <?php echo $filunity->descriptionright ?>
+                        </blockquote>
+                          <?php $o = 0; foreach ($unity_has_section as $filuhs):?>
+                            <?php $os = 0; foreach ($section as $fil_section): ?>
+                                <?php if($filunity->idunity === $filuhs->unity_idunity && $filuhs->section_idsection === $fil_section->idsection): ?>
+                                      <div class="chip" >
+                                        <img src="img/section.png" alt="Contact Person">
+                                        <span >
+                                            section :
+                                          <?php $section_idsection = $filuhs->section_idsection?>
+                                          <?php $unity_idunity = $filuhs->unity_idunity ?>
+                                          <?php echo $fil_section->sectionname ?>
+                                          <i id="idsp<?php echo $i?>" onclick="deleterelunitysection(<?php echo $section_idsection?>,<?php echo $unity_idunity?>)" class="close material-icons" >close</i>
+                                        </span>
+                                      </div>
+
+
+                                      <?php $r = 0; foreach ($section_has_class as $filshc):?>
+                              <?php $ro = 0; foreach ($class as $fil_class): ?>
+                                  <?php if($fil_class->idclass === $filshc->class_idclass && $filshc->section_idsection === $fil_section->idsection): ?>
+                                        <div class="chip" >
+                                          <img src="img/class.png" alt="Contact Person">
+                                          <span >
+                                            Class :
+                                            <?php echo $fil_class->classname ?>
+                                          </span>
+                                        </div>
+                                  <?php endif; ?>
+                                <?php $ro++; endforeach; ?>
+                            <?php $r++; endforeach;?>
+
+                                <?php endif; ?>
+                              <?php $os++; endforeach; ?>
+                          <?php $o++; endforeach;?>
+                        
+                    </div>
+                    <div class="card-action">
+                      <button class="modal-trigger btn waves-effect waves-green grey lighten-3 black-text" id="btneditunittable<?php echo $i ?>" style="cursor: pointer;" href="#ModalEditunit<?php echo $i ?>" data-tooltip="Edit Unit"><i class="material-icons right">edit</i>Edit </button>
+                      <button class="btn red modal-trigger" id="btnunitydeletemodal<?php echo $i ?>" style="cursor: pointer;" href="#Modal_delete_unity<?php echo $i ?>" data-tooltip="Delete Class"><i class="material-icons right">delete</i>Delete </button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
             <div id="ModalEditunit<?php echo $i ?>" class="modal modal-fixed-footer">
               <div class="modal-content">
                   <h4>Edit Unit</h4>
@@ -81,20 +102,8 @@
                         <input type="text" id="editunitid<?php echo $i?>" class="validate" value="<?php echo $filunity->idunity ?>">
                         <label for="editunitid<?php $i?>" class="active">Unit Name</label>
                     </div>
-                                    <div class="input-field col s6">
-                    <select disabled id="selectteacher">
-                        <option id="<?php echo $idteacher ?>"><?php echo $name ?> <?php echo $lastname ?></option>
-                    </select>
-                    <label>teacher</label>
-                </div>
-                    <div class="input-field col s6">
-                        <select id="selectclassunit<?php echo $i?>">
-                            <?php $e = 0; foreach ($class as $filclass): ?>
-                            <option id="<?php echo $e ?>" value="<?php echo $filclass->idclass ?>" <?php if($filunity->class_idclass === $filclass->idclass) echo "selected"?>><?php echo $filclass->classname ?></option>
-                            <?php $e++; endforeach;?>
-                        </select>
-                        <label>Select Class</label>
-                    </div>
+                                    
+                  
                     <div class="input-field col s6">
                         <input type="text" id="editunitname<?php echo $i?>" class="validate" value="<?php echo $filunity->unityname ?>">
                         <label for="editunitname<?php $i?>" class="active">Unit Name</label>
@@ -111,18 +120,14 @@
                         <textarea id="editunitdescriptionright<?php echo $i?>" class="materialize-textarea" required data-length="200" maxlength="200" ><?php echo $filunity->descriptionright ?></textarea>
                         <label for="editunitdescriptionright<?php echo $i?>" class="active">Description unit right</label>
                     </div>
+                </div>
 
+                <div class="modal-footer">
+                    <a class="modal-action modal-close btn waves-effect waves-green grey darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></a>
+                    <a id="btneditunit<?php echo $i?>" class="modal-action modal-close btn waves-effect waves-green green darken-1" onclick="updateunit(<?php echo $i?>)"><i class="material-icons right">save</i><strong> Save</strong></a>
+                </div>
             </div>
-
-            <div class="modal-footer">
-                <a class="modal-action modal-close btn waves-effect waves-green red darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></a>
-                <a id="btneditunit<?php echo $i?>" class="modal-action modal-close btn waves-effect waves-green green darken-1" onclick="updateunit(<?php echo $i?>)"><i class="material-icons right">save</i><strong> Save</strong></a>
-            </div>
-
-        </div>
-        <td>
-            <span class="card-title red-text modal-trigger" id="btnunitydeletemodal<?php echo $i ?>" style="cursor: pointer;" href="#Modal_delete_unity<?php echo $i ?>" data-tooltip="Delete Class"><i class="material-icons right">delete</i></span>
-        </td>
+            
         <div class="modal modal-fixed-footer" tabindex="-2" role="dialog" id="Modal_delete_unity<?php echo $i ?>">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -136,18 +141,37 @@
               </div>
           </div>
             <div class="modal-footer">
-              <button type="button" class="btn modal-trigger modal-close grey darken-1" ><i class="material-icons right">expand_more</i><strong> Done</strong></button>
-              <button type="button" class="btn modal-trigger modal-close  red darken-3" id="btndeleteunity<?php echo $i ?>" onclick="deleteunity(<?php echo $i ?>)"><i class="material-icons right">delete_forever</i><strong> Delete</strong></button>
+              <button type="button" class="modal-trigger modal-close btn waves-effect waves-green grey lighten-3 black-text" ><i class="material-icons right">expand_more</i><strong> Done</strong></button>
+              <button type="button" class="btn modal-trigger modal-close red darken-3" id="btndeleteunity<?php echo $i ?>" onclick="deleteunity(<?php echo $i ?>)"><i class="material-icons right">delete_forever</i><strong> Delete</strong></button>
             </div>
           </div>
         </div>
-    </tr>
-    <?php $i++; endforeach;?>
-<?php endif; ?>
-</tbody>
-</table>
-</div>
 
+
+        <?php $i++; endforeach;?>
+    <?php endif; ?>
+
+
+    <!-- MODALs News-->
+    <div id="unityhassection" class="modal modal-fixed-footer">
+        <div class="modal-content">
+         <h4><strong>Unity has Section</strong></h4>
+         <div class="input-field col s6">
+          <select id="idselectsectionunity">
+            <?php $e = 0; foreach ($section as $fil_section):?>
+            <option value="<?php echo $fil_section->idsection?>"> <?php echo $fil_section->sectionname?> </option>
+            <?php $e++; endforeach; ?>
+          </select>
+          <label>Section</label>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-action modal-close btn waves-effect waves-green grey darken-3"><i class="material-icons right">expand_more</i><strong> Done</strong></a>
+          <a id="btnstudentclass" class="modal-action modal-close btn waves-effect waves-green green darken-1" onclick="unitysavesection(<?php echo $checkcount?>)"><i class="material-icons right">save</i><strong> Save</strong></a>
+        </div>
+      </div>
+</div>
+</div>
 
 
 
@@ -159,7 +183,7 @@
         $(".button-collapse").sideNav();
         $('input#input_text, textarea#textarea1').characterCounter();
         $('.modal').modal();
-        $("#studentcheckedall").change(function () {
+        $("#unitycheckedall").change(function () {
             if ($(this).is(':checked')) {
                 //$("input[type=checkbox]").prop('checked', true); //todos los check
                 $('#check input[type = checkbox]').prop('checked', true); //solo los del objeto #diasHabilitados
