@@ -9,8 +9,8 @@
                 });}
             function load_user() {
                 $.post(base_url + 'controller/load_user', {
-                    username: $("#username").val(),
-                    password: $("#password").val()
+                    username: $("#n__Loggin").val(),
+                    password: $("#c__Loggin").val()
                 }, function (datos) {
                     if (datos.message_load_user_s !== "") {
                         //si no esta vacio lanza mensaje de confirmacion

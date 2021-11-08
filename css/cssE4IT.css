@@ -9,11 +9,20 @@ and open the template in the editor.
 */
 
 /* UL padding override - see https://github.com/Dogfalo/materialize/issues/2786#issuecomment-234809753  */
-ul { padding-left: 20px; }
+ul { padding-left: 10px; }
 .btn { font-size: .8em; }
 /* not sure why this is needed... */
 .material-icons { vertical-align: bottom; }
 
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
 .Bad{
     color: red;
 }
@@ -30,3 +39,9 @@ ul { padding-left: 20px; }
     padding: 0;
     overflow: hidden;
 }
+@use "@material/floating-label/mdc-floating-label";
+@use "@material/line-ripple/mdc-line-ripple";
+@use "@material/notched-outline/mdc-notched-outline";
+@use "@material/textfield";
+
+@include textfield.core-styles;

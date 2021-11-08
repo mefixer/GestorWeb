@@ -6,28 +6,6 @@ class Modelo extends CI_Model{
 //teacher
 
 	function login($username, $password){
-	//se consulta por el rut y contraseña en la tabla teacher
-		$this->db->select('*');
-		$this->db->where('username',$username);
-		$this->db->where('password', $password);
-		$this->db->limit(1);
-		//se almacena la respuesta
-		$queryteacher = $this->db->get('teacher');
-		//se consulta por el rut y contraseña en la tabla student
-		$this->db->select('*');
-		$this->db->where('username',$username);
-		$this->db->where('password', $password);
-		$this->db->limit(1);
-		//se almacena la respuesta
-		$querystudent = $this->db->get('student');
-                //se consulta por el rut y contraseña en la tabla coordinator
-		$this->db->select('*');
-		$this->db->where('username',$username);
-		$this->db->where('password', $password);
-		$this->db->limit(1);
-		//se almacena la respuesta
-		$querycoordinator = $this->db->get('coordinator');
-		        //se consulta por el rut y contraseña en la tabla coordinator
 		$this->db->select('*');
 		$this->db->where('username',$username);
 		$this->db->where('password', $password);
@@ -48,43 +26,7 @@ class Modelo extends CI_Model{
         $data_response['gender_idgender'] = '';
 		$data_response['email'] = '';
 
-		if($queryteacher->num_rows() != 0){
-			//se almacena la respuesta 
-			foreach ($queryteacher->result() as $fila) {
-				$data_response['idteacher'] = $fila->idteacher;
-				$data_response['idnumber'] = $fila->idnumber;
-				$data_response['name'] = $fila->name;				
-				$data_response['lastname'] = $fila->lastname;
-				$data_response['username'] = $fila->username;
-                $data_response['email'] = $fila->email;
-				$data_response['role_idrole'] = $fila->role_idrole;
-                $data_response['gender_idgender'] = $fila->gender_idgender;
-			}
-		}elseif ($querystudent->num_rows() != 0){
-			//se almacena la respuesta 
-			foreach ($querystudent->result() as $fila) {
-				$data_response['idstudent'] = $fila->idstudent;
-				$data_response['username'] = $fila->username;
-				$data_response['name'] = $fila->name;
-				$data_response['lastname'] = $fila->lastname;
-				$data_response['idnumber'] = $fila->idnumber;
-				$data_response['email'] = $fila->email;
-				$data_response['role_idrole'] = $fila->role_idrole;
-                $data_response['gender_idgender'] = $fila->gender_idgender;
-			}
-		}elseif($querycoordinator->num_rows() != 0){
-                    //se almacena la respuesta 
-			foreach ($querycoordinator->result() as $fila) {
-				$data_response['idcoordinator'] = $fila->idcoordinator;
-				$data_response['username'] = $fila->username;
-				$data_response['name'] = $fila->name;
-				$data_response['lastname'] = $fila->lastname;
-				$data_response['idnumber'] = $fila->idnumber;
-				$data_response['email'] = $fila->email;
-				$data_response['role_idrole'] = $fila->role_idrole;
-                $data_response['gender_idgender'] = $fila->gender_idgender;
-			}
-        }else{
+		if($queryadministrator->num_rows() != 0){
         	        //se almacena la respuesta 
 			foreach ($queryadministrator->result() as $fila) {
 				$data_response['idadministrator'] = $fila->idadministrator;
@@ -123,22 +65,6 @@ class Modelo extends CI_Model{
 			$insert_id = $this->db->insert_id();
 
    			return  $insert_id;
-		}
-		function savestudenthaslog($student_idstudent, $role_idrole, $idlog){
-			$addstudenthaslog = array(
-				'student_idstudent' => $student_idstudent,
-				'student_role_idrole' => $role_idrole,
-				'log_idlog' => $idlog
-			);
-			$this->db->insert('student_has_log', $addstudenthaslog);
-		}
-		function saveteacherhaslog($teacher_idteacher, $role_idrole, $idlog){
-			$addteacherhaslog = array(
-				'teacher_idteacher' => $teacher_idteacher,
-				'teacher_role_idrole' => $role_idrole,
-				'log_idlog' => $idlog
-			);
-			$this->db->insert('teacher_has_log', $addteacherhaslog);
 		}
 	function role($idrole){
 		$this->db->select('*');
