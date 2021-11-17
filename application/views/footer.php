@@ -3,7 +3,7 @@
             <div class="row">
               <div class="col l6 s12">
                 <h5 class="black-text">Creado por: </h5>
-                <p class="black-text">MeFixer SpA</p>
+                <p class="black-text">Versia SpA</p>
               </div>
               <div class="col l4 offset-l2 s12">
                 <h5 class="black-text">Bajo Licencia GPL v3</h5>
@@ -17,7 +17,7 @@
           </div>
           <div class="footer-copyright">
             <div class="container black-text">
-              © 2021 Copyright
+              © 2022 Copyright
             </div>
           </div>
         </footer>

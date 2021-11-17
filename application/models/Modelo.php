@@ -11,13 +11,10 @@ class Modelo extends CI_Model{
 		$this->db->where('password', $password);
 		$this->db->limit(1);
 		//se almacena la respuesta
-		$queryadministrator = $this->db->get('administrator');
+		$query = $this->db->get('user');
 
 		//se declara los arreglos vacios para evitar errores de compilacion
-		$data_response['idadministrator'] = '';
-        $data_response['idcoordinator'] = '';
-		$data_response['idteacher'] = '';
-		$data_response['idstudent'] = '';
+		$data_response['iduser'] = '';
 		$data_response['username'] = ''; 
 		$data_response['name'] = '';
 		$data_response['lastname'] = '';
@@ -26,10 +23,10 @@ class Modelo extends CI_Model{
         $data_response['gender_idgender'] = '';
 		$data_response['email'] = '';
 
-		if($queryadministrator->num_rows() != 0){
-        	        //se almacena la respuesta 
-			foreach ($queryadministrator->result() as $fila) {
-				$data_response['idadministrator'] = $fila->idadministrator;
+		if($query->num_rows() != 0){
+         //se almacena la respuesta 
+			foreach ($query->result() as $fila) {
+				$data_response['iduser'] = $fila->iduser;
 				$data_response['username'] = $fila->username;
 				$data_response['name'] = $fila->name;
 				$data_response['lastname'] = $fila->lastname;
@@ -42,6 +39,7 @@ class Modelo extends CI_Model{
                 
 		//devuelve el arreglo
 		return $data_response;}
+
 		function savelogstart($fecha,$username,$role_idrole){
 			$addlog = array(
 				'start' => $fecha,

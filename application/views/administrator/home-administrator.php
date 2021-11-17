@@ -20,56 +20,82 @@
     </ul>
   </div>
   <div class="nav-content">
-      <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#Usuarios">Usuarios</a></li>
-        <li class="tab"><a href="#Documentos">Documentos</a></li>
-        <li class="tab"><a href="#Pendientes">Pendientes</a></li>
-        <li class="tab"><a href="#Archivos">Archivos</a></li>
-        <li class="tab"><a href="#Configuracion">Configuracion</a></li>
-      </ul>
-    </div>
-
+    <ul class="tabs tabs-transparent">
+      <li class="tab"><a href="#Usuarios">Usuarios</a></li>
+      <li class="tab"><a href="#Documentos">Documentos</a></li>
+      <li class="tab"><a href="#Pendientes">Pendientes</a></li>
+      <li class="tab"><a href="#Archivos">Archivos</a></li>
+      <li class="tab"><a href="#Configuracion">Configuracion</a></li>
+    </ul>
+  </div>
 </nav>
+
 <br>
+
 <!-- BODY PAGE AND BUTTON LIST-->
 <div class="row">
   <div class="col s12 m3">
-  <div id="Usuarios" class="col s12">
-  <div class="row">
-    <form class="col s12">
-      <div class="row">
-        <div class="input-field col s6">
-          <input placeholder="" id="first_name" type="text" class="validate">
-          <label for="first_name">Nombre</label>
-        </div>
-        <div class="input-field col s6">
-
-          <input id="last_name" type="text" class="validate">
-          <label for="last_name">Apellido</label>
-        </div>
+    <div id="Usuarios" class="col s12">
+      <div class="col s12">
+        <ul class="collection">
+          <li class="collection-item dismissable">
+            <div>Usuario<a href="#!" class="secondary-content" onclick="useradd()"><i class="material-icons">add</i></a></div>
+          </li>
+          <li class="collection-item dismissable">
+            <div>Bloqueados<a href="#!" class="secondary-content" onclick="bloqueados()"><i class="material-icons">block</i></a></div>
+          </li>
+          <li class="collection-item dismissable">
+            <div>Parámetros<a href="#!" class="secondary-content" onclick="parametros()"><i class="material-icons">settings</i></a></div>
+          </li>
+          <li class="collection-item dismissable">
+            <div>Estadísticas<a href="#!" class="secondary-content" onclick="estadisticas()"><i class="material-icons">insert_chart</i></a></div>
+          </li>
+        </ul>
       </div>
 
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="password" type="password" class="validate">
-          <label for="password">Password</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-        <i class="material-icons prefix">mail</i>
-          <input id="email" type="email" class="validate">
-          <label for="email">Email</label>
-        </div>
+      <div class="col s12">
+
       </div>
 
-    </form>
-  </div>
-  </div>
-  <div id="Documentos" class="col s12">Documentos</div>
-  <div id="Pendientes" class="col s12">Pendientes</div>
-  <div id="Archivos" class="col s12">Archivos</div>
-  <div id="Configuracion" class="col s12">Configuracion</div>
+    </div>
+    <div id="Documentos" class="col s12">
+      <div class="col s12">
+        <ul class="collection">
+          <li class="collection-item">
+            <div>Documento<a href="#!" class="secondary-content"><i class="material-icons">attach_file</i></a></div>
+          </li>
+          <li class="collection-item ">
+            <div>Fuera de Plazo<a href="#!" class="secondary-content"><i class="material-icons">block</i></a></div>
+          </li>
+          <li class="collection-item ">
+            <div>Parámetros<a href="#!" class="secondary-content"><i class="material-icons">settings</i></a></div>
+          </li>
+          <li class="collection-item ">
+            <div>Estadísticas<a href="#!" class="secondary-content"><i class="material-icons">insert_chart</i></a></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="Pendientes" class="col s12">Pendientes</div>
+    <div id="Archivos" class="col s12">Archivos</div>
+    <div id="Configuracion" class="col s12">
+    <div class="col s6">
+        <ul class="collection">
+          <li class="collection-item dismissable">
+            <div>Mis Datos<a href="#!" class="secondary-content"><i class="material-icons">assignment_ind</i></a></div>
+          </li>
+          <li class="collection-item dismissable">
+            <div>Mis Documentos<a href="#!" class="secondary-content"><i class="material-icons">attach_file</i></a></div>
+          </li>
+          <li class="collection-item dismissable">
+            <div>Mis Parámetros<a href="#!" class="secondary-content"><i class="material-icons">settings</i></a></div>
+          </li>
+          <li class="collection-item dismissable">
+            <div>Mis Estadísticas<a href="#!" class="secondary-content"><i class="material-icons">insert_chart</i></a></div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
   <div class="col s12 m9 19">
     <div id="contentadministrator">
@@ -94,10 +120,10 @@
   $(document).ready(function() {
     $('.collapsible').collapsible();
   });
-  $(document).ready(function(){
+  $(document).ready(function() {
     $('ul.tabs').tabs();
   });
-  $(document).ready(function(){
+  $(document).ready(function() {
     $('ul.tabs').tabs('select_tab', 'Usuarios');
   });
 </script>
