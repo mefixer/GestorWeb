@@ -135,6 +135,11 @@ class Controller extends CI_controller
         $msjclose = "<strong >Nos Vemos!</strong>";
         echo json_encode(array('message_close' => $msjclose));
     }
+
+    function adduser()
+    {
+        $this->load->view('administrator/user/adduser');
+    }
     //Save Transaction 
     // function savesection(){
     //     $name = $this->input->post('sectionname');

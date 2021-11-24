@@ -79,7 +79,7 @@
     <div id="Pendientes" class="col s12">Pendientes</div>
     <div id="Archivos" class="col s12">Archivos</div>
     <div id="Configuracion" class="col s12">
-    <div class="col s6">
+    <div class="col s12">
         <ul class="collection">
           <li class="collection-item dismissable">
             <div>Mis Datos<a href="#!" class="secondary-content"><i class="material-icons">assignment_ind</i></a></div>
@@ -99,7 +99,7 @@
   </div>
   <div class="col s12 m9 19">
     <div id="contentadministrator">
-
+        
     </div>
   </div>
 </div>

@@ -45,8 +45,11 @@ function close_session() {
 }
 //button llamados a vistas de administrador
 function useradd() {
-    Materialize.toast('se llama vista Usuarios agregar', 6000, 'black lighten-3');
+    $.post(base_url + 'controller/adduser', {}, function(page) {
+        $("#contentadministrator").html(page);
+    }), 'json';
 }
+
 
 function bloqueados() {
     Materialize.toast('se llama vista usuarios bloqueados', 6000, 'black lighten-3');
