@@ -42,7 +42,7 @@ class Controller extends CI_controller
             $data['gender_name'] = $gender['name'];
             //con el nombre del rol se filtra al usuario:
             // Ahora existen [estos]:
-            //--
+            //-- Administrador - Director - Jefe de Unidad - Usuario de Unidad --
 
             switch ($role) {
                 case 'Administrador':
@@ -104,7 +104,7 @@ class Controller extends CI_controller
                 //se carga la session vacia
                 $this->session->set_userdata($cookies);
                 //se indica el mensaje
-                $msje = "<strong class='black-text'>El usuario No existe!</strong>";
+                $msje = "<strong class='black-text'>No a logrado entrar!</strong>";
             }
         } else {
             //se carga el mensaje de que los campos son vacios
@@ -132,13 +132,26 @@ class Controller extends CI_controller
         //     $this->modelo->saveteacherhaslog($teacher_idteacher, $role_idrole, $idlog);
 
         $this->session->sess_destroy();
-        $msjclose = "<strong >Nos Vemos!</strong>";
+        $msjclose = "<strong class='black-text'>Nos Vemos!</strong>";
         echo json_encode(array('message_close' => $msjclose));
     }
 
     function adduser()
     {
         $this->load->view('administrator/user/adduser');
+    }
+
+    function addsolicitud(){
+        $this->load->view('administrator/solicitud/solicitudadd');
+    }
+
+    function insertUser(){
+        //inicio mensajes:
+        $msj_insertUser = array();
+        $m = array();
+        $m = array('msje' => "<strong>No se a guardado el usuario!</strong>");
+        array_push($msj_insertUser, $m);
+        echo json_encode($msj_insertUser);
     }
     //Save Transaction 
     // function savesection(){

@@ -1,22 +1,31 @@
-        <footer class="page-footer blue lighten-2">
+        <footer class="page-footer blue-grey lighten-1 z-depth-5">
           <div class="container">
             <div class="row">
-              <div class="col l6 s12">
-                <h5 class="black-text">Creado por: </h5>
-                <p class="black-text">Versia SpA</p>
+              <div class="col s12 black-text">
+                <h5 style="font-weight: bolder;">Creado por: </h5>
+                <p class="logo"><img src="img/inngenialogo.png" style="width: 30%; padding-left:10px;"></p>
+                <p>Gracias a <span style="font-weight: bolder;">Mauricio García</span> - Ingeniero Informático</p>
               </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="black-text">Bajo Licencia GPL v3</h5>
-                <ul>
-                  <li><a class="black-text text-lighten-3" href="https://codeigniter.com/">Codeigniter</a></li>
-                  <li><a class="black-text text-lighten-3" href="http://materializecss.com">Materialize</a></li>
-                  <li><a class="black-text text-lighten-3" href="https://jquery.com/">Jquery</a></li>
-                </ul>
-              </div>
+              <!-- <div class="col s8">
+                <h5 class="">Licencia GPL v3</h5>
+                <div class="container">
+                  <div class="row">
+                    <div class="col s4">
+                      <p href="https://codeigniter.com/" class="logo"><img src="img/codeigniter.png" style="width: 120px;"></p>
+                    </div>
+                    <div class="col s4">
+                      <p href="http://materializecss.com" class="logo"><img src="img/materialize.png" style="width: 120px;"></p>
+                    </div>
+                    <div class="col s4">
+                      <p href="https://jquery.com/" class="logo"><img src="img/jquery.png" style="width: 180px;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
             </div>
           </div>
           <div class="footer-copyright">
-            <div class="container black-text">
+            <div class="container">
               © 2022 Copyright
             </div>
           </div>
