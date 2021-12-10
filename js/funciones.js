@@ -34,10 +34,10 @@ function close_session() {
         function(datos) {
             if (datos.message_close !== '') {
                 //si se completa con exito lanza mensaje de confirmacion
-                Materialize.toast(datos.message_close, 4000, 'red lighten-3');
+                Materialize.toast(datos.message_close, 4000, 'light-green lighten-4');
             } else {
                 //de los contrario lanza mensaje de error
-                $message_error = 'Not posible close session';
+                $message_error = 'No fue posible cerrar la aplicacion';
                 Materialize.toast($message_error, 4000, 'red lighten-3');
             }
             charger();
@@ -50,6 +50,29 @@ function useradd() {
     }), 'json';
 }
 
+function solicadd() {
+    $.post(base_url + 'controller/addsolicitud', {}, function(page) {
+        $("#contentadministrator").html(page);
+    }), 'json';
+}
+
+function insertUser() {
+    $.post(base_url + 'controller/insertUser', {}, function(datos) {
+        var msj = datos;
+        $.each(msj, function(i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+        $("#contentadministrator").html(datos);
+    }), 'json';
+}
 
 function bloqueados() {
     Materialize.toast('se llama vista usuarios bloqueados', 6000, 'black lighten-3');
