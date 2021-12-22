@@ -40,6 +40,12 @@ class Modelo extends CI_Model{
 		//devuelve el arreglo
 		return $data_response;}
 
+		function userlist(){
+			$this->db->select('*');
+			$res = $this->db->get('user');
+	
+			return $res;
+		}
 		function savelogstart($fecha,$username,$role_idrole){
 			$addlog = array(
 				'start' => $fecha,
@@ -64,6 +70,19 @@ class Modelo extends CI_Model{
 
    			return  $insert_id;
 		}
+	
+	function rol(){
+		$this->db->select('*');
+		$res = $this->db->get('role');
+
+		return $res;
+	}
+	function gender(){
+		$this->db->select('*');
+		$res = $this->db->get('gender');
+
+		return $res;
+	}
 	function role($idrole){
 		$this->db->select('*');
 		$this->db->where('idrole', $idrole);
@@ -866,5 +885,3 @@ function material_has_class(){
 
 
 }
-
-?>

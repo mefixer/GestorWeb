@@ -6,23 +6,31 @@
       </div>
       <BR></BR>
       <div class="row">
-        <div class="input-field col s4">
-          <input placeholder="" id="first_name" type="text" class="validate">
+        <div class="input-field col s2">
+          <input id="rut" type="text" class="validate" maxlength="10" required onkeypress="checkRut(this)">
+          <label for="rut">Rut</label>
+        </div>
+        <div class="input-field col s5">
+          <input id="first_name" type="text" class="validate">
           <label for="first_name">Nombres</label>
         </div>
-        <div class="input-field col s4">
+        <div class="input-field col s5">
           <input id="last_name" type="text" class="validate">
           <label for="last_name">Apellidos</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s2">
+          <input id="username" type="text" class="validate">
+          <label for="username">Nombre de usuario</label>
+        </div>
+        <div class="input-field col s5">
           <input id="password" type="password" class="validate">
           <label for="password">Contraseña</label>
         </div>
-        <div class="input-field col s2">
+        <div class="input-field col s5">
           <input id="passwordConfirm" type="password" class="validate">
-          <label for="passwordConfirm">Confirmar Contraseña</label>
+          <label for="passwordConfirm">Confirmar</label>
         </div>
       </div>
       <div class="row">
@@ -33,19 +41,28 @@
         <div class="input-field col s4">
           <select id="rol">
             <option value="0" disabled selected>Rol de usuario</option>
-            <option value="1">Director de Area</option>
-            <option value="2">Contador Municipal</option>
-            <option value="3">Director de Finanzas</option>
-            <option value="4">Administrador de Municipal</option>
-            <option value="5">Unidad de Compra</option>
-            <option value="6">Orden de Compra?</option>
+            <?php $e = 0;
+            foreach ($rol as $fil) : ?>
+              <option value="<?php echo $fil->idrole ?>"> <?php echo $fil->rolename ?> </option>
+            <?php $e++;
+            endforeach; ?>
+          </select>
+        </div>
+        <div class="input-field col s4">
+          <select id="gender">
+            <option value="0" disabled selected>Genero del usuario</option>
+            <?php $e = 0;
+            foreach ($gender as $fil) : ?>
+              <option value="<?php echo $fil->idgender ?>"> <?php echo $fil->name ?> </option>
+            <?php $e++;
+            endforeach; ?>
           </select>
         </div>
       </div>
-      <br>
-      <button class="waves-effect waves-light btn light-green lighten-3 black-text" onclick="insertUser()"><i class="material-icons">check</i> LISTO</button>
-    </form>
   </div>
+  <button class="waves-effect waves-light btn light-green lighten-3 black-text" onclick="insertUser()"><i class="material-icons">check</i> LISTO</button>
+  </form>
+</div>
 </div>
 
 <script>

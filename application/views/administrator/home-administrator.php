@@ -36,9 +36,9 @@
 <br>
 <!-- BODY PAGE AND BUTTON LIST-->
 <div class="row">
-  <div class="col s4 m2">
-    <div id="Usuarios" class="col s12">
-      <div class="col s12">
+  <div class="col s4 m3">
+    <div id="Usuarios">
+      <div class="col s9">
         <ul class="collapsible popout" data-collapsible="accordion">
           <li class="collection-item">
             <div class="collapsible-header">
@@ -97,7 +97,7 @@
         </ul>
       </div>
     </div>
-    <div id="Documentos" class="col s12">
+    <div id="Documentos">
       <div class="col s12">
         <ul class="collapsible popout" data-collapsible="accordion">
           <li class="collection-item">
@@ -152,9 +152,9 @@
         </ul>
       </div>
     </div>
-    <div id="Pendientes" class="col s12">Pendientes</div>
-    <div id="Archivos" class="col s12">Archivos</div>
-    <div id="Configuracion" class="col s12">
+    <div id="Pendientes">Pendientes</div>
+    <div id="Archivos">Archivos</div>
+    <div id="Configuracion">
       <div class="col s12">
         <ul class="collection popout">
           <li class="collection-item dismissable">
@@ -173,7 +173,7 @@
       </div>
     </div>
   </div>
-  <div class="col s8 m10">
+  <div class="col s8 m9">
     <div id="contentadministrator">
     </div>
   </div>

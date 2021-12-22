@@ -45,8 +45,13 @@ function close_session() {
 }
 //button llamados a vistas de administrador
 function useradd() {
-    $.post(base_url + 'controller/adduser', {}, function(page) {
-        $("#contentadministrator").html(page);
+    $.post(base_url + 'controller/adduser', {}, function(page,data) {
+        $("#contentadministrator").html(page,data);
+    }), 'json';
+}
+function userlist(){
+    $.post(base_url + 'controller/userlist', {}, function(page,data) {
+        $("#contentadministrator").html(page,data);
     }), 'json';
 }
 
@@ -57,7 +62,18 @@ function solicadd() {
 }
 
 function insertUser() {
-    $.post(base_url + 'controller/insertUser', {}, function(datos) {
+    $.post(base_url + 'controller/insertUser', {
+        rut: $("#rut").val(),
+         name: $("#first_name").val(),
+         lastname: $("#last_name").val(),
+         username: $("#username").val(),
+         password: $("#password").val(),
+         passwordConfirm: $("#passwordConfirm").val(),
+         passwordconfirm: $("#passwordconfirm").val(),
+         email: $("#email").val(),
+         rol: $("#rol").val(),
+         gender: $("#gender").val()
+    }, function(datos) {
         var msj = datos;
         $.each(msj, function(i, o) {
             if (o.msjw !== "") {
@@ -70,8 +86,7 @@ function insertUser() {
                 Materialize.toast(o.msje, 4000, 'red lighten-3');
             }
         });
-        $("#contentadministrator").html(datos);
-    }), 'json';
+    },'json');
 }
 
 function bloqueados() {
@@ -87,33 +102,33 @@ function estadisticas() {
 }
 
 // //load save
-// function saveteacher() {
-//     var idgender = document.getElementById("idselectgenderteacher").value;
-//     $.post(base_url + 'controller/saveteacher', {
-//         idnumber: $("#idnumber").val(),
-//         name: $("#name").val(),
-//         lastname: $("#lastname").val(),
-//         username: $("#username").val(),
-//         password: $("#password").val(),
-//         passwordconfirm: $("#passwordconfirm").val(),
-//         email: $("#email").val(),
-//         gender: idgender
-//     }, function(datos) {
-//         var msj_teacher = datos;
-//         $.each(msj_teacher, function(i, o) {
-//             if (o.msjw !== "") {
-//                 Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
-//             }
-//             if (o.msjs !== "") {
-//                 Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
-//             }
-//             if (o.msje !== "") {
-//                 Materialize.toast(o.msje, 4000, 'red lighten-3');
-//             }
-//         });
-//         teacherlist();
-//     }, 'json');
-// }
+function saveteacher() {
+    var idgender = document.getElementById("idselectgenderteacher").value;
+    $.post(base_url + 'controller/saveteacher', {
+        idnumber: $("#idnumber").val(),
+        name: $("#name").val(),
+        lastname: $("#lastname").val(),
+        username: $("#username").val(),
+        password: $("#password").val(),
+        passwordconfirm: $("#passwordconfirm").val(),
+        email: $("#email").val(),
+        gender: idgender
+    }, function(datos) {
+        var msj_teacher = datos;
+        $.each(msj_teacher, function(i, o) {
+            if (o.msjw !== "") {
+                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+            }
+            if (o.msjs !== "") {
+                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+            }
+            if (o.msje !== "") {
+                Materialize.toast(o.msje, 4000, 'red lighten-3');
+            }
+        });
+        teacherlist();
+    }, 'json');
+}
 
 // function savesection() {
 //     $.post(base_url + 'controller/savesection', {
@@ -1151,62 +1166,51 @@ function estadisticas() {
 //*Valida Campos*/
 function checkRut(rut) {
     // Despejar Puntos
-    var valor = rut.value.replace('.', '');
+    var valor = rut.value.replace('.','');
     // Despejar Guión
-    valor = valor.replace('-', '');
-
+    valor = valor.replace('-','');
+    
     // Aislar Cuerpo y Dígito Verificador
-    cuerpo = valor.slice(0, -1);
+    cuerpo = valor.slice(0,-1);
     dv = valor.slice(-1).toUpperCase();
-
+    
     // Formatear RUN
-    rut.value = cuerpo + '-' + dv
-
+    rut.value = cuerpo + '-'+ dv
+    
     // Si no cumple con el mínimo ej. (n.nnn.nnn)
-    if (cuerpo.length < 7) {
-        rut.setCustomValidity("RUT Incompleto");
-        return false;
-    }
-
+    if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
+    
     // Calcular Dígito Verificador
     suma = 0;
     multiplo = 2;
-
+    
     // Para cada dígito del Cuerpo
-    for (i = 1; i <= cuerpo.length; i++) {
-
+    for(i=1;i<=cuerpo.length;i++) {
+    
         // Obtener su Producto con el Múltiplo Correspondiente
         index = multiplo * valor.charAt(cuerpo.length - i);
-
+        
         // Sumar al Contador General
         suma = suma + index;
-
+        
         // Consolidar Múltiplo dentro del rango [2,7]
-        if (multiplo < 7) {
-            multiplo = multiplo + 1;
-        } else {
-            multiplo = 2;
-        }
-
+        if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+  
     }
-
+    
     // Calcular Dígito Verificador en base al Módulo 11
     dvEsperado = 11 - (suma % 11);
-
+    
     // Casos Especiales (0 y K)
-    dv = (dv == 'K') ? 10 : dv;
-    dv = (dv == 0) ? 11 : dv;
-
+    dv = (dv == 'K')?10:dv;
+    dv = (dv == 0)?11:dv;
+    
     // Validar que el Cuerpo coincide con su Dígito Verificador
-    if (dvEsperado != dv) {
-        rut.setCustomValidity("RUT Inválido");
-        return false;
-    }
-
+    if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
+    
     // Si todo sale bien, eliminar errores (decretar que es válido)
     rut.setCustomValidity('');
 }
-
 function soloLetras(e) {
     key = e.keyCode || e.which;
     tecla = String.fromCharCode(key).toLowerCase();

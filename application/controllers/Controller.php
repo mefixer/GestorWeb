@@ -138,20 +138,111 @@ class Controller extends CI_controller
 
     function adduser()
     {
-        $this->load->view('administrator/user/adduser');
+        $data['rol'] = $this->modelo->rol()->result();
+        $data['gender'] = $this->modelo->gender()->result();
+        $this->load->view('administrator/user/adduser',$data);
+    }
+    function userlist()
+    {
+        $data['users'] = $this->modelo->userlist()->result();
+        $this->load->view('administrator/user/userlist',$data);
     }
 
-    function addsolicitud(){
+    function addsolicitud()
+    {
         $this->load->view('administrator/solicitud/solicitudadd');
     }
 
-    function insertUser(){
+    function insertUser()
+    {
         //inicio mensajes:
-        $msj_insertUser = array();
+        $msj = array();
         $m = array();
-        $m = array('msje' => "<strong>No se a guardado el usuario!</strong>");
-        array_push($msj_insertUser, $m);
-        echo json_encode($msj_insertUser);
+
+        //Datos Post desde js/funciones.js 
+        $rut = $this->input->post('rut');
+        $name = $this->input->post('name');
+        $lastname = $this->input->post('lastname');
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+        $passwordConfirm = $this->input->post('passwordConfirm');
+        $email = $this->input->post('email');
+        $rol = $this->input->post('rol');
+        $gender = $this->input->post('gender');
+
+        $pase = true;
+
+        //validacion de datos
+        if ($this->nullcheck($rut)) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el rut</strong>");
+            array_push($msj, $m);
+        }
+
+        if ($this->nullcheck($name)) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el nombre</strong>");
+            array_push($msj, $m);
+        }
+        if ($this->nullcheck($lastname)) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el apellido</strong>");
+            array_push($msj, $m);
+        }
+        if ($password != null) {
+            if ($password != $passwordConfirm) {
+                $m = array('msjw' => "<strong class='black-text'>la clave debe ser igual</strong>");
+                array_push($msj, $m);
+            }
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>el usuario debe tener clave</strong>");
+            array_push($msj, $m);
+        }
+        if ($email != "") {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el correo</strong>");
+            array_push($msj, $m);
+        }
+        if ($rol != 0) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el rol</strong>");
+            array_push($msj, $m);
+        }
+        if ($gender != 0) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el genero</strong>");
+            array_push($msj, $m);
+        }
+
+        //consulta base de datos validar existencia
+
+
+        //Finalmente Guardado de informacion o mensajes de error!
+        if ($msj == null) {
+            $m = array('msjs' => "<strong class='black-text'>$rut</strong>");
+            array_push($msj, $m);
+        } else {
+            $m = array('msje' => "<strong class='black-text'>No se puede completar el ingreso del usuario</strong>");
+            array_push($msj, $m);
+        }
+
+        //Respuesta Ajax
+        echo json_encode($msj);
+    }
+    function nullcheck($field)
+    {
+        //compruebo que el tamaño del string sea válido. 
+        if (strlen($field) < 3 || strlen($field) > 200) {
+            return false;
+        }
+        //comprueba que los caracteres sean los permitidos 
+        $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ @.,:;'¿?#";
+        for ($i = 0; $i < strlen($field); $i++) {
+            if (strpos($permitidos, substr($field, $i, 1)) === false) {
+                return false;
+            }
+        }
+        return true;
     }
     //Save Transaction 
     // function savesection(){
