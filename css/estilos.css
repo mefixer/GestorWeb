@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.cover {
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+}
+
+.nav ul li {
+  list-style-type: none;
+  display: inline-block;
+  transition: 1.7s all;
+  text-transform: uppercase;
+  padding-left: 15vh;
+}
+
+.header ul {
+  text-align: center;
+}
+
+.header ul li {
+  list-style: none;
+  display: inline-block;
+}
+
+.header ul li a {
+  display: block;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: 'Raleway', sans-serif;
+  letter-spacing: 2px;
+  font-weight: 600;
+  padding: 25px;
+}

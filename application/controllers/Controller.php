@@ -1,17 +1,21 @@
 <?php
+
+use CodeIgniter\CLI\Console;
+use PHPUnit\Util\Printer;
+use SebastianBergmann\Environment\Console as EnvironmentConsole;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Controller extends CI_controller
 {
-
     //carga librerias para trabajar
     function __construct()
     {
         parent::__construct();
         $this->load->model("modelo");
-        $this->load->helper(array('download', 'file', 'url', 'html', 'form'));
+        $this->load->helper(array('url', 'form'));
         $this->load->library('session');
-        $this->load->library('form_validation');
+        $this->load->library('cart');
     }
     //división de pagina
     public function index()
@@ -23,53 +27,54 @@ class Controller extends CI_controller
         //Footer
         $this->load->view('footer');
     }
-
     //carga sistema
     function charger()
     {
         //primero consulta si existe un usuario loggeado
         if ($this->session->userdata('logged')) {
             //se almacenan las variables del usuario activo
-            $idgender = $this->session->userdata('gender_idgender');
-            $gender = $this->modelo->gendername($idgender);
-            $idrole = $this->session->userdata('role_idrole');
+            $id_genero = $this->session->userdata('genero_id_genero');
+            $id_rol = $this->session->userdata('rol_id_rol');
             //con el id del rol se trae el dato 
-            $role = $this->modelo->role($idrole);
-            $data['iduser'] = $this->session->userdata('iduser');
-            $data['name'] = $this->session->userdata('name');
-            $data['lastname'] = $this->session->userdata('lastname');
+            $nombre_rol = $this->modelo->rol($id_rol);
+            $data['id_usuario'] = $this->session->userdata('id_usuario');
+            $data['primer_nombre'] = $this->session->userdata('primer_nombre');
+            $data['primer_apellido'] = $this->session->userdata('primer_apellido');
             $data['email'] = $this->session->userdata('email');
-            $data['gender_name'] = $gender['name'];
             //con el nombre del rol se filtra al usuario:
             // Ahora existen [estos]:
             //-- Administrador - Director - Jefe de Unidad - Usuario de Unidad --
 
-            switch ($role) {
+            switch ($nombre_rol) {
                 case 'Administrador':
                     //si es Administrador pasa y se carga su vista y datos de usuario
                     $this->load->view('administrator/home-administrator', $data);
                     break;
-                case 'Director':
-                    //si es Administrador pasa y se carga su vista y datos de usuario
-                    $this->load->view('administrator/home-director', $data);
-                    break;
-                case 'Jefe de Unidad':
-                    //si es Administrador pasa y se carga su vista y datos de usuario
-                    $this->load->view('administrator/home-jefe-unidad', $data);
-                    break;
-                case 'Usuario de Unidad':
-                    //si es Administrador pasa y se carga su vista y datos de usuario
-                    $this->load->view('administrator/home-usuario-unidad', $data);
-                    break;
+                    // case 'Director':
+                    //     //si es Administrador pasa y se carga su vista y datos de usuario
+                    //     $this->load->view('administrator/home-director', $data);
+                    //     break;
+                    // case 'Jefe de Unidad':
+                    //     //si es Administrador pasa y se carga su vista y datos de usuario
+                    //     $this->load->view('administrator/home-jefe-unidad', $data);
+                    //     break;
+                    // case 'Usuario de Unidad':
+                    //     //si es Administrador pasa y se carga su vista y datos de usuario
+                    //     $this->load->view('administrator/home-usuario-unidad', $data);
+                    //     break;
             }
         } else {
             //de no existir un usuario loggeado se envia al login
-            $this->load->view('login');
+            $data['principal'] = $this->modelo->principal()->result();
+            $data['galeria'] = $this->modelo->galeria()->result();
+            $data['destacados'] = $this->modelo->destacados()->result();
+            $data['posteos'] = $this->modelo->posteos()->result();
+            $this->load->view('login', $data);
         }
     }
     function load_user()
     {
-        $username = $this->input->post('username');
+        $nombre_usuario = $this->input->post('nombre_usuario');
         $password = md5($this->input->post('password'));
         //se declaran los mensajes
         $msjs = '';
@@ -78,22 +83,22 @@ class Controller extends CI_controller
         //se declara las variables
         $cookies = '';
         //se validan los campos para que no sean vacios
-        if ($this->c_valide_field($username) & $this->c_valide_field($password)) {
+        if ($this->nullcheck($nombre_usuario) & $this->nullcheck($password)) {
             //se consulta al modelo por usuario y su pass
-            $datos = $this->modelo->login($username, $password);
+            $datos = $this->modelo->login($nombre_usuario, $password);
             //la respuesta se almacena en un arreglo
             $cookies = array(
-                "iduser" => $datos['iduser'],
-                "idnumber" => $datos['idnumber'],
-                "name" => $datos['name'],
-                "lastname" => $datos['lastname'],
-                "username" => $datos['username'],
+                "id_usuario" => $datos['id_usuario'],
+                "rut" => $datos['rut'],
+                "primer_nombre" => $datos['primer_nombre'],
+                "primer_apellido" => $datos['primer_apellido'],
+                "nombre_usuario" => $datos['nombre_usuario'],
                 "email" => $datos['email'],
-                "role_idrole" => $datos['role_idrole'],
-                "gender_idgender" => $datos['gender_idgender']
+                "rol_id_rol" => $datos['rol_id_rol'],
+                "genero_id_genero" => $datos['genero_id_genero']
             );
             //se consulta si la respuesta es vacia para continuar
-            if ($datos['role_idrole'] != '') {
+            if ($datos['rol_id_rol'] != '') {
                 $cookies['logged'] = true;
                 //se carga la session
                 $this->session->set_userdata($cookies);
@@ -117,8 +122,6 @@ class Controller extends CI_controller
             "message_load_user_w" => $msjw
         ));
     }
-
-
     //Cierra Sesión
     function close_session()
     {
@@ -135,25 +138,71 @@ class Controller extends CI_controller
         $msjclose = "<strong class='black-text'>Nos Vemos!</strong>";
         echo json_encode(array('message_close' => $msjclose));
     }
-
-    function adduser()
+    //carga vistas de agregado
+    function useradd()
     {
-        $data['rol'] = $this->modelo->rol()->result();
-        $data['gender'] = $this->modelo->gender()->result();
-        $this->load->view('administrator/user/adduser',$data);
+        $data['rol'] = $this->modelo->userrol()->result();
+        $data['gender'] = $this->modelo->usergender()->result();
+        $data['usuario'] = $this->modelo->userlist()->result();
+        $this->load->view('administrator/user/useradd', $data);
     }
-    function userlist()
+    function productadd()
     {
-        $data['users'] = $this->modelo->userlist()->result();
-        $this->load->view('administrator/user/userlist',$data);
+        $data['producto'] = $this->modelo->productList()->result();
+        $this->load->view('administrator/product/productadd', $data);
     }
-
-    function addsolicitud()
+    function principaladd()
     {
-        $this->load->view('administrator/solicitud/solicitudadd');
+        $data['principal'] = $this->modelo->principal()->result();
+        $this->load->view('administrator/portada/principal', $data);
     }
+    function galeryadd()
+    {
+        $data['galeria'] = $this->modelo->galeria()->result();
+        $this->load->view('administrator/portada/galeria', $data);
+    }
+    function destacadosadd()
+    {
+        $data['destacados'] = $this->modelo->destacados()->result();
+        $this->load->view('administrator/portada/destacados', $data);
+    }
+    function postadd()
+    {
+        $data['posteos'] = $this->modelo->posteos()->result();
+        $this->load->view('administrator/portada/posteos');
+    }
+    function adProduct()
+    {
+        //inicio mensajes:
+        $msj = array();
+        $m = array();
 
-    function insertUser()
+        $name = $this->input->post('name');
+        $foto = $this->input->post('foto');
+        $description = $this->input->post('description');
+        $price = $this->input->post('price');
+        $stock = $this->input->post('stock');
+        $date = date('Y-m-d');
+        if ($this->modelo->adProduct($name, $foto, $description, $price, $stock, $date) === true) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>no se pudo realizar el ingreso</strong>");
+            array_push($msj, $m);
+        }
+
+
+        //Finalmente Guardado de informacion o mensajes de error!
+        if ($msj == null) {
+            $m = array('msjs' => "<strong class='black-text'>Producto ingresado correctamente</strong>");
+            array_push($msj, $m);
+        } else {
+            $m = array('msje' => "<strong class='black-text'>No se puede completar el ingreso del producto/strong>");
+            array_push($msj, $m);
+        }
+
+        //Respuesta Ajax
+        echo json_encode($msj);
+    }
+    function agregar_usuario()
     {
         //inicio mensajes:
         $msj = array();
@@ -161,16 +210,17 @@ class Controller extends CI_controller
 
         //Datos Post desde js/funciones.js 
         $rut = $this->input->post('rut');
-        $name = $this->input->post('name');
-        $lastname = $this->input->post('lastname');
-        $username = $this->input->post('username');
+        $primer_nombre = $this->input->post('primer_nombre');
+        $segundo_nombre = $this->input->post('segundo_nombre');
+        $primer_apellido = $this->input->post('primer_apellido');
+        $segundo_apellido = $this->input->post('segundo_apellido');
+        $nombre_usuario = $this->input->post('nombre_usuario');
         $password = $this->input->post('password');
         $passwordConfirm = $this->input->post('passwordConfirm');
         $email = $this->input->post('email');
         $rol = $this->input->post('rol');
-        $gender = $this->input->post('gender');
+        $genero = $this->input->post('genero');
 
-        $pase = true;
 
         //validacion de datos
         if ($this->nullcheck($rut)) {
@@ -179,14 +229,29 @@ class Controller extends CI_controller
             array_push($msj, $m);
         }
 
-        if ($this->nullcheck($name)) {
+        if ($this->nullcheck($primer_nombre)) {
         } else {
             $m = array('msjw' => "<strong class='black-text'>Falta el nombre</strong>");
             array_push($msj, $m);
         }
-        if ($this->nullcheck($lastname)) {
+        if ($this->nullcheck($segundo_nombre)) {
         } else {
             $m = array('msjw' => "<strong class='black-text'>Falta el apellido</strong>");
+            array_push($msj, $m);
+        }
+        if ($this->nullcheck($primer_apellido)) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el apellido</strong>");
+            array_push($msj, $m);
+        }
+        if ($this->nullcheck($segundo_apellido)) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el nombre de usuario</strong>");
+            array_push($msj, $m);
+        }
+        if ($this->nullcheck($nombre_usuario)) {
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>Falta el nombre de usuario</strong>");
             array_push($msj, $m);
         }
         if ($password != null) {
@@ -208,18 +273,25 @@ class Controller extends CI_controller
             $m = array('msjw' => "<strong class='black-text'>Falta el rol</strong>");
             array_push($msj, $m);
         }
-        if ($gender != 0) {
+        if ($genero != 0) {
         } else {
             $m = array('msjw' => "<strong class='black-text'>Falta el genero</strong>");
             array_push($msj, $m);
         }
 
         //consulta base de datos validar existencia
-
-
+        if ($msj == null) {
+            if ($this->modelo->agregar_usuario($rut, $primer_nombre, $segundo_nombre, $primer_apellido, $segundo_apellido, $nombre_usuario, md5($password), $email, $rol, $genero)) {
+                $m = array('msjs' => "<strong class='black-text'>Guardado!</strong>");
+                array_push($msj, $m);
+            } else {
+                $m = array('msje' => "<strong class='black-text'>No se puede completar el ingreso del usuario</strong>");
+                array_push($msj, $m);
+            }
+        }
         //Finalmente Guardado de informacion o mensajes de error!
         if ($msj == null) {
-            $m = array('msjs' => "<strong class='black-text'>$rut</strong>");
+            $m = array('msjs' => "<strong class='black-text'>$rut Ingresado Correctamente!</strong>");
             array_push($msj, $m);
         } else {
             $m = array('msje' => "<strong class='black-text'>No se puede completar el ingreso del usuario</strong>");
@@ -229,6 +301,219 @@ class Controller extends CI_controller
         //Respuesta Ajax
         echo json_encode($msj);
     }
+    //funciones de carro de compras!
+    function catalogo()
+    {
+        $data['producto'] = $this->modelo->productList()->result();
+        $this->load->view('catalogo/catalogo', $data);
+    }
+
+    /**
+     * Funcion que ingresa productos al carrito
+     * @param Object producto
+     * @return void
+     */
+    public function addProductCart()
+    {
+        //inicio mensajes:
+        $msj = array();
+        $m = array();
+        //se obtiene el id del producto desde el js
+        $idproducto = $this->input->post('idproducto');
+        //se busca el producto mediante el id
+        $producto['producto'] = $this->modelo->getProduct($idproducto)->result();
+        //default se agrega solo un producto a la vez
+        $cantidad = 1;
+        //se crea un arreglo para pasar al carrito
+        $info = $producto['producto'][0];
+        $data = [
+            'id' => $info->id,
+            'qty' => $cantidad,
+            'price' => $info->price,
+            'name' => $info->name
+        ];
+        //se agrega el producto al carrito
+        if($this->cart->insert($data)){
+            $m = array('msjs' => "<strong class='black-text'>Se agrego tu producto al carro</strong>");
+            array_push($msj, $m);
+        }else{
+            $m = array('msje' => "<strong class='black-text'>No fue posible producto agregar el producto.</strong>");
+            array_push($msj, $m);
+        }
+
+        
+
+
+        echo json_encode($msj);
+    }
+
+    public function verCarrito()
+    {
+        //se envia la informacion de los productos para en la vista poder mostrar las fotos
+        $productos['producto'] = $this->modelo->productList()->result();
+        //se muestra la vista con el contenido del carrito
+        $this->load->view('catalogo/listacarro', $productos);
+    }
+
+    function conteoCart()
+    {
+        $this->load->view('conteoCart');
+    }
+
+    public function cancelCart()
+    {
+        //se elimina el carrito
+        $this->cart->destroy();
+        //se retorna al bazar
+        $this->charger();
+    }
+
+    /**
+     * Funcion que retorna el total del carrito
+     * @param void
+     * @return int total
+     */
+    public function getTotalCart()
+    {
+        return $this->cart->total();
+    }
+
+    /**
+     * Funcion que retorna el contenido del carrito
+     * @param void
+     * @return Array contents
+     */
+    public function getContentCart()
+    {
+        return $this->cart->contents();
+    }
+
+    /**
+     * Funcion que destruye el carrito
+     * @param void
+     * @return resultado
+     */
+    public function cancelar_pedido()
+    {
+        return $this->cart->destroy();
+    }
+
+    function realizar_pedido()
+    {
+        //inicio mensajes:
+        $msj = array();
+        $m = array();
+
+        $contenido = $this->cart->contents();
+
+        if ($contenido != null) {
+            foreach ($contenido as $fila) :
+                $data = array(
+                    'codigo' => $fila['rowid'],
+                    'idproducto' => $fila['id'],
+                    'cantidad' => $fila['qty'],
+                    'total' => $fila['subtotal']
+                );
+            endforeach;
+
+            if ($this->session->userdata('logged')) {
+                //no se permite comprar con usuario sistema.
+            } else {
+                $m = array('msjs' => "<strong class='black-text'>primero se deben llenar los datos del pedido!</strong>");
+                array_push($msj, $m);
+            }
+        } else {
+            $m = array('msjw' => "<strong class='black-text'>El carro esta vacio</strong>");
+            array_push($msj, $m);
+        }
+
+        //Respuesta Ajax
+        echo json_encode($msj);
+    }
+    function datos_pedido()
+    {
+        $data['producto'] = $this->modelo->productList()->result();
+        $this->load->view('catalogo/datos_pedido', $data);
+    }
+    function generar_solicitud()
+    {
+        //inicio mensajes:
+        $msj = array();
+        $m = array();
+
+        $nombre = $this->input->post('nombre');
+        $apellido = $this->input->post('apellido');
+        $direccion = $this->input->post('direccion');
+        $correo = $this->input->post('correo');
+        $celular = $this->input->post('celular');
+        $codigo = "";
+
+        $estadomodelo = $this->modelo->estado('ingresado')->result();
+
+        foreach ($estadomodelo as $fila) :
+            $estado = $fila->id;
+        endforeach;
+
+        $contenido = $this->cart->contents();
+
+        $id_carro = $this->modelo->pedido_up($nombre, $apellido, $direccion, $correo, $celular, $estado);
+
+        foreach ($contenido as $fila) :
+            $id_producto = $fila['id'];
+            $cantidad = $fila['qty'];
+            $subtotal = $fila['subtotal'];
+            $codigo = $fila['rowid'];
+            $this->modelo->detalle_pedido_up($id_producto, $id_carro, $cantidad, $subtotal, $codigo);
+        endforeach;
+
+        $data = array(
+            'codigo' => $id_carro,
+            'nombre' => $nombre,
+            'apellido' => $apellido,
+            'correo' => $correo
+        );
+        $this->session->set_userdata($data);
+
+        //Respuesta Ajax
+        echo json_encode($msj);
+    }
+
+    function vista_codigo()
+    {
+        $data['codigo'] = $this->session->userdata('codigo');
+        $data['nombre'] = $this->session->userdata('nombre');
+        $data['apellido'] = $this->session->userdata('apellido');
+        $data['correo'] = $this->session->userdata('correo');
+        $this->session->sess_destroy();
+        $this->load->view('catalogo/vista_codigo', $data);
+    }
+
+    function pedidos()
+    {
+        $data['carro'] = $this->modelo->pedidos()->result();
+        $data['detalle'] = $this->modelo->detalle_pedido(null)->result();
+        $data['producto'] = $this->modelo->productos()->result();
+        $data['estado'] = $this->modelo->estados()->result();
+        $this->load->view('administrator/pedido/pedidos', $data);
+    }
+
+    function revisar_pedido()
+    {
+        $this->load->view('catalogo/revisar_pedido');
+    }
+
+    function verificar()
+    {
+        $codigo = $this->input->post('codigo');
+
+        $data['carro'] = $this->modelo->verificar($codigo)->result();
+        $data['detalle'] = $this->modelo->detalle_pedido($codigo)->result();
+        $data['producto'] = $this->modelo->productos()->result();
+        $data['estado'] = $this->modelo->estados()->result();
+
+        $this->load->view('catalogo/resultado', $data);
+    }
+    //valida que los camposs no esten vacios y que no sean menores de 3 caracteres
     function nullcheck($field)
     {
         //compruebo que el tamaño del string sea válido. 
@@ -244,1138 +529,8 @@ class Controller extends CI_controller
         }
         return true;
     }
-    //Save Transaction 
-    // function savesection(){
-    //     $name = $this->input->post('sectionname');
-    //     $description = $this->input->post('description');
 
-    //     $msj_section = array();
-    //     $m = array();
 
-    //     if ($this->c_valide_field($name)) {
-    //         if ($this->modelo->savesection($name,$description)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Save section!</strong>");
-    //             array_push($msj_section, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong>Don't save section!</strong>");
-    //             array_push($msj_section, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Nmae is Empty!</strong>");
-    //             array_push($msj_section, $m);
-    //     }
-    //     echo json_encode($msj_section);
-    // }
-    // function saveteacher(){
-    //     $idnumber = $this->input->post('idnumber');
-    //     $name = $this->input->post('name');
-    //     $lastname = $this->input->post('lastname');
-    //     $username = $this->input->post('username');
-    //     $email = $this->input->post('email');
-    //     $password = $this->input->post('password');
-    //     $passwordconfirm = $this->input->post('passwordconfirm');
-    //     $gender_idgender = $this->input->post('gender');
-    //     $role_idrole = $this->modelo->roleid('Teacher');
-
-    //     $msjteacher = array();
-    //     $m = array();
-    //     $si = 0;
-    //     $no = 0;
-
-    //     if ($this->c_valide_field($idnumber)) {$si+=1;}else{$no+=1;}
-    //     if ($this->c_valide_field($name)) {$si+=1;}else{$no+=1;}
-    //     if ($this->c_valide_field($lastname)) {$si+=1;}else{$no+=1;}
-    //     if ($this->c_valide_field($username)) {$si+=1;}else{$no+=1;}
-    //     if ($this->c_valide_field($password)) {$si+=1;}else{$no+=1;}
-    //     if ($this->c_valide_field($passwordconfirm)) {$si+=1;}else{$no+=1;}
-    //     if ($si === 6) {
-    //         if ($password === $passwordconfirm) {
-    //             if ($this->modelo->saveteacher($idnumber,$name,$lastname,$username,$email,md5($password),$role_idrole,$gender_idgender)) {
-    //                 $m = array('msjs' => "<strong class='black-text'>Save Teacher!</strong>");
-    //                 array_push($msjteacher, $m);
-    //             }else{
-    //                 $m = array('msje' => "<strong class='black-text'>Don't save teacher!</strong>");
-    //                 array_push($msjteacher, $m);
-    //             }
-    //         }else{
-    //             $m = array('msjw' => "<strong class='black-text'>Password confirm is diference to password</strong>");
-    //             array_push($msjteacher, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Some files are empty!</strong>");
-    //             array_push($msjteacher, $m);
-    //     }echo json_encode($msjteacher);}                
-    // function savestudent(){
-    //     //se extrae los datos de la vista 
-    //     $idnumber = $this->input->post('idnumber');
-    //     $name = $this->input->post('name');
-    //     $lastname = $this->input->post('lastname');
-    //     $username = $this->input->post('username');
-    //     $email = $this->input->post('email');
-    //     $password = $this->input->post('password');
-    //     $passwordconfirm = $this->input->post('passwordconfirm');
-    //     $gender_idgender = $this->input->post('gender_idgender');
-    //     $role_idrole = $this->modelo->roleid('Student');
-    //     //declarando
-    //             $msj_load_student = array();
-    //             $m = array();
-    //             $si = 0;
-    //             $no = 0;    
-    //     //si campos son Vacios  
-    //                 if ($this->c_valide_field($idnumber)) {
-    //                         $si += 1;}else{$no += 1;}
-    //                 if ($this->validate_rut($idnumber)) {
-    //                         $si += 1;
-    //                 }else{
-    //                     $m = array('msje' => "<strong class='black-text'>The field rut Incorrect!</strong>");
-    //                     array_push($msj_load_student, $m);
-    //                     $no += 1;
-    //                 }
-    //                 if ($this->modelo->studentexist($idnumber)) {
-    //                     $m = array('msje' => "<strong class='black-text'>The Rut exist in System!</strong>");
-    //                     array_push($msj_load_student, $m);
-    //                      $no += 1;
-    //                 }else{
-    //                      $si += 1;
-    //                 }
-    //                 if ($this->c_valide_field($name)) {
-    //                         $si += 1;}else{$no += 1;}
-    //                 if ($this->c_valide_field($lastname)) {
-    //                         $si += 1;}else{$no += 1;}
-    //                 if ($this->c_valide_field($username)) {
-    //                         $si += 1;}else{$no += 1;}
-    //                 if ($this->c_valide_field($role_idrole)) {
-    //                         $si += 1;}else{$no += 1;}
-    //                 if ($this->c_valide_field($gender_idgender)) {
-    //                         $si += 1;}else{$no += 1;}
-    //                 if($password != $passwordconfirm || $password === "" || $passwordconfirm === ""){
-    //                         $m = array('msje' => "<strong class='black-text'>The pass does not match and not empty</strong>");
-    //                         array_push($msj_load_student, $m);
-    //                         $no += 1;}else{$si += 1;}
-    //         //valida coexion
-    //                         // echo $si;
-    //                         // echo $no;
-    //             if ($si === 7) {
-    //                 $pass = md5($password);
-    //                 if ($this->modelo->savestudent($idnumber,$name,$lastname,$username,$pass,$email,$role_idrole,$gender_idgender)) {
-    //                     $m = array('msjs' => "<strong class='black-text'>Save student!!</strong>");
-    //                     array_push($msj_load_student, $m);
-    //                 }else{
-    //                     $m = array('msje' => "<strong class='black-text'>Error!, Teacher don't save!!</strong>");
-    //                     array_push($msj_load_student, $m);
-    //                 }
-    //             }else{
-    //                 if ($no >= 1) {
-    //                     $m = array('msjw' => "<strong class='black-text'>Some fields are empty or the fields have less than 3 characters!</strong>");
-    //                     array_push($msj_load_student, $m);
-    //                 }
-    //             }
-    //             echo json_encode($msj_load_student);
-    //     }
-
-    // function saveclass(){
-    //     //se extrae los datos de la vista
-    //     $classname = $this->input->post('classname');
-    //     $descriptionclasscenter = $this->input->post('descriptionclasscenter');
-    //     $descriptionclassleft = $this->input->post('descriptionclassleft');
-    //     $descriptionclassright = $this->input->post('descriptionclassright');
-
-    //         //declaracion de variables mensajes y 
-    //         $classmsj = array();
-    //         $m = array();
-    //         $nconfirm = false;
-    //         $si = 0;
-    //         $no = 0;
-    //         //consulta si el nombre de la clase ya existe
-    //         $date = $this->modelo->classname($classname)->result();
-    //             if(empty($date)){
-    //                 $nconfirm = true;
-    //             }else{
-    //                 $nconfirm = false;
-    //             }
-
-    //         //valida campos vacios 
-    //         if ($this->c_valide_field($classname)){
-    //             $si += 1;
-    //         }else{
-    //             $no += 1;
-    //             }
-    //         if ($this->c_valide_field($descriptionclasscenter)){
-    //             $si += 1;
-    //         }else{
-    //             $no += 1;
-    //         }
-
-    //         //valida si existe el nombre
-    //         if ($nconfirm){
-    //             $si += 1;
-    //         }else{
-    //             $m = array('msjw' => "<strong class='black-text'>Class exit in system, please change name!</strong>");
-    //             array_push($classmsj, $m);
-    //             $no += 1;
-    //         }
-
-    //         if($si === 3){
-    //             if($this->modelo->saveclass($classname,$descriptionclasscenter,$descriptionclassleft,$descriptionclassright)){
-    //                 $m = array('msjs' => "<strong class='black-text'>Save class!</strong>");
-    //                 array_push($classmsj, $m);
-    //             }else{
-    //                 $m = array('msje' => "<strong class='black-text'>Error, Don't save the class!</strong>");
-    //                 array_push($classmsj, $m);
-    //             }
-    //         }else{if($no > 1){
-    //             $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-    //             array_push($classmsj, $m);}
-    //         }
-    //         echo json_encode($classmsj);
-    //     }
-    // function saveunity() {
-    //         //se extrae los datos de la vista
-    //         $unityname = $this->input->post('unityname');
-    //         $descriptioncenter = $this->input->post('descriptioncenter');
-    //         $descriptionleft = $this->input->post('descriptionleft');
-    //         $descriptionright = $this->input->post('descriptionright');
-    //         //declaracion de variables mensajes y errores
-    //         $unitymsj = array();
-    //         $m = array();
-    //         $si = 0;
-    //         $no = 0;
-    //         //consulta si el nombre de la unidad ya existe
-    //         if ($this->modelo->existunity($unityname)== true) {
-    //             $si += 1;
-    //         } else {
-    //             $m = array('msjs' => "<strong class='black-text'>Unity Name Exist!</strong>");
-    //             array_push($unitymsj, $m);
-    //             $no += 1;
-    //         }
-    //         //valida campos vacios 
-    //         if ($this->c_valide_field($unityname)== true) {
-    //             $si += 1;
-    //         } else {
-    //             $no += 1;
-    //         }
-    //         if($si === 2){
-    //             if($this->modelo->saveunity($unityname,$descriptioncenter,$descriptionleft,$descriptionright)){
-    //                 $m = array('msjs' => "<strong class='black-text'>Save unity!</strong>");
-    //                 array_push($unitymsj, $m);
-    //             }else{
-    //                 $m = array('msje' => "<strong class='black-text'>Error, Don't save the unity!</strong>");
-    //                 array_push($unitymsj, $m);
-    //             }
-    //         }else{if($no > 0){
-    //             $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-    //             array_push($unitymsj, $m);}
-    //         }
-    //         echo json_encode($unitymsj);}
-    // function saveactivity(){
-    //     $activityname = $this->input->post('activityname');
-    //     $descriptionleft = $this->input->post('descriptionleft');
-    //     $descriptionright = $this->input->post('descriptionright');
-
-    //     $msjactivity = array();
-    //     $m = array();
-    //     $si = 0;
-    //     $no = 0;
-
-    //     if ($this->c_valide_field($activityname)) {
-    //         if ($this->modelo->saveactivity($activityname,$descriptionleft,$descriptionright)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Save activity!</strong>");
-    //             array_push($msjactivity, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't save activity!</strong>");
-    //             array_push($msjactivity, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Field name are empty!</strong>");
-    //             array_push($msjactivity, $m);
-    //     }
-    //     echo json_encode($msjactivity);}
-    // function savequestion(){
-    //     $questionname = $this->input->post('questionname');
-    //     $description = $this->input->post('description');
-    //     $idquestiontype = $this->input->post('idquestiontype');
-
-    //     $msjquestion = array();
-    //     $m = array();
-
-    //     if($this->c_valide_field($questionname)) {
-    //         if($this->modelo->savequestion($questionname,$description,$idquestiontype)){
-    //             $m = array('msjs' => "<strong class='black-text'>Save question!</strong>");
-    //         array_push($msjquestion, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't save question! Error Database!</strong>");
-    //         array_push($msjquestion, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Question are empty!</strong>");
-    //         array_push($msjquestion, $m);
-    //     }
-    //     echo json_encode($msjquestion);}
-    // function saveanswer(){
-    //     $answerename = $this->input->post('answerename');
-    //     $description = $this->input->post('description');
-    //     $value_idvalue = $this->input->post('value_idvalue');
-    //     $question_idquestion = $this->input->post('question_idquestion');
-
-    //     $msjanswer = array();
-    //     $m = array();
-
-    //     if($this->c_valide_field($answerename)){
-    //         if($this->modelo->saveanswer($answerename,$description,$value_idvalue,$question_idquestion)){
-    //             $m = array('msjs' => "<strong class='black-text'>Answere Save!</strong>");
-    //         array_push($msjanswer, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Answere Don't Save!</strong>");
-    //         array_push($msjanswer, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Answere are empty!</strong>");
-    //         array_push($msjanswer, $m);
-    //     }
-    //     echo json_encode($msjanswer);}
-    // function saveword(){
-    //     $wordname = $this->input->post('wordname');
-    //     $description = $this->input->post('description');
-    //     $aditionaldescription = $this->input->post('aditionaldescription');
-
-    //     $msjword = array();
-    //     $m = array();
-    //     $si = 0;
-    //     $no = 0;
-
-    //     if ($this->c_valide_field($wordname) == true){$si += 1;}else{$no += 1;}
-    //     if ($this->c_valide_field($description) == true){$si += 1;}else{$no += 1;}
-
-    //     if($si == 2){
-    //         if($this->modelo->saveword($wordname,$description,$aditionaldescription) == true){
-    //             $m = array('msjs' => "<strong class='black-text'>Save word!</strong>");
-    //             array_push($msjword, $m);
-    //         }else{
-    //             $m = array('msjw' => "<strong class='black-text'>Dont save word!</strong>");
-    //             array_push($msjword, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-    //         array_push($msjword, $m);
-    //     }
-    //     echo json_encode($msjword);}
-    //Update Transaction
-    // function updateclass(){
-    //     //se extrae los datos de la vista
-    //     $idclass = $this->input->post('idclassedit');
-    //     $classname = $this->input->post('classnameedit');
-    //     $descriptioncenter = $this->input->post('classdescriptioncenteredit');
-    //     $descriptionleft = $this->input->post('classdescriptionleftedit');
-    //     $descriptionright = $this->input->post('classdescriptionrightedit');
-    //         //declaracion de variables mensajes y 
-    //         $classmsj = array();
-    //         $m = array();
-    //         $si = 0;
-    //         $no = 0;
-    //         //valida campos vacios 
-    //             if ($this->c_valide_field($classname)){$si += 1;}else{
-    //                 $no += 1;
-    //                 $m = array('msjw' => "<strong class='black-text'>Class name is empy!</strong>");
-    //                     array_push($classmsj, $m);
-    //             }
-    //             if ($this->c_valide_field($descriptioncenter)){$si += 1;}else{
-    //                 $no += 1;
-    //                 $m = array('msjw' => "<strong class='black-text'>Description Center is empy!</strong>");
-    //                     array_push($classmsj, $m);
-    //             }
-    //                 if($si === 2){
-    //                     if($this->modelo->updateclass($idclass,$classname,$descriptioncenter,$descriptionleft,$descriptionright) == true){
-    //                         $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //                         array_push($classmsj, $m);
-    //                     }else{
-    //                         $m = array('msje' => "<strong class='black-text'>Error, Don't save the class!</strong>");
-    //                         array_push($classmsj, $m);
-    //                     }
-    //                 }else{
-    //                     $m = array('msjw' => "<strong class='black-text'>!</strong>");
-    //                     array_push($classmsj, $m);
-    //                 }
-    //         echo json_encode($classmsj);}
-    // function updateword(){
-    //     $idglosary = $this->input->post('idglosary');
-    //     $wordname = $this->input->post('wordname');
-    //     $description = $this->input->post('description');
-    //     $aditionaldescription = $this->input->post('aditionaldescription');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     $si = 0;
-    //     $no = 0;
-
-    //     if ($this->c_valide_field($wordname)) {$si+=1;}else{
-    //         $no += 1;
-    //         $m = array('msjw' => "<strong class='black-text'>Word Name is empy!</strong>");
-    //         array_push($msj, $m);}
-    //     if ($this->c_valide_field($description)) {$si+=1;}else{
-    //         $no += 1;
-    //         $m = array('msjw' => "<strong class='black-text'>Description is empy!</strong>");
-    //         array_push($msj, $m);}
-    //     if ($si === 2) {
-    //         if ($this->modelo->updateword($idglosary,$wordname,$description,$aditionaldescription)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //             array_push($msj, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Error, Don't save changes!</strong>");
-    //             array_push($classmsj, $m);
-    //         }
-    //     }
-    //     echo json_encode($msj);
-    // }
-    // function updatesection(){
-    //     $idsection = $this->input->post('idsection');
-    //     $sectionname = $this->input->post('sectionname');
-    //     $description = $this->input->post('description');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->c_valide_field($sectionname)) {
-    //         if ($this->modelo->updatesection($idsection,$sectionname,$description)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Update Section!</strong>");
-    //             array_push($msj, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't save changes!</strong>");
-    //             array_push($msj, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Section name is empty!</strong>");
-    //         array_push($msj, $m);}
-    //     echo json_encode($msj);}
-    //     function updateunit(){
-    //           //se extrae los datos de la vista
-    //         $idunity = $this->input->post('idunity');
-    //         $unityname = $this->input->post('unityname');
-    //         $descriptioncenter = $this->input->post('descriptioncenter');
-    //         $descriptionleft = $this->input->post('descriptionleft');
-    //         $descriptionright = $this->input->post('descriptionright');
-    //         //declaracion de variables mensajes y errores
-    //         $unitmsj = array();
-    //         $m = array();
-
-    //         if ($this->c_valide_field($unityname) === true) {
-    //             if($this->modelo->updateunit($idunity,$unityname,$descriptioncenter,$descriptionleft,$descriptionright)){
-    //                 $m = array('msjs' => "<strong class='black-text'>Save unity!</strong>");
-    //                 array_push($unitmsj, $m);
-    //             }else{
-    //                 $m = array('msje' => "<strong class='black-text'>Error, Don't save the unity!</strong>");
-    //                 array_push($unitmsj, $m);
-    //             }
-    //         }else{if($no > 0){
-    //             $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-    //             array_push($unitmsj, $m);}
-    //         }
-    //         echo json_encode($unitmsj);
-    //     } 
-    //     function updateunity(){
-    //     //se extrae los datos de la vista
-    //         $idunity = $this->load->post('idunity');
-    //         $unityname = $this->input->post('unityname');
-    //         $descriptioncenter = $this->input->post('descriptioncenter');
-    //         $descriptionleft = $this->input->post('descriptionleft');
-    //         $descriptionright = $this->input->post('descriptionright');
-    //         $class_idclass = $this->input->post('class_idclass');
-    //         $class_teacher_idteacher = $this->session->userdata('idteacher');
-    //         //declaracion de variables mensajes y errores
-    //         $unityupdatemsj = array();
-    //         $m = array();
-    //         $si = 0;
-    //         $no = 0;
-    //         //valida campos vacios 
-    //         if ($this->c_valide_field($unityname)== true) {
-    //             $si += 1;
-    //         } else {
-    //             $no += 1;
-    //         }
-    //         if($si === 1){
-    //             if($this->modelo->updateunity($idunity,$unityname,$descriptioncenter,$descriptionleft,$descriptionright,$class_idclass,$class_teacher_idteacher)){
-    //                 $m = array('msjs' => "<strong class='black-text'>Save unity!</strong>");
-    //                 array_push($unityupdatemsj, $m);
-    //             }else{
-    //                 $m = array('msje' => "<strong class='black-text'>Error, Don't save the unity!</strong>");
-    //                 array_push($unityupdatemsj, $m);
-    //             }
-    //         }else{if($no > 0){
-    //             $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-    //             array_push($unityupdatemsj, $m);}
-    //         }
-    //         echo json_encode($unityupdatemsj);}
-    // function updateactivity(){
-    //     $idactivity = $this->input->post('idactivity');
-    //     $activityname = $this->input->post('activityname');
-    //     $descriptionleft = $this->input->post('descriptionleft');
-    //     $descriptionright = $this->input->post('descriptionright');
-
-    //     $msjactivityupdate = array();
-    //     $m = array();
-
-    //     if ($this->c_valide_field($activityname)){
-    //         if ($this->modelo->updateactivity($idactivity,$activityname,$descriptionleft,$descriptionright)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Save activity!</strong>");
-    //             array_push($msjactivityupdate, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't save activity!</strong>");
-    //             array_push($msjactivityupdate, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Field name are empty!</strong>");
-    //             array_push($msjactivityupdate, $m);
-    //     }
-    //     echo json_encode($msjactivityupdate);}
-    // function updatestudent(){
-    //     $idstudent = $this->input->post('idstudent');
-    //     $idnumber = $this->input->post('idnumber');
-    //     $name = $this->input->post('name');
-    //     $lastname = $this->input->post('lastname');
-    //     $username = $this->input->post('username');
-    //     $email = $this->input->post('email');
-    //     $gender_idgender = $this->input->post('gender_idgender');
-    //     //declaracion de variables mensajes
-    //     $msjsupdatestudent = array();
-    //     $m = array();
-    //     $si = 0;
-    //     $no = 0;
-
-    //     if ($this->c_valide_field($idnumber)){$si += 1;}else{$no += 1;}
-    //     if ($this->c_valide_field($name)){$si += 1;}else{$no += 1;}
-    //     if ($this->c_valide_field($lastname)){$si += 1;}else{$no += 1;}
-    //     if ($this->c_valide_field($username)){$si += 1;}else{$no += 1;}
-    //     if ($this->c_valide_field($email)){$si += 1;}else{$no += 1;}
-
-    //     if($si === 5){
-    //         if($this->modelo->updatestudent($idstudent,$idnumber,$name,$lastname,$username,$email,$gender_idgender)){
-    //             $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //             array_push($msjsupdatestudent, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Error, Don't save the changes!</strong>");
-    //             array_push($msjsupdatestudent, $m);
-    //         }
-    //     }else{
-    //         if($no > 1){
-    //         $m = array('msjw' => "<strong class='black-text'>Some field are empy!</strong>");
-    //         array_push($msjsupdatestudent, $m);
-    //         }
-    //     }
-    //     echo json_encode($msjsupdatestudent);}
-    // function studentsaveclass(){
-    //     $idclass = $this->input->post('idclass');
-    //     $idstudent = $this->input->post('idstudent');
-    //     $idteacher = $this->session->userdata('idteacher');
-
-    //     $msjsstudenclass= array();
-    //     $m = array();
-    //         if ($this->modelo->studentsaveclass($idclass,$idstudent,$idteacher)){
-    //             $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //             array_push($msjsstudenclass, $m);
-    //         }else{
-    //             $m = array('msjw' => "<strong class='black-text'>No es posible Realizar los cambios, el alumno ya pertenece a la clase!</strong>");
-    //             array_push($msjsstudenclass, $m);
-    //         }
-    //     echo json_encode($msjsstudenclass);
-    // }
-    // function unitysavesection(){
-    //     $unity_idunity = $this->input->post('unity_idunity');
-    //     $section_idsection = $this->input->post('section_idsection');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->unitysavesection($unity_idunity,$section_idsection)) {
-    //         $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //         array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>No es posible Realizar los cambios, la unidad ya pertenece a la seccion!</strong>");
-    //         array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // function activitysaveunity(){
-    //     $unity_idunity = $this->input->post('unity_idunity');
-    //     $activity_idactivity = $this->input->post('activity_idactivity');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->activitysaveunity($unity_idunity, $activity_idactivity)) {
-    //         $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //         array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>No es posible Realizar los cambios, la actividad ya pertenece a la unidad!</strong>");
-    //         array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // function materialhasclass(){
-    //     $class_idclass = $this->input->post('class_idclass');
-    //     $material_idmaterial = $this->input->post('material_idmaterial');
-    //     $material_materialtype_idmaterialtype = $this->input->post('material_materialtype_idmaterialtype');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->materialhasclass($class_idclass, $material_idmaterial,$material_materialtype_idmaterialtype)) {
-    //         $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //         array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>No es posible Realizar los cambios, el material ya pertenece a la Clase!</strong>");
-    //         array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);
-    // }
-
-    // function sectionhasclass(){
-    //     $idclass = $this->input->post('idclass');
-    //     $idsection = $this->input->post('idsection');
-
-    //     $msjsectionhasclass = array();
-    //     $m = array();
-
-    //     if ($this->modelo->sectionhasclass($idclass,$idsection)) {
-    //         $m = array('msjs' => "<strong class='black-text'>Save changes!</strong>");
-    //         array_push($msjsectionhasclass, $m);
-    //     }else{
-    //         $m = array('msjs' => "<strong class='black-text'>No es posible Realizar los cambios, la sección ya pertenece a la clase!</strong>");
-    //         array_push($msjsectionhasclass, $m);
-    //     }
-    //     echo json_encode($msjsectionhasclass);
-    // }
-    // function teachersavesection(){
-    //     $teacher_idteacher = $this->input->post('teacher_idteacher');
-    //     $teacher_role_idrole = $this->input->post('teacher_role_idrole');
-    //     $teacher_gender_idgender = $this->input->post('teacher_gender_idgender');
-    //     $section_idsection = $this->input->post('section_idsection');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->teachersavesection($teacher_idteacher,$teacher_role_idrole,$teacher_gender_idgender,$section_idsection)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Save relation!</strong>");
-    //             array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjs' => "<strong class='black-text'>No es posible Realizar los cambios, la sección ya pertenece a la clase!</strong>");
-    //         array_push($msjs, $m);   
-    //     }
-    //     echo json_encode($msj);
-    // }
-    // function studentsavesection(){
-    //     $student_idstudent = $this->input->post('student_idstudent');
-    //     $student_role_idrole = $this->input->post('student_role_idrole');
-    //     $student_gender_idgender = $this->input->post('student_gender_idgender');
-    //     $section_idsection = $this->input->post('section_idsection');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->studentsavesection($student_idstudent,$student_role_idrole,$student_gender_idgender,$section_idsection)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Save relation!</strong>");
-    //             array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjs' => "<strong class='black-text'>No es posible Realizar los cambios, la sección ya pertenece a la section!</strong>");
-    //         array_push($msjs, $m);   
-    //     }
-    //     echo json_encode($msj);
-    // }
-
-
-    // function saveyoutubelink(){
-    //     $materialname = $this->input->post('materialname');
-    //     $descriptionleft = $this->input->post('descriptionleft');
-    //     $descriptionright = $this->input->post('descriptionright');
-    //     $link = $this->input->post('link');
-    //     $idmaterialtype = 4;
-
-    //     $this->modelo->saveyoutubelink($materialname, $descriptionleft,$descriptionright,$link,$idmaterialtype);}
-
-    // function materialsaveactivity(){
-    //     $idmaterial = $this->input->post('idmaterial');
-    //     $materialidtype = $this->modelo->materialtyṕe($idmaterial);
-    //     $idactivity = $this->input->post('idactivity');
-    //     $idunity = $this->modelo->activityunity($idactivity);
-    //     $idclass = $this->modelo->unityclass($idunity);
-    //     $idteacher = $this->session->userdata('idteacher');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->materialsaveactivity($idmaterial,$materialidtype,$idactivity,$idunity,$idclass,$idteacher)) {
-    //         $m = array('msjs' => "<strong class='black-text'>Save Material in Activity</strong>");
-    //         array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Don't Save Material in Activity, Material exist</strong>");
-    //         array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    //Delete Transaction
-    // function deleteteacher(){
-    //     $idteacher = $this->input->post('idteacher');
-    //     $role_idrole = 2;
-    //     $gender_idgender = $this->input->post('gender_idgender');
-    //     $password = md5($this->input->post('password'));
-
-    //     $msjdelete = array();
-    //     $m = array();
-
-    //     if ($password == $this->session->userdata('password')) {
-    //         if ($this->modelo->deleteteacher($idteacher, $role_idrole, $gender_idgender)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Delete teacher</strong>");
-    //             array_push($msjdelete, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete teacher, Error Database!</strong>");
-    //             array_push($msjdelete, $m);
-    //         }
-    //     }else{
-    //         $m = array('msje' => "<strong class='black-text'>Password incorrect! don't delete teacher</strong>");
-    //         array_push($msjdelete, $m);
-    //     }
-    //     echo json_encode($msjdelete);}
-    // function deleteclass(){
-    //     $idclass = $this->input->post('idclass');
-    //     $password = md5($this->input->post('password'));
-    //     $user = $this->session->userdata('username');
-
-    //     $msjdeleteclass = array();
-    //     $m = array();
-
-    //     if ($this->modelo->confirm_delete($user,$password)) {
-    //         if($this->modelo->deleteclass($idclass)){
-    //             $m = array('msjs' => "<strong class='black-text'>Delete Class!</strong>");
-    //             array_push($msjdeleteclass, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete Class, section depend of this class!</strong>");
-    //             array_push($msjdeleteclass, $m);
-    //         }
-    //     }else{
-    //         $m = array('msje' => "<strong class='black-text'>Don't delete Class, Error!; Pass is Incorrect!</strong>");
-    //             array_push($msjdeleteclass, $m);
-    //     }
-    //     echo json_encode($msjdeleteclass);}
-    // function deletesection(){
-    //     $idsection = $this->input->post('idsection');
-    //     $password = md5($this->input->post('password'));
-    //     $user = $this->session->userdata('username');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->confirm_delete($user,$password)) {
-    //         if ($this->modelo->deletesection($idsection)) {
-    //             $m = array('msjs' => "<strong class='black-text'>Delete Section!</strong>");
-    //             array_push($msj, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete section, section is asociated of class or contain teacher and students asignament!</strong>");
-    //             array_push($msj, $m);
-    //         }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Don't delete Section, Error!; Pass is Incorrect!</strong>");
-    //             array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // function deleteactivity(){
-    //     $idactivity = $this->input->post('idactivity');
-    //     $user = $this->session->userdata('username');
-    //     $password = md5($this->input->post('password'));
-
-    //     $msjdeleteactivity = array();
-    //     $m = array();
-
-    //     if ($this->modelo->confirm_delete($user,$password)) {
-    //          if ($this->modelo->deleteactivity($idactivity)) {
-    //              $m = array('msjs' => "<strong class='black-text'>Delete activity!</strong>");
-    //             array_push($msjdeleteactivity, $m);
-    //          }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete activity! because activity content a question</strong>");
-    //             array_push($msjdeleteactivity, $m);
-    //          }
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Password is incorrect!</strong>");
-    //             array_push($msjdeleteactivity, $m);
-    //     }
-    //     echo json_encode($msjdeleteactivity); }
-    // function deleteunity(){
-    //     $idunity = $this->input->post('idunity');
-    //     $password = md5($this->input->post('password'));
-    //     $user = $this->session->userdata('username');
-
-    //     $msjdeleteunity = array();
-    //     $m = array();
-
-    //     if ($this->modelo->confirm_delete($user,$password)) {
-    //         if($this->modelo->deleteunity($idunity)){
-    //             $m = array('msjs' => "<strong class='black-text'>Delete unity!</strong>");
-    //             array_push($msjdeleteunity, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete unity, activity depend of this class!</strong>");
-    //             array_push($msjdeleteunity, $m);
-    //         }
-    //     }else{
-    //         $m = array('msje' => "<strong class='black-text'>Don't delete unity, Error! Pass is Incorrect!</strong>");
-    //             array_push($msjdeleteunity, $m);
-    //     }
-    //     echo json_encode($msjdeleteunity);}
-    // function deleteStudent(){
-    //     $idstudent = $this->input->post('idstudent');
-    //     $password = md5($this->input->post('password'));
-    //     $user = $this->session->userdata('username');
-
-    //     $msjdeletestudent = array();
-    //     $m = array();
-
-    //     if ($this->modelo->confirm_delete($user,$password)) {
-    //         if($this->modelo->deleteStudent($idstudent)){
-    //             $m = array('msjs' => "<strong class='black-text'>Delete Student!</strong>");
-    //             array_push($msjdeletestudent, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete student!</strong>");
-    //             array_push($msjdeletestudent, $m);
-    //         }
-    //     }else{
-    //         $m = array('msje' => "<strong class='black-text'>Don't delete student, Error! Pass is Incorrect!</strong>");
-    //             array_push($msjdeletestudent, $m);
-    //     }
-    //     echo json_encode($msjdeletestudent);}
-    // function deleteword(){
-    //     $idglosary = $this->input->post('idglosary');
-    //     $password = md5($this->input->post('password'));
-    //     $user = $this->session->userdata('username');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if ($this->modelo->confirm_delete($user,$password)) {
-    //         if ($this->modelo->deleteword($idglosary)) {
-    //            $m = array('msjs' => "<strong class='black-text'>Delete Word!</strong>");
-    //             array_push($msj, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>Don't delete word!</strong>");
-    //             array_push($msj, $m);
-    //         }
-    //     }else{
-    //         $m = array('msje' => "<strong class='black-text'>Don't delete student, Error! Pass is Incorrect!</strong>");
-    //             array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // function deleterelstudentsection(){
-    //     $student_idstudent = $this->input->post('student_idstudent');
-    //     $section_idsection = $this->input->post('section_idsection');
-
-    //     $msjsstudent= array();
-    //     $m = array();
-
-    //     if ($this->modelo->deleterelstudentsection($student_idstudent,$section_idsection )){
-    //             $m = array('msjs' => "<strong class='black-text'>delete relations!</strong>");
-    //             array_push($msjsstudent, $m);
-    //         }else{
-    //             $m = array('msje' => "<strong class='black-text'>No es posible Realizar los cambios existe una unidad asociada a la seccion.</strong>");
-    //             array_push($msjsstudent, $m);
-    //         }
-    //     echo json_encode($msjsstudent);}
-    // function deleterelsectionclass(){
-    //     $section_idsection = $this->input->post('section_idsection');
-    //     $class_idclass = $this->input->post('class_idclass');
-
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if($this->modelo->deleterelsectionclass($section_idsection,$class_idclass)){
-    //         $m = array('msje' => "<strong class='black-text'>Delete Relation!</strong>");
-    //             array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Don't delete section content a teacher or student asignament</strong>");
-    //             array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // function deleterelactivityunity(){
-    //     $activity_idactivity = $this->input->post('activity_idactivity');
-    //     $unity_idunity = $this->input->post('unity_idunity');
-
-    //     $msj = array();
-    //     $m = array();
-
-    //     if($this->modelo->deleterelactivityunity($activity_idactivity,$unity_idunity)){
-    //         $m = array('msje' => "<strong class='black-text'>Delete Relation!</strong>");
-    //             array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjw' => "<strong class='black-text'>Don't delete activity content a question asignament</strong>");
-    //             array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);
-    // }
-    // function deletereltechersection(){
-    //     $section_idsection = $this->input->post('section_idsection');
-    //     $teacher_idteacher = $this->input->post('teacher_idteacher');
-
-    //     $msj = array();
-    //     $m = array();
-    //     if ($this->modelo->deletereltechersection($section_idsection, $teacher_idteacher)) {
-    //         $m = array('msjs' => "<strong class='black-text'> Delete relation!</strong>");
-    //         array_push($msj, $m);
-    //     }else{
-    //         $m = array('msje' => "<strong class='black-text'>Don't delete relation, exist estudent in this section!</strong>");
-    //         array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // function deleterelunitysection(){
-    //     $section_idsection = $this->input->post('section_idsection');
-    //     $unity_idunity = $this->input->post('unity_idunity');
-
-    //     $msj = array();
-    //     $m = array();
-    //     if ($this->modelo->deleterelunitysection($section_idsection, $unity_idunity)) {
-    //         $m = array('msjs' => "<strong class='black-text'> Delete relation!</strong>");
-    //         array_push($msj, $m);
-    //     }else{
-    //         $m = array('msjs' => "<strong class='black-text'>Don't delete relation, exist activity in this unity!</strong>");
-    //         array_push($msj, $m);
-    //     }
-    //     echo json_encode($msj);}
-    // //Files Transaction
-    //     public function upload_video(){
-    //             $config['file_name'] =  $this->input->post('archivename');
-    //             $config['upload_path']          = './media';
-    //             $config['allowed_types']        = '*';
-    //             $config['max_size']             = 10000000000;
-
-    //             $this->load->library('upload', $config);
-
-    //             if ( ! $this->upload->do_upload('userfile')){
-    //                 //no se a seleccionado archivo de video
-    //             }else{
-    //                 if($this->upload->data('file_name') != ""){
-    //                     $name = $this->upload->data('file_name');
-    //                     $type = $this->input->post('selectmaterialtype');
-    //                     $this->modelo->savevideo($name,$type);
-    //                     $data = array('upload_data' => $this->upload->data());
-    //                     $msjsavevideo= "<strong class='black-text'>save video!</strong>";
-    //                     echo json_encode(array('msjs' => $msjsavevideo));
-    //                     redirect($this->load->view('teacher/home-teacher'));
-    //                 } else{
-    //                     //no se a asignado nombre al archivo de video
-    //                 }
-    //             }}
-    // //---------Select List Transaction---------
-    //     function teacherlist(){
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['teacher_has_section'] = $this->modelo->teacher_has_section()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-    //         $list['teacher'] = $this->modelo->teacherlist()->result();
-    //         $list['gender'] = $this->modelo->genderlist()->result();
-    //         $this->load->view('administrator/class/teacherlist',$list);}
-    //     function studentlist(){
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['student_has_section'] = $this->modelo->studenthassection()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-    //         $list['student'] = $this->modelo->studentlist()->result();
-    //         $list['role'] = $this->modelo->rolelist()->result();
-    //         $list['gender'] = $this->modelo->genderlist()->result();
-
-    //         $idrole = $this->session->userdata('role_idrole');
-    //         $role = $this->modelo->role($idrole);
-
-    //         switch($role){
-    //                 case 'Administrator':
-    //                     $this->load->view('administrator/class/studentlist',$list);
-    //                 break;
-    //                 case 'Coordinador':
-    //                     $this->load->view('teacher/class/studentlist',$list);
-    //                 break;
-    //                 case 'Teacher':
-    //                     $this->load->view('teacher/class/studentlist',$list);
-    //                 break;
-    //             }}
-    //     function classlist(){
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['name'] = $this->session->userdata('name');
-    //         $list['lastname'] = $this->session->userdata('lastname');
-    //         $list['email'] = $this->session->userdata('email');
-    //         $list['idteacher'] = $this->session->userdata('idteacher');
-
-    //         $idrole = $this->session->userdata('role_idrole');
-    //         $role = $this->modelo->role($idrole);
-
-    //         switch($role){
-    //                 case 'Administrator':
-    //                     $this->load->view('teacher/class/classlist',$list);
-    //                 break;
-    //                 case 'Coordinador':
-    //                     $this->load->view('teacher/class/classlist',$list);
-    //                 break;
-    //                 case 'Teacher':
-    //                     $this->load->view('teacher/class/classlist',$list);
-    //                 break;
-    //             }}
-    //     function sectionlist(){
-    //         $list['class'] = $this->modelo->classlist()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $this->load->view('administrator/class/sectionlist',$list);}
-    //     function unitylist(){
-    //         $list['unity'] = $this->modelo->unitylist()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['unity_has_section'] = $this->modelo->unity_has_section()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-
-
-    //         $idrole = $this->session->userdata('role_idrole');
-    //         $role = $this->modelo->role($idrole);
-
-    //         switch($role){
-    //                 case 'Administrator':
-    //                     $this->load->view('teacher/unity/unitylist',$list);
-    //                 break;
-    //                 case 'Coordinador':
-    //                     $this->load->view('teacher/class/classlist',$list);
-    //                 break;
-    //                 case 'Teacher':
-    //                     $this->load->view('teacher/class/classlist',$list);
-    //                 break;
-    //             }
-
-    //         }
-    //     function materiallist(){
-    //         $list['material'] = $this->modelo->materiallist()->result();
-    //         $list['materialtype'] = $this->modelo->materialtypelist()->result();
-    //         $list['unity'] = $this->modelo->unitylist()->result();
-    //         $list['unity_has_section'] = $this->modelo->unity_has_section()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-    //         $list['material_has_class'] = $this->modelo->material_has_class()->result();
-
-    //         $this->load->view('teacher/material/materiallist',$list);}
-    //     function activitylist(){
-    //         $list['activity'] = $this->modelo->activitylist()->result();
-    //         $list['activity_has_unity'] = $this->modelo->activity_has_unity()->result();
-    //         $list['unity'] = $this->modelo->unitylist()->result();
-    //         $list['unity_has_section'] = $this->modelo->unity_has_section()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-
-
-    //         $idrole = $this->session->userdata('role_idrole');
-    //         $role = $this->modelo->role($idrole);
-
-    //         switch($role){
-    //                 case 'Administrator':
-    //                     $this->load->view('teacher/activity/activitylist',$list);
-    //                 break;
-    //                 case 'Coordinador':
-    //                     $this->load->view('teacher/activity/activitylist',$list);
-    //                 break;
-    //                 case 'Teacher':
-    //                     $this->load->view('teacher/activity/activitylist',$list);
-    //                 break;
-    //             }}
-    //     function examlist(){
-    //         $list['exam'] = $this->modelo->examlist()->result();
-    //         $list['exam_has_unity'] = $this->modelo->exam_has_unity()->result();
-    //         $list['unity'] = $this->modelo->unitylist()->result();
-    //         $list['unity_has_section'] = $this->modelo->unity_has_section()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-
-
-    //         $idrole = $this->session->userdata('role_idrole');
-    //         $role = $this->modelo->role($idrole);
-
-    //         switch($role){
-    //                 case 'Administrator':
-    //                     $this->load->view('teacher/activity/examlist',$list);
-    //                 break;
-    //                 case 'Coordinador':
-    //                     $this->load->view('teacher/activity/examlist',$list);
-    //                 break;
-    //                 case 'Teacher':
-    //                     $this->load->view('teacher/activity/examlist',$list);
-    //                 break;
-    //             }}
-    //     function questionlist(){
-    //         $list['question'] = $this->modelo->questionlist()->result();
-    //         $list['questiontype'] = $this->modelo->questiontype()->result();
-    //         $list['question_has_activity'] = $this->modelo->question_has_activity()->result();
-    //         $list['activity'] = $this->modelo->activitylist()->result();
-    //         $list['activity_has_unity'] = $this->modelo->activity_has_unity()->result();
-    //         $list['unity'] = $this->modelo->unitylist()->result();
-    //         $list['unity_has_section'] = $this->modelo->unity_has_section()->result();
-    //         $list['section'] = $this->modelo->sectionlist()->result();
-    //         $list['section_has_class'] = $this->modelo->section_has_class()->result();
-    //         $list['class'] = $this->modelo->classlist()->result();
-
-    //         $list['question_has_exam'] = $this->modelo->question_has_exam()->result();
-    //         $list['exam'] = $this->modelo->examlist()->result();
-    //         $list['answer'] = $this->modelo->answerlist()->result();
-    //         $list['value'] = $this->modelo->valuelist()->result();
-
-
-    //         $idrole = $this->session->userdata('role_idrole');
-    //         $role = $this->modelo->role($idrole);
-
-    //         switch($role){
-    //                 case 'Administrator':
-    //                     $this->load->view('teacher/activity/questionlist',$list);
-    //                 break;
-    //                 case 'Coordinador':
-    //                     $this->load->view('teacher/activity/questionlist',$list);
-    //                 break;
-    //                 case 'Teacher':
-    //                    $this->load->view('teacher/activity/questionlist',$list);
-    //                 break;
-    //             }}
-    //     function glosarylist(){
-    //         $list['glosary'] = $this->modelo->glosarylist()->result();
-    //         $this->load->view('teacher/glosary/glosarylist',$list);}
-    //     function progresslist(){$this->load->view('teacher/progress/progresslist');}
-    // //---------Load Page Web---------
-    //     function load_teacher(){$list = $this->modelo->user_list_teacher(); echo json_encode($list);}
-    //     function load_student(){$list = $this->modelo->user_list_student(); echo json_encode($list);}
-    //     function student_load_menu(){$this->load->view('teacher/class/menu-students');}
-    //     function learning_load(){$this->load->view('teacher/class/menu-learning');}
-    //     function newclass(){$this->load->view('teacher/class/newclass');}
-    // //-------------------------------------------------------------------------------------------------------------
-
-    // //-----------------------------Student---------------------------------------------------------------------
-    //         function unity_activities(){
-
-    //         $idunity = $this->input->post('idunity');
-    //         $idteacher = $this->modelo->teacherbyidunity($idunity);
-    //         $data['material_has_activity'] = $this->modelo->unity_activities($idunity)->result();
-    //         $data['activity'] = $this->modelo->activitybyunity($idunity)->result();
-    //         $data['material'] = $this->modelo->materiallist()->result();
-    //         $data['question'] = $this->modelo->questionlist($idteacher)->result();
-    //         $data['answer'] = $this->modelo->answerlist()->result();
-    //         $data['teacher'] = $this->modelo->teacherlist()->result();
-
-    //         $this->load->view('student/activity',$data);
-    //     }
-    //---------------------------------------------------------------------------------------------------------
-
-    //-------------------------validaciones-----------------------------
-    //valida que los camposs no esten vacios y que no sean menores de 3 caracteres
-    function c_valide_field($field)
-    {
-        //compruebo que el tamaño del string sea válido. 
-        if (strlen($field) < 3 || strlen($field) > 200) {
-            return false;
-        }
-        //comprueba que los caracteres sean los permitidos 
-        $permitidos = "áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ0123456789-_ @.,:;'¿?#";
-        for ($i = 0; $i < strlen($field); $i++) {
-            if (strpos($permitidos, substr($field, $i, 1)) === false) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     /**
      * Comprueba si el rut ingresado es valido
