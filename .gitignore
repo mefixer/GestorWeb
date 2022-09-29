@@ -27,3 +27,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
+*.php
+*.php
+application/views/administrator/home-administrator.php
+application/views/administrator/solicitud/solicitudadd.php
+application/views/login.php
