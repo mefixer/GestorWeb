@@ -1,0 +1,65 @@
+.tienda{
+  background-color: #D97D48 !important; 
+  color: white;
+}
+.tienda :hover{
+  background-color: #F786C7 !important;
+}
+.cover{
+  padding-left: 15rem !important;
+}
+.inicio{
+  background-color: #faf8f5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.carrucel{
+  position: absolute !important;
+  display: flow-root !important;
+  background-size: cover !important;
+  z-index: -1 !important;
+}
+.galeria{
+  padding-top: 100vh !important;
+  padding-bottom: 10vh !important;
+}
+.nav{
+  position: initial !important;
+  display: flex !important;
+}
+.nav ul li {
+  list-style-type: none !important;
+  display: inline-flex !important;
+  transition: 0.7s all !important;
+  text-transform: uppercase !important;
+  padding-left: 10vh !important;
+}
+
+.header ul {
+  text-align: center !important;
+}
+
+.header ul li {
+  list-style: none  !important;
+  display: inline-block !important;
+}
+
+.nav_a {
+  display: flexbox !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  color: #424242 !important;
+  font-size: 14px !important;
+  font-family: 'Raleway', sans-serif !important;
+  letter-spacing: 7px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+.nav_a ::after{
+  display: flexbox !important;
+  color: #732002 !important;
+  font-size: 16px !important;
+  font-family: 'Raleway', sans-serif !important;
+  letter-spacing: 2px !important;
+  font-weight: 600 !important;
+}

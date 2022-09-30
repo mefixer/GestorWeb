@@ -1,81 +1,122 @@
 /* global base_url, Materialize */
-$(document).ready(function() {
+$(document).ready(function () {
     //se inicia con la carga del sistema\
     charger();
+
 });
 //carga el arranque para iniciar sesion
 function charger() {
-    $.post(base_url + 'controller/charger', {}, function(page, data) {
+    $.post(base_url + 'controller/charger', {}, function (page, data) {
         $("#page-body").html(page, data);
-    });
+    }), 'json';
 }
 
 function load_user() {
     $.post(base_url + 'controller/load_user', {
-        username: $("#n__Loggin").val(),
+        nombre_usuario: $("#n__Loggin").val(),
         password: $("#c__Loggin").val()
-    }, function(datos) {
-        if (datos.message_load_user_s !== "") {
-            //si no esta vacio lanza mensaje de confirmacion
-            Materialize.toast(datos.message_load_user_s, 4000, 'light-green lighten-4');
-        } else if (datos.message_load_user_e !== "") {
-            //si no esta vacio lanza mensaje de error
-            Materialize.toast(datos.message_load_user_e, 4000, 'red');
-        } else {
-            //po ultimo si los campos estan vacios lanza mensaje de alerta
-            Materialize.toast(datos.message_load_user_w, 4000, 'yellow lighten-3');
-        }
+    }, function () {
+        
         charger();
     }, 'json');
 }
 
 function close_session() {
     $.post(base_url + 'controller/close_session', {},
-        function(datos) {
-            if (datos.message_close !== '') {
-                //si se completa con exito lanza mensaje de confirmacion
-                Materialize.toast(datos.message_close, 4000, 'light-green lighten-4');
-            } else {
-                //de los contrario lanza mensaje de error
-                $message_error = 'No fue posible cerrar la aplicacion';
-                Materialize.toast($message_error, 4000, 'red lighten-3');
-            }
+        function (datos) {
             charger();
         }, 'json');
 }
 //button llamados a vistas de administrador
 function useradd() {
-    $.post(base_url + 'controller/adduser', {}, function(page,data) {
-        $("#contentadministrator").html(page,data);
-    }), 'json';
-}
-function userlist(){
-    $.post(base_url + 'controller/userlist', {}, function(page,data) {
-        $("#contentadministrator").html(page,data);
+    $.post(base_url + 'controller/useradd', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
-function solicadd() {
-    $.post(base_url + 'controller/addsolicitud', {}, function(page) {
+function productadd() {
+    $.post(base_url + 'controller/productadd', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
+    }), 'json';
+}
+
+function principaladd() {
+    $.post(base_url + 'controller/principaladd', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
+    }), 'json';
+}
+
+function galeryadd() {
+    $.post(base_url + 'controller/galeryadd', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
+    }), 'json';
+}
+
+function destacadosadd() {
+    $.post(base_url + 'controller/destacadosadd', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
+    }), 'json';
+}
+
+function postadd() {
+    $.post(base_url + 'controller/postadd', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
+    }), 'json';
+}
+
+function userlist() {
+    $.post(base_url + 'controller/userlist', {}, function (page, data) {
+        $("#contentadministrator").html(page, data);
+    }), 'json';
+}
+
+
+function categoriadd() {
+    $.post(base_url + 'controller/categoriadd', {}, function (page) {
         $("#contentadministrator").html(page);
     }), 'json';
 }
 
-function insertUser() {
-    $.post(base_url + 'controller/insertUser', {
+function adProduct() {
+    //Primero Crear una variable para el formData de la imagen
+    $.post(base_url + 'controlador/adProduct', {
+        name: $("#productname").val(),
+        description: $("#productDes").val(),
+        price: $("#price").val(),
+        stock: $("#stock").val(),
+        foto: $("#imagePath").val()
+    },
+        function (datos) {
+            var msj = datos;
+            $.each(msj, function (i, o) {
+                if (o.msjw !== "") {
+                    Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
+                }
+                if (o.msjs !== "") {
+                    Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
+                }
+                if (o.msje !== "") {
+                    Materialize.toast(o.msje, 4000, 'red lighten-3');
+                }
+            });
+        }, 'json');
+}
+function agregar_usuario() {
+    $.post(base_url + 'controller/agregar_usuario', {
         rut: $("#rut").val(),
-         name: $("#first_name").val(),
-         lastname: $("#last_name").val(),
-         username: $("#username").val(),
-         password: $("#password").val(),
-         passwordConfirm: $("#passwordConfirm").val(),
-         passwordconfirm: $("#passwordconfirm").val(),
-         email: $("#email").val(),
-         rol: $("#rol").val(),
-         gender: $("#gender").val()
-    }, function(datos) {
+        primer_nombre: $("#primer_nombre").val(),
+        segundo_nombre: $("#segundo_nombre").val(),
+        primer_apellido: $("#primer_apellido").val(),
+        segundo_apellido: $("#segundo_apellido").val(),
+        nombre_usuario: $("#nombre_usuario").val(),
+        password: $("#password").val(),
+        passwordConfirm: $("#passwordConfirm").val(),
+        email: $("#email").val(),
+        rol: $("#rol").val(),
+        genero: $("#genero").val()
+    }, function (datos) {
         var msj = datos;
-        $.each(msj, function(i, o) {
+        $.each(msj, function (i, o) {
             if (o.msjw !== "") {
                 Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
             }
@@ -86,9 +127,78 @@ function insertUser() {
                 Materialize.toast(o.msje, 4000, 'red lighten-3');
             }
         });
-    },'json');
+    }, 'json');
 }
 
+//funciones de carro de compra
+function catalogo() {
+    $.post(base_url + 'controller/catalogo', {}, function (page, data) {
+        $("#page-body").html(page, data);
+    }), 'json';
+}
+function addProductCart(id) {
+    $.post(base_url + 'controller/addProductCart', {
+        idproducto: id
+    }, function (datos) {
+        catalogo();
+    }, 'json');
+}
+
+function verCarrito() {
+    $.post(base_url + 'controller/verCarrito', {}, function (page, data) {
+        $("#page-body").html(page, data);
+    }), 'json';
+}
+
+function pedidos() {
+    $.post(base_url + 'controller/pedidos', {}, function (page, data) {
+        $('#contentadministrator').html(page, data);
+    }), 'json';
+}
+function cancelar_pedido(){
+    $.post(base_url + 'controller/cancelar_pedido', {}, function () {
+       verCarrito();
+    }), 'json';
+}
+
+function realizar_pedido() {
+    $.post(base_url + 'controller/realizar_pedido', {},
+        function (datos) {
+
+            if(datos[0] != null){
+                datos_pedido();
+            }else{
+                catalogo();
+            }
+
+        }, 'json');
+}
+function datos_pedido() {
+    $.post(base_url + 'controller/datos_pedido', {}, function (page, data) {
+        $("#page-body").html(page, data);
+    }), 'json';
+}
+function generar_solicitud() {
+    $.post(base_url + 'controller/generar_solicitud', {
+        nombre: $("#nombre_pedido").val(),
+        apellido: $("#apellido_pedido").val(),
+        direccion: $("#direc_pedido").val(),
+        correo: $("#email_pedido").val(),
+        celular: $("#cel_pedido").val()
+    }, function (datos) {
+        if(datos[0] != null){
+            charger();
+        }else{
+            vista_codigo(); 
+        }
+        
+    }, 'json');
+}
+function vista_codigo() {
+    $.post(base_url + 'controller/vista_codigo', {}, function (page, data) {
+        $("#page-body").html(page, data);
+    }), 'json';
+}
 function bloqueados() {
     Materialize.toast('se llama vista usuarios bloqueados', 6000, 'black lighten-3');
 }
@@ -100,36 +210,94 @@ function parametros() {
 function estadisticas() {
     Materialize.toast('se llama vista estadisticas de Usuarios', 6000, 'black lighten-3');
 }
+function revisar_pedido() {
+    $.post(base_url + 'controller/revisar_pedido', {}, function (page, data) {
+        $("#page-body").html(page, data);
+    }), 'json';
+}
+function verificar() {
+    $.post(base_url + 'controller/verificar', {
+        codigo: $("#codigo_pedido").val()
+    }, 
+    function (page, datos) {
+        $("#page-body").html(page, datos);
+    }), 'json';
+}
+//*Valida Campos*/
+function checkRut(rut) {
+    // Despejar Puntos
+    var valor = rut.value.replace('.', '');
+    // Despejar Guión
+    valor = valor.replace('-', '');
+    // Aislar Cuerpo y Dígito Verificador
+    cuerpo = valor.slice(0, -1);
+    dv = valor.slice(-1).toUpperCase();
 
-// //load save
-function saveteacher() {
-    var idgender = document.getElementById("idselectgenderteacher").value;
-    $.post(base_url + 'controller/saveteacher', {
-        idnumber: $("#idnumber").val(),
-        name: $("#name").val(),
-        lastname: $("#lastname").val(),
-        username: $("#username").val(),
-        password: $("#password").val(),
-        passwordconfirm: $("#passwordconfirm").val(),
-        email: $("#email").val(),
-        gender: idgender
-    }, function(datos) {
-        var msj_teacher = datos;
-        $.each(msj_teacher, function(i, o) {
-            if (o.msjw !== "") {
-                Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
-            }
-            if (o.msjs !== "") {
-                Materialize.toast(o.msjs, 4000, 'light-green lighten-4');
-            }
-            if (o.msje !== "") {
-                Materialize.toast(o.msje, 4000, 'red lighten-3');
-            }
-        });
-        teacherlist();
-    }, 'json');
+    // Formatear RUN
+    rut.value = cuerpo + '-' + dv
+
+    // Si no cumple con el mínimo ej. (n.nnn.nnn)
+    if (cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false; }
+
+    // Calcular Dígito Verificador
+    suma = 0;
+    multiplo = 2;
+
+    // Para cada dígito del Cuerpo
+    for (i = 1; i <= cuerpo.length; i++) {
+
+        // Obtener su Producto con el Múltiplo Correspondiente
+        index = multiplo * valor.charAt(cuerpo.length - i);
+
+        // Sumar al Contador General
+        suma = suma + index;
+
+        // Consolidar Múltiplo dentro del rango [2,7]
+        if (multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+
+    }
+
+    // Calcular Dígito Verificador en base al Módulo 11
+    dvEsperado = 11 - (suma % 11);
+
+    // Casos Especiales (0 y K)
+    dv = (dv == 'K') ? 10 : dv;
+    dv = (dv == 0) ? 11 : dv;
+
+    // Validar que el Cuerpo coincide con su Dígito Verificador
+    if (dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
+
+    // Si todo sale bien, eliminar errores (decretar que es válido)
+    rut.setCustomValidity('');
 }
 
+
+function soloLetras(e) {
+    key = e.keyCode || e.which;
+    tecla = String.fromCharCode(key).toLowerCase();
+    letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+    especiales = "8-37-39-46";
+    tecla_especial = false;
+    for (var i in especiales) {
+        if (key == especiales[i]) {
+            tecla_especial = true;
+            break;
+        }
+    }
+
+    if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+        return false;
+    }
+}
+
+function soloNumeros(e) {
+    var key = window.Event ? e.which : e.keyCode
+    if (key == 8) {
+        return key;
+    } else {
+        return (key >= 48 && key <= 57)
+    }
+}
 // function savesection() {
 //     $.post(base_url + 'controller/savesection', {
 //         sectionname: $("#sectionname").val(),
@@ -1163,77 +1331,3 @@ function saveteacher() {
 //         $("#contentstudent").html(pagina, datos);
 //     });
 // }
-//*Valida Campos*/
-function checkRut(rut) {
-    // Despejar Puntos
-    var valor = rut.value.replace('.','');
-    // Despejar Guión
-    valor = valor.replace('-','');
-    
-    // Aislar Cuerpo y Dígito Verificador
-    cuerpo = valor.slice(0,-1);
-    dv = valor.slice(-1).toUpperCase();
-    
-    // Formatear RUN
-    rut.value = cuerpo + '-'+ dv
-    
-    // Si no cumple con el mínimo ej. (n.nnn.nnn)
-    if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
-    
-    // Calcular Dígito Verificador
-    suma = 0;
-    multiplo = 2;
-    
-    // Para cada dígito del Cuerpo
-    for(i=1;i<=cuerpo.length;i++) {
-    
-        // Obtener su Producto con el Múltiplo Correspondiente
-        index = multiplo * valor.charAt(cuerpo.length - i);
-        
-        // Sumar al Contador General
-        suma = suma + index;
-        
-        // Consolidar Múltiplo dentro del rango [2,7]
-        if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
-  
-    }
-    
-    // Calcular Dígito Verificador en base al Módulo 11
-    dvEsperado = 11 - (suma % 11);
-    
-    // Casos Especiales (0 y K)
-    dv = (dv == 'K')?10:dv;
-    dv = (dv == 0)?11:dv;
-    
-    // Validar que el Cuerpo coincide con su Dígito Verificador
-    if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
-    
-    // Si todo sale bien, eliminar errores (decretar que es válido)
-    rut.setCustomValidity('');
-}
-function soloLetras(e) {
-    key = e.keyCode || e.which;
-    tecla = String.fromCharCode(key).toLowerCase();
-    letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-    especiales = "8-37-39-46";
-    tecla_especial = false;
-    for (var i in especiales) {
-        if (key == especiales[i]) {
-            tecla_especial = true;
-            break;
-        }
-    }
-
-    if (letras.indexOf(tecla) == -1 && !tecla_especial) {
-        return false;
-    }
-}
-
-function soloNumeros(e) {
-    var key = window.Event ? e.which : e.keyCode
-    if (key == 8) {
-        return key;
-    } else {
-        return (key >= 48 && key <= 57)
-    }
-}
