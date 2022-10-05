@@ -1,12 +1,18 @@
 /* global base_url, Materialize */
-$(document).ready(function () {
+$(document).ready(function() {
     //se inicia con la carga del sistema\
     charger();
-
 });
+//Toast
+function mostrarToast($mensaje) {
+    var toast = document.getElementById($mensaje);
+    toast.className = "mostrar";
+    setTimeout(function() { toast.className = toast.className.replace("mostrar", ""); }, 5000);
+}
+
 //carga el arranque para iniciar sesion
 function charger() {
-    $.post(base_url + 'controller/charger', {}, function (page, data) {
+    $.post(base_url + 'controller/charger', {}, function(page, data) {
         $("#page-body").html(page, data);
     }), 'json';
 }
@@ -15,64 +21,63 @@ function load_user() {
     $.post(base_url + 'controller/load_user', {
         nombre_usuario: $("#n__Loggin").val(),
         password: $("#c__Loggin").val()
-    }, function () {
-        
+    }, function() {
         charger();
     }, 'json');
 }
 
 function close_session() {
     $.post(base_url + 'controller/close_session', {},
-        function (datos) {
+        function(datos) {
             charger();
         }, 'json');
 }
 //button llamados a vistas de administrador
 function useradd() {
-    $.post(base_url + 'controller/useradd', {}, function (page, data) {
+    $.post(base_url + 'controller/useradd', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 function productadd() {
-    $.post(base_url + 'controller/productadd', {}, function (page, data) {
+    $.post(base_url + 'controller/productadd', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 function principaladd() {
-    $.post(base_url + 'controller/principaladd', {}, function (page, data) {
+    $.post(base_url + 'controller/principaladd', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 function galeryadd() {
-    $.post(base_url + 'controller/galeryadd', {}, function (page, data) {
+    $.post(base_url + 'controller/galeryadd', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 function destacadosadd() {
-    $.post(base_url + 'controller/destacadosadd', {}, function (page, data) {
+    $.post(base_url + 'controller/destacadosadd', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 function postadd() {
-    $.post(base_url + 'controller/postadd', {}, function (page, data) {
+    $.post(base_url + 'controller/postadd', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 function userlist() {
-    $.post(base_url + 'controller/userlist', {}, function (page, data) {
+    $.post(base_url + 'controller/userlist', {}, function(page, data) {
         $("#contentadministrator").html(page, data);
     }), 'json';
 }
 
 
 function categoriadd() {
-    $.post(base_url + 'controller/categoriadd', {}, function (page) {
+    $.post(base_url + 'controller/categoriadd', {}, function(page) {
         $("#contentadministrator").html(page);
     }), 'json';
 }
@@ -80,15 +85,15 @@ function categoriadd() {
 function adProduct() {
     //Primero Crear una variable para el formData de la imagen
     $.post(base_url + 'controlador/adProduct', {
-        name: $("#productname").val(),
-        description: $("#productDes").val(),
-        price: $("#price").val(),
-        stock: $("#stock").val(),
-        foto: $("#imagePath").val()
-    },
-        function (datos) {
+            name: $("#productname").val(),
+            description: $("#productDes").val(),
+            price: $("#price").val(),
+            stock: $("#stock").val(),
+            foto: $("#imagePath").val()
+        },
+        function(datos) {
             var msj = datos;
-            $.each(msj, function (i, o) {
+            $.each(msj, function(i, o) {
                 if (o.msjw !== "") {
                     Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
                 }
@@ -101,6 +106,7 @@ function adProduct() {
             });
         }, 'json');
 }
+
 function agregar_usuario() {
     $.post(base_url + 'controller/agregar_usuario', {
         rut: $("#rut").val(),
@@ -114,9 +120,9 @@ function agregar_usuario() {
         email: $("#email").val(),
         rol: $("#rol").val(),
         genero: $("#genero").val()
-    }, function (datos) {
+    }, function(datos) {
         var msj = datos;
-        $.each(msj, function (i, o) {
+        $.each(msj, function(i, o) {
             if (o.msjw !== "") {
                 Materialize.toast(o.msjw, 4000, 'yellow lighten-3');
             }
@@ -132,52 +138,56 @@ function agregar_usuario() {
 
 //funciones de carro de compra
 function catalogo() {
-    $.post(base_url + 'controller/catalogo', {}, function (page, data) {
+    $.post(base_url + 'controller/catalogo', {}, function(page, data) {
         $("#page-body").html(page, data);
     }), 'json';
 }
+
 function addProductCart(id) {
     $.post(base_url + 'controller/addProductCart', {
         idproducto: id
-    }, function (datos) {
+    }, function(datos) {
         catalogo();
     }, 'json');
 }
 
 function verCarrito() {
-    $.post(base_url + 'controller/verCarrito', {}, function (page, data) {
+    $.post(base_url + 'controller/verCarrito', {}, function(page, data) {
         $("#page-body").html(page, data);
     }), 'json';
 }
 
 function pedidos() {
-    $.post(base_url + 'controller/pedidos', {}, function (page, data) {
+    $.post(base_url + 'controller/pedidos', {}, function(page, data) {
         $('#contentadministrator').html(page, data);
     }), 'json';
 }
-function cancelar_pedido(){
-    $.post(base_url + 'controller/cancelar_pedido', {}, function () {
-       verCarrito();
+
+function cancelar_pedido() {
+    $.post(base_url + 'controller/cancelar_pedido', {}, function() {
+        verCarrito();
     }), 'json';
 }
 
 function realizar_pedido() {
     $.post(base_url + 'controller/realizar_pedido', {},
-        function (datos) {
+        function(datos) {
 
-            if(datos[0] != null){
+            if (datos[0] != null) {
                 datos_pedido();
-            }else{
+            } else {
                 catalogo();
             }
 
         }, 'json');
 }
+
 function datos_pedido() {
-    $.post(base_url + 'controller/datos_pedido', {}, function (page, data) {
+    $.post(base_url + 'controller/datos_pedido', {}, function(page, data) {
         $("#page-body").html(page, data);
     }), 'json';
 }
+
 function generar_solicitud() {
     $.post(base_url + 'controller/generar_solicitud', {
         nombre: $("#nombre_pedido").val(),
@@ -185,20 +195,22 @@ function generar_solicitud() {
         direccion: $("#direc_pedido").val(),
         correo: $("#email_pedido").val(),
         celular: $("#cel_pedido").val()
-    }, function (datos) {
-        if(datos[0] != null){
+    }, function(datos) {
+        if (datos[0] != null) {
             charger();
-        }else{
-            vista_codigo(); 
+        } else {
+            vista_codigo();
         }
-        
+
     }, 'json');
 }
+
 function vista_codigo() {
-    $.post(base_url + 'controller/vista_codigo', {}, function (page, data) {
+    $.post(base_url + 'controller/vista_codigo', {}, function(page, data) {
         $("#page-body").html(page, data);
     }), 'json';
 }
+
 function bloqueados() {
     Materialize.toast('se llama vista usuarios bloqueados', 6000, 'black lighten-3');
 }
@@ -210,18 +222,20 @@ function parametros() {
 function estadisticas() {
     Materialize.toast('se llama vista estadisticas de Usuarios', 6000, 'black lighten-3');
 }
+
 function revisar_pedido() {
-    $.post(base_url + 'controller/revisar_pedido', {}, function (page, data) {
+    $.post(base_url + 'controller/revisar_pedido', {}, function(page, data) {
         $("#page-body").html(page, data);
     }), 'json';
 }
+
 function verificar() {
     $.post(base_url + 'controller/verificar', {
-        codigo: $("#codigo_pedido").val()
-    }, 
-    function (page, datos) {
-        $("#page-body").html(page, datos);
-    }), 'json';
+            codigo: $("#codigo_pedido").val()
+        },
+        function(page, datos) {
+            $("#page-body").html(page, datos);
+        }), 'json';
 }
 //*Valida Campos*/
 function checkRut(rut) {
